@@ -51,10 +51,6 @@ password | string | 密碼
 
 3002: 無效的參數
 
-6001: Ldap: 連線失敗
-
-6002: Ldap: 驗證失敗
-
 ### 登出
 
 `POST /logout`
