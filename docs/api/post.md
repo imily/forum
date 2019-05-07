@@ -21,7 +21,7 @@
 
 ##### Response
 
-`Status: 201 OK`
+`Status: 200 OK`
 
 ```json
 [
@@ -103,7 +103,7 @@
 
 ##### Response
 
-`Status: 201 OK`
+`Status: 200 OK`
 
 ```json
 [

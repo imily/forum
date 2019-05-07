@@ -12,7 +12,7 @@
 
 ##### Response
 
-`Status: 201 OK`
+`Status: 200 OK`
 
 ```json
 [
@@ -48,7 +48,7 @@
 
 ##### Response
 
-`Status: 201 OK`
+`Status: 200 OK`
 
 ```json
 [
@@ -125,6 +125,10 @@
 | 名稱          | 型別    | 敘述 |
 | ---          | ---     | --- |
 | description  | string     | 敘述 |
+
+##### Response
+
+`Status: 204 OK`
 
 ##### Example
 
