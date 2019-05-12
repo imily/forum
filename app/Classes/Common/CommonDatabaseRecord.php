@@ -14,6 +14,7 @@ class CommonDatabaseRecord
     protected $dtUpdate = '0000-00-00 00:00:00';
 
     /**
+     * 建構子
      * CommonDatabaseRecord constructor.
      * @param array $content
      */
