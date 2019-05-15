@@ -7,7 +7,7 @@ class VerifyFormat
      * @param $sDateTime
      * @return bool
      */
-    public static function isValidDate($sDateTime)
+    public static function isValidDateTime($sDateTime)
     {
         $format = '/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/i';
         $isMatch = preg_match($format, $sDateTime);
@@ -22,30 +22,30 @@ class VerifyFormat
     /**
      * 檢查輸入參數是否為正整數
      * 可輸入資料型態為數字或字串的內容
-     * @param int|string $Id
+     * @param int|string $id
      * @return bool
      */
-    public static function isValidId($Id)
+    public static function isValidId($id)
     {
-        return static::isPositiveInteger($Id);
+        return static::isPositiveInteger($id);
     }
 
     /**
      * 檢查array裡的內容是否都存放id(正整數的int)
      * 空array回應無效
-     * @param array $Ids
+     * @param array $ids
      * @return bool
      */
-    public static function isValidIds(array $Ids)
+    public static function isValidIds(array $ids)
     {
-        if (empty($Ids)) {
+        if (empty($ids)) {
             return false;
         }
 
-        //其中一筆id有誤，回傳Error離開
-        foreach ($Ids as $id) {
+        //其中一筆id有誤，回傳Error離開。
+        foreach ($ids as $id) {
             $isValidId = static::isValidId($id);
-            if (!$isValidId) {
+            if ( ! $isValidId) {
                 return false;
             }
         }
@@ -66,7 +66,7 @@ class VerifyFormat
 
         //設定比對的規則
         $idFormat = "/^[0-9]+$/";
-        if (!preg_match($idFormat, $number)) {
+        if ( ! preg_match($idFormat, $number)) {
             return false;
         }
 
@@ -85,10 +85,10 @@ class VerifyFormat
             return false;
         }
 
-        //其中一筆id有誤，回傳Error離開
+        //其中一筆id有誤，回傳Error離開。
         foreach ($numbers as $number) {
             $isValid = static::isPositiveInteger($number);
-            if (!$isValid) {
+            if ( ! $isValid) {
                 return false;
             }
         }
@@ -103,7 +103,7 @@ class VerifyFormat
      */
     public static function isInteger($number)
     {
-        //設定比對規則
+        //設定比對的規則
         $intFormat = "/^[-]?[0-9]+$/";
         if ( ! preg_match($intFormat, $number)) {
             return false;
@@ -122,9 +122,7 @@ class VerifyFormat
         if (empty($numbers)) {
             return false;
         }
-
-        //其中一筆id有誤，回傳Error離開
-        foreach ($numbers as $number){
+        foreach ($numbers as $number) {
             $isValid = static::isInteger($number);
             if ( ! $isValid) {
                 return false;
