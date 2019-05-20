@@ -13,11 +13,12 @@ class CreateMessageTable extends Migration
      */
     public function up()
     {
-        Schema::create('message', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('user');
-            $table->string('description');
-            $table->timestamps();
+        Schema::create('Message', function (Blueprint $table) {
+            $table->bigIncrements('ixMessage');
+            $table->integer('ixUser')->default(0);
+            $table->string('sDescription',255)->default('');
+            $table->dateTime('dtCreate')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->dateTime('dtUpdate')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
     }
 
@@ -28,6 +29,6 @@ class CreateMessageTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('message');
+        Schema::dropIfExists('Message');
     }
 }

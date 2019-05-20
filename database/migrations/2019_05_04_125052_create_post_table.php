@@ -13,14 +13,15 @@ class CreatePostTable extends Migration
      */
     public function up()
     {
-        Schema::create('post', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('user');
-            $table->integer('message');
-            $table->string('topic');
-            $table->string('description');
-            $table->string('likes');
-            $table->timestamps();
+        Schema::create('Post', function (Blueprint $table) {
+            $table->bigIncrements('ixPost');
+            $table->integer('ixUser')->default(0);
+            $table->integer('ixMessage')->default(0);
+            $table->string('sTopic',255)->default('');
+            $table->string('sDescription',255)->default('');
+            $table->string('sLikes');
+            $table->dateTime('dtCreate')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->dateTime('dtUpdate')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
     }
 
@@ -31,6 +32,6 @@ class CreatePostTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('post');
+        Schema::dropIfExists('Post');
     }
 }
