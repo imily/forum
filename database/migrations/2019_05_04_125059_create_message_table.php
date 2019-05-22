@@ -15,8 +15,8 @@ class CreateMessageTable extends Migration
     {
         Schema::create('Message', function (Blueprint $table) {
             $table->bigIncrements('ixMessage');
-            $table->integer('ixUser')->default(0);
-            $table->string('sDescription',255)->default('');
+            $table->integer('ixUser');
+            $table->string('sDescription',255);
             $table->dateTime('dtCreate')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->dateTime('dtUpdate')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });

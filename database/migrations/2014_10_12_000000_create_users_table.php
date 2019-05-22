@@ -15,10 +15,10 @@ class CreateUsersTable extends Migration
     {
         Schema::create('User', function (Blueprint $table) {
             $table->increments('ixUser');
-            $table->string('sUsername',32)->default('');
-            $table->string('sPassword', 60)->default('');
-            $table->integer('nStickerType')->default(1);
-            $table->boolean('fAdmin')->default(false);
+            $table->string('sUsername',32);
+            $table->string('sPassword', 60);
+            $table->integer('nStickerType');
+            $table->boolean('fAdmin');
             $table->dateTime('dtCreate')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->dateTime('dtUpdate')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });

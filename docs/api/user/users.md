@@ -29,7 +29,7 @@
 名稱 | 型別 | 敘述
 --- | --- | ---
 new_password     | string | 新密碼
-confirm_password | string | 確認密碼
+confirm_password | string | 確認新密碼
 
 #### Response
 

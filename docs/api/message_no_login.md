@@ -21,7 +21,7 @@
 
 ```json
 {
-    "total_amount": 4,
+    "total_amount": 2,
     "data":[
       {
         "id": 1,
@@ -42,7 +42,7 @@
 
 ```
 {
-  "error": 4001
+  "error": 3002
 }
 ```
 

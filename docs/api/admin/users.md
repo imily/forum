@@ -29,47 +29,9 @@
   {
     "id": 3,
     "username": "bar"
-  },
+  }
 ]
 ```
-
-### 修改使用者名稱
-
-`PATCH /admin/users/{user_id}/username`
-
-##### 參數
-
-名稱 | 型別 | 敘述
---- | --- | ---
-username | string | 使用者名稱
-
-##### Example
-
-```
-{
-  "username": "NCS-Foo"
-}
-```
-
-##### Response
-
-`Status: 204 No Content`
-
-##### Error
-
-代碼: 敘述
-
-1: 未知的錯誤
-
-1008: 使用者 id 無效
-
-1009: 無修改權限
-
-2002: 修改失敗
-
-3001: 輸入有空值
-
-3002: 無效的參數
 
 ### 修改使用者密碼
 
@@ -79,13 +41,15 @@ username | string | 使用者名稱
 
 名稱 | 型別 | 敘述
 --- | --- | ---
-password | string | 密碼
+new_password | string | 新密碼
+confirm_password	 | string | 確認新密碼
 
 ##### Example
 
 ```
 {
-  "password": "EMHi8OKhO5MSBraS"
+  "new_password": "EMHi8OKhO5MSBraS",
+  "confirm_password": "EMHi8OKhO5MSBraS"
 }
 ```
 

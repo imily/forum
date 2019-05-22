@@ -51,12 +51,12 @@ Domain： 主域名資料
 | 名稱         | 結構         | 是否有預設值? | 描述                                   |
 | ------------ | ------------ | ------- | -------------------------------------- |
 | ixUser       | int(10)      |         | 編號 (Primary key, AutoNumber)         |
-| sUsername    | varchar(16)  |  Yes    | 使用者名稱                             |
-| sPassword    | varchar(128) |  Yes    | 使用者密碼，經過Hash加密               |
-| nStickerType | tinyint      |  Yes   | 頭像類型                               |
-| fAdmin       | boolean      |  Yes   | 是否為管理員                           |
-| dtCreate     | datetime     |  Yes   | 建立時間，第一次新增時自動帶入當前時間 |
-| dtUpdate     | datetime     |  Yes   | 更新時間，資料修改時自動帶入當前時間   |
+| sUsername    | varchar(16)  |       | 使用者名稱                             |
+| sPassword    | varchar(128) |       | 使用者密碼，經過Hash加密               |
+| nStickerType | tinyint      |      | 頭像類型                               |
+| fAdmin       | boolean      |      | 是否為管理員                           |
+| dtCreate     | datetime     |      | 建立時間，第一次新增時自動帶入當前時間 |
+| dtUpdate     | datetime     |      | 更新時間，資料修改時自動帶入當前時間   |
 
 #### 索引
 - **unique**: sUsername
@@ -69,10 +69,10 @@ Domain： 主域名資料
 | 名稱         | 結構         | 是否有預設值? | 描述                                   |
 | ------------ | ------------ | ------- | -------------------------------------- |
 | ixMessage    | int(10)      |         | 編號 (Primary key, AutoNumber)|
-| ixUser       | int          |  Yes    | 使用者 ID                     |
-| sDescription | varchar(255) |  Yes    | 評論內容                       |
-| dtCreate     | datetime     |  Yes    | 建立時間，第一次新增時自動帶入當前時間 |
-| dtUpdate     | datetime     |  Yes    | 更新時間，資料修改時自動帶入當前時間   |
+| ixUser       | int          |         | 使用者 ID                     |
+| sDescription | varchar(255) |         | 評論內容                       |
+| dtCreate     | datetime     |         | 建立時間，第一次新增時自動帶入當前時間 |
+| dtUpdate     | datetime     |         | 更新時間，資料修改時自動帶入當前時間   |
 
 #### 索引
 無
@@ -85,13 +85,13 @@ Domain： 主域名資料
 | 名稱         | 結構          | 是否有預設值? | 描述                                     |
 | ------------ | ------------- | ------- | ---------------------------------------- |
 | ixPost       | int(10)       |         | 編號 (Primary key, AutoNumber)           |
-| ixUser       | int           | Yes     | 使用者 ID                                |
-| ixMessage    | varchar(4096) | YES     | 評論 ID                                  |
-| sTopic       | varchar(128)  | Yes     | 留言標題                                 |
-| sDescription | varchar(255)  | Yes     | 留言內容                                 |
+| ixUser       | int           |       | 使用者 ID                                |
+| ixMessage    | varchar(4096) |       | 評論 ID                                  |
+| sTopic       | varchar(128)  |       | 留言標題                                 |
+| sDescription | varchar(255)  |       | 留言內容                                 |
 | sLike        | varchar(4096) |         | 喜歡此留言的使用者，欄位裡為陣列格式內容 |
-| dtCreate     | datetime      | Yes     | 建立時間，第一次新增時自動帶入當前時間   |
-| dtUpdate     | datetime      | Yes     | 更新時間，資料修改時自動帶入當前時間     |
+| dtCreate     | datetime      |       | 建立時間，第一次新增時自動帶入當前時間   |
+| dtUpdate     | datetime      |       | 更新時間，資料修改時自動帶入當前時間     |
 
 #### 索引
 - **unique**: ixUser
