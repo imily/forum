@@ -51,21 +51,19 @@ confirm_password | string | 確認新密碼
 
 1007: 確認密碼有誤
 
-1008: 取得id失敗
-
 2002: 修改失敗
 
 3001: 輸入有空值
 
 ### 變更目前使用者頭像類型
 
-`PATCH /user/sicker_type`
+`PATCH /user/sticker_type`
 
 #### 參數
 
 名稱 | 型別 | 敘述
 --- | --- | ---
-sicker_type     | int | 頭像類型
+sticker_type     | int | 頭像類型
 
 #### Response
 
@@ -82,8 +80,6 @@ sicker_type     | int | 頭像類型
 代碼: 敘述
 
 1: 未知的錯誤
-
-1008: 取得id失敗
 
 2002: 修改失敗
 

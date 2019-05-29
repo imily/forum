@@ -4,6 +4,7 @@
 
  0. [取得所有使用者](#取得使用者)
  0. [修改使用者密碼](#修改使用者密碼)
+ 0. [修改使用者頭像類型](#修改使用者頭像類型)
  0. [批量刪除使用者](#批量刪除使用者)
 
 ### 取得使用者
@@ -50,6 +51,42 @@ confirm_password	 | string | 確認新密碼
 {
   "new_password": "EMHi8OKhO5MSBraS",
   "confirm_password": "EMHi8OKhO5MSBraS"
+}
+```
+
+##### Response
+
+`Status: 204 No Content`
+
+##### Error
+
+代碼: 敘述
+
+1: 未知的錯誤
+
+1008: 使用者 id 無效
+
+2002: 修改失敗
+
+3001: 輸入有空值
+
+3002: 無效的參數
+
+### 修改使用者頭像類型
+
+`PATCH /admin/users/{user_id}/sticker_type`
+
+##### 參數
+
+名稱 | 型別 | 敘述
+--- | --- | ---
+sticker_type | int | 頭像類型
+
+##### Example
+
+```
+{
+  "sticker_type": 2,
 }
 ```
 

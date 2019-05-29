@@ -14,7 +14,7 @@ class User extends CommonDatabaseRecord
     const STICKER_TYPE_SHAW   = 4;
     const STICKER_TYPE_ROOT   = 5;
     const STICKER_TYPE_CARTER = 6;
-    protected static $types = array(
+    protected static $stickerTypes = array(
         User::STICKER_TYPE_FINCH  => 'Finch'
       , User::STICKER_TYPE_REESE  => 'Reese'
       , User::STICKER_TYPE_LIONEL => 'Lionel'
@@ -37,13 +37,14 @@ class User extends CommonDatabaseRecord
      */
     public function isValid()
     {
-        // 若使用者名稱長度超過16，表示無效資料
-        if ($this->getUsername() > 16) {
+        // 若使用者名稱長度超過16或小於等於 0，表示無效資料
+        if (($this->getUsername() > 16) or
+            ($this->getUsername() < 0)) {
             return false;
         }
 
-        // 若使用者頭像類型小於等於 0，表示無效資料
-        if ($this->getStickerType() <=0) {
+        // 若使用者密碼長度小於等於 0，表示無效資料
+        if ($this->sPassword <= 0) {
             return false;
         }
 
@@ -124,12 +125,12 @@ class User extends CommonDatabaseRecord
 
     /**
      * 設定使用者頭像類型
-     * @param int $typeId
+     * @param int $stickerTypeId
      * @return void
      */
-    public function setStickerType(int $typeId)
+    public function setStickerType(int $stickerTypeId)
     {
-        $this->nStickerType = $typeId;
+        $this->nStickerType = $stickerTypeId;
     }
 
     /**
@@ -163,23 +164,23 @@ class User extends CommonDatabaseRecord
 
     /**
      * 驗證使用者頭像類型是否有效
-     * @param int $nType
+     * @param int $nStickerType
      * @return bool
      */
-    public static function isValidType(int $nType)
+    public static function isValidType(int $nStickerType)
     {
-        return isset(static::$types[$nType]);
+        return isset(static::$stickerTypes[$nStickerType]);
     }
 
     /**
      * 取得使用者頭像類型文字訊息
-     * @param int $nType
-     * @return mixed|string
+     * @param int $nStickerType
+     * @return string
      */
-    public static function getTypeString(int $nType)
+    public static function getStickerTypeString(int $nStickerType)
     {
-        if (static::isValidType($nType)) {
-            return static::$types[$nType];
+        if (static::isValidType($nStickerType)) {
+            return static::$stickerTypes[$nStickerType];
         }
         return '';
     }
