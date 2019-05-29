@@ -58,12 +58,12 @@ class CommonDatabaseRecord
     public function isValid()
     {
         //驗證dtCreate日期格式
-        if ( ! VerifyFormat::isValidDate($this->dtCreate)) {
+        if ( ! VerifyFormat::isValidDateTime($this->dtCreate)) {
             return false;
         }
 
         //驗證dtUpdate日期格式
-        if ( ! VerifyFormat::isValidDate($this->dtUpdate)){
+        if ( ! VerifyFormat::isValidDateTime($this->dtUpdate)){
             return false;
         }
 
