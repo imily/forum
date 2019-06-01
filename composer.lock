@@ -4250,9 +4250,7 @@
     "platform": {
         "php": ">=7.0.0",
         "ext-curl": "^7.2",
-        "ext-intl": "^1.1",
-        "ext-json": "^1.6",
-        "ext-ldap": "^7.2"
+        "ext-json": "^1.6"
     },
     "platform-dev": []
 }
