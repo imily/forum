@@ -38,13 +38,8 @@ class User extends CommonDatabaseRecord
     public function isValid()
     {
         // 若使用者名稱長度超過16或小於等於 0，表示無效資料
-        if (($this->getUsername() > 16) or
-            ($this->getUsername() < 0)) {
-            return false;
-        }
-
-        // 若使用者密碼長度小於等於 0，表示無效資料
-        if ($this->sPassword <= 0) {
+        if ((strlen($this->getUsername()) > 16) or
+            (strlen($this->getUsername()) <= 0)) {
             return false;
         }
 
