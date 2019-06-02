@@ -10,13 +10,12 @@ class UserSeeder extends Seeder
     {
         $sql = sprintf("
             INSERT INTO `User`
-            (`ixUser`, `sUserName`, `sPassword`
-            , `nStickerType`, `fAdmin`, `dtCreate`, `dtUpdate`)
+            (`ixUser`, `sUserName`, `sPassword`, `nStickerType`, `fAdmin`, `dtCreate`, `dtUpdate`)
             VALUES
-            ('2', 'imily', '%s'
-            , '3', 'false', '2011-11-11 00:00:00', '2011-11-11 00:00:00'),
-            ('3', 'finch', '%s'
-            , '1', 'false', '2011-11-12 00:00:00', '2011-11-12 00:00:00')"
+            ('2', 'imily', '%s', '3', FALSE, '2011-11-11 00:00:00', '2011-11-12 00:00:00'),
+            ('3', 'Mary', '%s', '1', FALSE, '2011-11-12 00:00:00', '2011-11-13 00:00:00'),
+            ('4', 'Jessie', '%s', '2', FALSE, '2011-11-13 00:00:00', '2011-11-14 00:00:00')"
+            , User::hashPassword(1234)
             , User::hashPassword(1234)
             , User::hashPassword(1234));
         DB::insert($sql);

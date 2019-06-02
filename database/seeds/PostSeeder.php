@@ -10,7 +10,7 @@ class PostSeeder extends Seeder
         $sql = sprintf("
             INSERT INTO `Post`
             (`ixPost`, `ixUser`, `ixMessage`, `sTopic`, `sDescription`
-            , `sLike`,  `dtCreate`, `dtUpdate`)
+            , `sLikes`,  `dtCreate`, `dtUpdate`)
             VALUES
             (1, 1, '[1,2,3,5]',  'topic01', 'description01'
             , '[1,2,3]', '2011-11-11 00:00:00', '2011-11-12 00:00:00'),
