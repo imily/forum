@@ -49,14 +49,15 @@ Domain： 主域名資料
 #### Columns
 
 | 名稱         | 結構         | 是否有預設值? | 描述                                   |
-| ------------ | ------------ | ------- | -------------------------------------- |
-| ixUser       | int(10)      |         | 編號 (Primary key, AutoNumber)         |
-| sUsername    | varchar(16)  |       | 使用者名稱                             |
-| sPassword    | varchar(128) |       | 使用者密碼，經過Hash加密               |
-| nStickerType | tinyint      |      | 頭像類型                               |
-| fAdmin       | boolean      |      | 是否為管理員                           |
-| dtCreate     | datetime     |      | 建立時間，第一次新增時自動帶入當前時間 |
-| dtUpdate     | datetime     |      | 更新時間，資料修改時自動帶入當前時間   |
+| ------------ | ------------ | -------   | -------------------------------------- |
+| ixUser       | int(10)      |           | 編號 (Primary key, AutoNumber)         |
+| sUsername    | varchar(16)  |           | 使用者名稱                             |
+| sPassword    | varchar(128) |           | 使用者密碼，經過Hash加密               |
+| nStickerType | tinyint      |           | 頭像類型                               |
+| fAdmin       | boolean      |           | 是否為管理員                           |
+| sDescription  | varchar(255)|YES        | 描述 |
+| dtCreate     | datetime     |           | 建立時間，第一次新增時自動帶入當前時間 |
+| dtUpdate     | datetime     |           | 更新時間，資料修改時自動帶入當前時間   |
 
 #### 索引
 - **unique**: sUsername

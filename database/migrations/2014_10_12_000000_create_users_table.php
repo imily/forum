@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('sPassword', 60);
             $table->integer('nStickerType');
             $table->boolean('fAdmin');
+            $table->string('sDescription', 255)->default('');
             $table->dateTime('dtCreate')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->dateTime('dtUpdate')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
