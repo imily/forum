@@ -6,14 +6,15 @@ class ErrorAuth extends Error
     const ERROR_AUTH_FAILED_LOGOUT      = 1002;
     const ERROR_AUTH_EXISTED_EMAIL      = 1003;
     const ERROR_AUTH_EXISTED_USERNAME   = 1004;
-    const ERROR_AUTH_INCORRECT_EMAIL    = 1005;
-    const ERROR_AUTH_INCORRECT_PASSWORD = 1006;
-    const ERROR_AUTH_UNMATCHED_PASSWORD = 1007;
-    const ERROR_AUTH_FAILED_GET_ID      = 1008;
-    const ERROR_AUTH_UNAUTHORIZED       = 1009;
-    const ERROR_AUTH_UNDELETABLE        = 1010;
-    const ERROR_AUTH_INACTIVE           = 1011;
-    const ERROR_AUTH_UNCHANGEABLE       = 1012;
+    const ERROR_AUTH_INCORRECT_USERNAME = 1005;
+    const ERROR_AUTH_INCORRECT_EMAIL    = 1006;
+    const ERROR_AUTH_INCORRECT_PASSWORD = 1007;
+    const ERROR_AUTH_UNMATCHED_PASSWORD = 1008;
+    const ERROR_AUTH_FAILED_GET_ID      = 1009;
+    const ERROR_AUTH_UNAUTHORIZED       = 1010;
+    const ERROR_AUTH_UNDELETABLE        = 1011;
+    const ERROR_AUTH_INACTIVE           = 1012;
+    const ERROR_AUTH_UNCHANGEABLE       = 1013;
 
     /**
      * 記錄對應的錯誤顯示內容
@@ -26,7 +27,8 @@ class ErrorAuth extends Error
         $this->errorTable[static::ERROR_AUTH_FAILED_LOGIN]       = 'Auth：登入發生錯誤';
         $this->errorTable[static::ERROR_AUTH_FAILED_LOGOUT]      = 'Auth：登出發生錯誤';
         $this->errorTable[static::ERROR_AUTH_EXISTED_EMAIL]      = 'Auth：email 已經存在';
-        $this->errorTable[static::ERROR_AUTH_EXISTED_USERNAME]   = 'Auth：名稱已經存在';
+        $this->errorTable[static::ERROR_AUTH_EXISTED_USERNAME]   = 'Auth：帳號已經存在';
+        $this->errorTable[static::ERROR_AUTH_INCORRECT_USERNAME] = 'Auth：帳號輸入有誤';
         $this->errorTable[static::ERROR_AUTH_INCORRECT_EMAIL]    = 'Auth：email 輸入有誤';
         $this->errorTable[static::ERROR_AUTH_INCORRECT_PASSWORD] = 'Auth：密碼輸入有誤';
         $this->errorTable[static::ERROR_AUTH_UNMATCHED_PASSWORD] = 'Auth：兩次密碼不相符';
