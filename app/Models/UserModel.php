@@ -112,10 +112,10 @@ class UserModel
                 INSERT INTO `User`
                 (`sUsername`, `sPassword`, `nStickerType`, `sDescription`)
                 VALUE 
-                ('%s', '%s', '%n', '%s')"
+                ('%s', '%s', '%d', '%s')"
             , addslashes($user->getUsername())
-            , $user->hashPassword($password)
-            , addslashes($user->getStickerType())
+            , addslashes($user->hashPassword($password))
+            , (int)$user->getStickerType()
             , addslashes($user->getDescription()));
         $inserted = DB::INSERT($sql);
 

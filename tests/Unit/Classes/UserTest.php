@@ -115,29 +115,29 @@ class UserTest extends TestCase
         $this->assertFalse($user->isValid());
     }
 
-//    /**
-//     * 測試驗證密碼
-//     * @return void
-//     */
-//    public function testVerifyPassword()
-//    {
-//        $content = $this->content;
-//
-//        $queryResult = array();
-//        $queryResult['ixUser'] = 1;
-//        $queryResult['sUsername'] = 'Name';
-//        $queryResult['sPassword'] = '$2y$10$ziBTD0IoVyrSF/RwRAnR5uYjbLzY9Y/fBwIoLmbAcyFa6bmwbB9sS';
-//        $queryResult['nStickerType'] = 1;
-//        $queryResult['sDescription'] = '';
-//        $queryResult['dtCreate'] = '0000-00-00 00:00:00';
-//        $queryResult['dtUpdate'] = '0000-00-00 00:00:00';
-//
-//        $user = new User();
-//        $user->loadFromDbResult($queryResult);
-//        $isValid = $user->verifyPassword($content['sPassword']);
-//
-//        $this->assertTrue($isValid);
-//    }
+    /**
+     * 測試驗證密碼
+     * @return void
+     */
+    public function testVerifyPassword()
+    {
+        $content['sPassword'] = 123;
+
+        $queryResult = array();
+        $queryResult['ixUser'] = 1;
+        $queryResult['sUsername'] = 'Name';
+        $queryResult['sPassword'] = '$2y$10$sFnZHfyCInA.GPqon1GmFOfb09pR5yPW5GVL8Y24TeNTxO9w2yCdW';
+        $queryResult['nStickerType'] = 1;
+        $queryResult['sDescription'] = '';
+        $queryResult['dtCreate'] = '0000-00-00 00:00:00';
+        $queryResult['dtUpdate'] = '0000-00-00 00:00:00';
+
+        $user = new User();
+        $user->loadFromDbResult($queryResult);
+        $isValid = $user->verifyPassword($content['sPassword']);
+
+        $this->assertTrue($isValid);
+    }
 
     /**
      * 測試是否為管理員

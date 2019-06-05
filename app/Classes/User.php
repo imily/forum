@@ -65,6 +65,7 @@ class User extends CommonDatabaseRecord
         $this->setId(data_get($content, 'ixUser'));
         $this->setUsername(data_get($content, 'sUsername'));
         $this->setStickerType(data_get($content, 'nStickerType'));
+        $this->sPassword = data_get($content, 'sPassword');
     }
 
     /**

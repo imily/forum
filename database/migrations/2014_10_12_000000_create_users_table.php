@@ -1,5 +1,6 @@
 <?php
 
+use App\Classes\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -17,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->increments('ixUser');
             $table->string('sUsername',32);
             $table->string('sPassword', 60);
-            $table->integer('nStickerType');
+            $table->integer('nStickerType', User::STICKER_TYPE_FINCH);
             $table->string('sDescription', 255)->default('');
             $table->dateTime('dtCreate')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->dateTime('dtUpdate')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));

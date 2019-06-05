@@ -5,10 +5,23 @@ use App\Classes\Common\CommonDatabaseRecord;
 class Message extends CommonDatabaseRecord
 {
     // 留言 id
-    private $ixMessage = 1;
+    private $ixMessage = 0;
 
     // 留言者 id
-    private $ixUser    = 1;
+    private $ixUser    = 0;
+
+    private $user = null;
+
+    /**
+     * 建構子
+     * CommonDatabaseRecord constructor.
+     * @param array $content
+     */
+    public function __construct($content = array())
+    {
+        parent::__construct($content);
+        $this->user = new User();
+    }
 
     /**
      * 資料是否有效

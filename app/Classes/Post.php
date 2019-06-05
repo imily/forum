@@ -6,10 +6,10 @@ class Post extends CommonDatabaseRecord
 {
 
     // 討論主題 id
-    private $ixPost          = 1;
+    private $ixPost          = 0;
 
     // 討論主題發表人 id
-    private $ixUser          = 1;
+    private $ixUser          = 0;
 
     // 討論主題留言者，欄位裡為json文字格式內容
     private $sMessagePerson  = '[]';
