@@ -20,7 +20,7 @@ class Message extends CommonDatabaseRecord
     public function __construct($content = array())
     {
         parent::__construct($content);
-        $this->user = new User();
+        $this->setUser(new User());
     }
 
     /**
@@ -30,7 +30,7 @@ class Message extends CommonDatabaseRecord
     public function isValid()
     {
         // 留言者 id 是否小於等於 0
-        if ($this->getUser() <= 0) {
+        if ($this->getIxUser() <= 0) {
             return false;
         }
 
@@ -50,7 +50,7 @@ class Message extends CommonDatabaseRecord
         }
 
         $this->setId(data_get($content, 'ixMessage'));
-        $this->setUser(data_get($content, 'ixUser'));
+        $this->setIxUser(data_get($content, 'ixUser'));
     }
 
     /**
@@ -61,9 +61,28 @@ class Message extends CommonDatabaseRecord
     {
         $content = parent::toArray();
         $content['ixMessage'] = $this->getId();
-        $content['ixUser'] = $this->getUser();
+        $content['ixUser'] = $this->getIxUser();
 
         return $content;
+    }
+
+    /**
+     * 設定使用者
+     * @param User $user
+     * @return void
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * 取得使用者
+     * @return User
+     */
+    public function getUser():User
+    {
+        return $this->user;
     }
 
     /**
@@ -90,7 +109,7 @@ class Message extends CommonDatabaseRecord
      * @param int $userId
      * @return void
      */
-    public function setUser(int $userId)
+    public function setIxUser(int $userId)
     {
         $this->ixUser = $userId;
     }
@@ -99,7 +118,7 @@ class Message extends CommonDatabaseRecord
      * 取得留言者 id
      * @return int
      */
-    public function getUser():int
+    public function getIxUser():int
     {
         return $this->ixUser;
     }

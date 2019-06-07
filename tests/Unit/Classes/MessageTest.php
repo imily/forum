@@ -1,6 +1,7 @@
 <?php namespace Tests;
 
 use App\Classes\Message;
+use App\Classes\User;
 
 class MessageTest extends TestCase
 {
@@ -23,6 +24,22 @@ class MessageTest extends TestCase
     }
 
     /**
+     * 生成User物件
+     * @return User
+     */
+    private function generateUser()
+    {
+        $user = new User();
+        $user->setId(1);
+        $user->setUsername('testUser');
+        $user->setStickerType(2);
+        $user->setDescription('描述');
+        $user->setDtCreate('1970-01-01 08:00:01');
+        $user->setDtUpdate('1970-01-01 08:00:01');
+        return $user;
+    }
+
+    /**
      * 測試由陣列載入
      * @return void
      */
@@ -35,7 +52,7 @@ class MessageTest extends TestCase
         $this->assertEquals($this->content, $message->toArray());
 
         $this->assertEquals($this->content['ixMessage'], $message->getId());
-        $this->assertEquals($this->content['ixUser'], $message->getUser());
+        $this->assertEquals($this->content['ixUser'], $message->getIxUser());
         $this->assertEquals($this->content['sDescription'], $message->getDescription());
         $this->assertEquals($this->content['dtCreate'], $message->getDtCreate());
         $this->assertEquals($this->content['dtUpdate'], $message->getDtUpdate());
@@ -54,7 +71,7 @@ class MessageTest extends TestCase
         $this->assertEquals($this->content, $message->toArray());
 
         $this->assertEquals($this->content['ixMessage'], $message->getId());
-        $this->assertEquals($this->content['ixUser'], $message->getUser());
+        $this->assertEquals($this->content['ixUser'], $message->getIxUser());
         $this->assertEquals($this->content['sDescription'], $message->getDescription());
         $this->assertEquals($this->content['dtCreate'], $message->getDtCreate());
         $this->assertEquals($this->content['dtUpdate'], $message->getDtUpdate());
@@ -85,10 +102,28 @@ class MessageTest extends TestCase
         $message->loadFromDbResult($content);
         $this->assertTrue($message->isValid());
 
-        $message->setUser(0);
+        $message->setIxUser(0);
         $this->assertFalse($message->isValid());
 
-        $message->setUser(-1);
+        $message->setIxUser(-1);
         $this->assertFalse($message->isValid());
+    }
+
+    /**
+     * 測試取得User物件
+     * @return void
+     */
+    public function testGetUser()
+    {
+        $message = new Message();
+        //測試放入物件前的狀態是否為空物件
+        $this->assertEquals(new User(), $message->getUser());
+        //存入生成的物件
+        $user = $this->generateUser();
+        $message->setUser($user);
+        //檢查資料是否有效
+        $this->assertTrue($message->getUser()->isValid());
+        //檢查取得的資料是否符合預期
+        $this->assertEquals($user, $message->getUser());
     }
 }
