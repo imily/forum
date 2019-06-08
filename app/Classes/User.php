@@ -72,7 +72,7 @@ class User extends CommonDatabaseRecord
      * 轉為陣列
      * @return array
      */
-    public  function  toArray():array
+    public function toArray():array
     {
         $content = parent::toArray();
         $content['ixUser'] = $this->getId();
