@@ -134,12 +134,6 @@ class MessageModel
             return array(false, $error);
         }
 
-        // 檢查當前使用者是否為此留言的發表者
-        if (UserModel::getCurrentLoginUser() !== $messageId) {
-            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
-            return array(false, $error);
-        }
-
         $sql = sprintf("
                 UPDATE `Message`
                 SET `sDescription` = '%s'
