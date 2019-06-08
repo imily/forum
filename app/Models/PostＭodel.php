@@ -15,13 +15,17 @@ class PostＭodel
 {
     /**
      * 取得所有討論主題清單
+     * @param Filter $filter
      * @return array
      */
-    public static function getAllList()
+    public static function getAllList(Filter $filter)
     {
         $sql = sprintf("
                 SELECT * 
-                FROM `Post`");
+                FROM `Post`
+                LIMIT %d, %d"
+            , (int)$filter->getOffset()
+            , (int)$filter->getLimit());
 
         $results = DB::SELECT($sql);
         $posts = array();
@@ -114,13 +118,17 @@ class PostＭodel
 
     /**
      * 新增討論主題
-     * @param Post $post
+     * @param int $userId
+     * @param string $topic
+     * @param string $description
      * @return array
      */
-    public static function add(Post $post)
+    public static function add(int $userId, string $topic, string $description)
     {
-        if ($post->isValid()) {
-            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
+        // 檢查欄位是否為空
+        if (($topic === '') or
+            ($description === '')) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
             return array(false, $error);
         }
 
@@ -129,9 +137,9 @@ class PostＭodel
                 (`ixUser`, `sTopic`, `sDescription`)
                 VALUE 
                 ('%d', '%s', '%s')"
-            , addslashes($post->getUser())
-            , addslashes($post->getTopic())
-            , addslashes($post->getDescription()));
+            , (int)$userId
+            , addslashes($topic)
+            , addslashes($description));
 
         $inserted = DB::INSERT($sql);
 
@@ -140,6 +148,117 @@ class PostＭodel
         if ($inserted) {
             $errorNone = new Error(Error::ERROR_NONE);
             $result = array(true, $errorNone);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 修改單一討論主題標題
+     * @param int $postId
+     * @param string $topic
+     * @return array
+     */
+    public static function modifyPostTopic(int $postId, string $topic)
+    {
+        // 檢查欄位是否為空
+        if ($topic === '') {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+            return array(false, $error);
+        }
+
+        // 檢查此留言 id 是否存在
+        if (static::isExist($postId)) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_RESULT_NOT_FOUND);
+            return array(false, $error);
+        }
+
+        $sql = sprintf("
+                UPDATE `Post`
+                SET `sTopic` = '%s'
+                WHERE `ixPost` = '%d'"
+            , addslashes($topic)
+            , (int)$postId);
+
+        $isUpdated = DB::update($sql);
+
+        $result = array(false, new ErrorDB(ErrorDB::ERROR_DB_FAILED_UPDATE));
+        if ($isUpdated) {
+            $result = array(true, new Error(Error::ERROR_NONE));
+        }
+
+        return $result;
+    }
+
+    /**
+     * 修改單一討論主題內容
+     * @param int $postId
+     * @param string $description
+     * @return array
+     */
+    public static function modifyPostDescription(int $postId, string $description)
+    {
+        // 檢查欄位是否為空
+        if ($description === '') {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+            return array(false, $error);
+        }
+
+        // 檢查此留言 id 是否存在
+        if (static::isExist($postId)) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_RESULT_NOT_FOUND);
+            return array(false, $error);
+        }
+
+        $sql = sprintf("
+                UPDATE `Post`
+                SET `sDescription` = '%s'
+                WHERE `ixPost` = '%d'"
+            , addslashes($description)
+            , (int)$postId);
+
+        $isUpdated = DB::update($sql);
+
+        $result = array(false, new ErrorDB(ErrorDB::ERROR_DB_FAILED_UPDATE));
+        if ($isUpdated) {
+            $result = array(true, new Error(Error::ERROR_NONE));
+        }
+
+        return $result;
+    }
+
+    /**
+     * 批量刪除討論主題
+     * @param array $ids
+     * @return array
+     */
+    public static function deletePosts(array $ids)
+    {
+        if (count($ids) <= 0) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+            return array(false, $error);
+        }
+
+        foreach ($ids as $id) {
+            if ($id <= 0) {
+                $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
+                return array(false, $error);
+            }
+        }
+
+        $sql = sprintf("
+                DELETE
+                FROM `Post`
+                WHERE `ixPost` IN '%s'"
+            , SafeSql::transformSqlInArrayByIds($ids));
+
+        $isDeleted = DB::delete($sql);
+
+        $error = new ErrorDB(ErrorDB::ERROR_DB_FAILED_DELETE);
+        $result = array(false, $error->convertToDisplayArray());
+        if ($isDeleted) {
+            $error = new Error(Error::ERROR_NONE);
+            $result = array(true, $error->convertToDisplayArray());
         }
 
         return $result;
