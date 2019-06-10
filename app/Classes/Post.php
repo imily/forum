@@ -20,6 +20,10 @@ class Post extends CommonDatabaseRecord
     // 討論主題喜歡者，欄位裡為json文字格式內容
     private $sLike           = '[]';
 
+    private $user            = null;
+
+    private $messages         = null;
+
     /**
      * 資料是否有效
      * @return bool
@@ -98,7 +102,7 @@ class Post extends CommonDatabaseRecord
      * @param int $userId
      * @return void
      */
-    public function setUser(int $userId)
+    public function setIxUser(int $userId)
     {
         $this->ixUser = $userId;
     }
@@ -107,7 +111,7 @@ class Post extends CommonDatabaseRecord
      * 取得討論主題發表人 id
      * @return int
      */
-    public function getUser():int
+    public function getIxUser():int
     {
         return $this->ixUser;
     }
@@ -167,5 +171,43 @@ class Post extends CommonDatabaseRecord
     public function getLikes():string
     {
         return $this->sLike;
+    }
+
+    /**
+     * 設定message
+     * @param array $messages
+     * @return void
+     */
+    public function setMessages(array $messages)
+    {
+        $this->messages = $messages;
+    }
+
+    /**
+     * 取得message
+     * @return array
+     */
+    public function getMessages():array
+    {
+        return $this->messages;
+    }
+
+    /**
+     * 設定使用者
+     * @param User $user
+     * @return void
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * 取得使用者
+     * @return User
+     */
+    public function getUser():User
+    {
+        return $this->user;
     }
 }

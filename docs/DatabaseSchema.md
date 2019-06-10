@@ -86,7 +86,7 @@ Domain： 主域名資料
 | -------------- | ------------- | ---------- | ---------------------------------------- |
 | ixPost         | int(10)       |            | 編號 (Primary key, AutoNumber)           |
 | ixUser         | int           |            | 使用者 ID                                |
-| sMessagePerson | varchar(4096) |            | 評論者們                                 |
+| sMessagePerson | varchar(4096) |            | 評論者們，欄位裡為陣列格式內容             |
 | sTopic         | varchar(128)  |            | 留言標題                                 |
 | sDescription   | varchar(255)  |            | 留言內容                                 |
 | sLike          | varchar(4096) |            | 喜歡此留言的使用者，欄位裡為陣列格式內容 |

@@ -16,7 +16,7 @@ class MessageModel
      * @param Filter $filter
      * @return array
      */
-    public static function getAllList(Filter $filter)
+    public static function getList(Filter $filter)
     {
         $sql = sprintf("
                 SELECT * 
@@ -28,7 +28,9 @@ class MessageModel
         $results = DB::select($sql);
         $messages = array();
         foreach ($results as $result) {
-            $messages[] = new Message($result);
+            $message = new Message($result);
+            $message->setUser(UserModel::getById($message->getIxUser()));
+            $messages[] = $message;
         }
         return $messages;
     }
@@ -40,7 +42,7 @@ class MessageModel
      */
     public static function getById(int $id)
     {
-        if ((int)$id <= 0) {
+        if ($id <= 0) {
             return new Message();
         }
 
@@ -68,7 +70,7 @@ class MessageModel
      */
     public static function isExist(int $id)
     {
-        if ((int)$id <= 0){
+        if ($id <= 0){
             return false;
         }
         $sql = sprintf("

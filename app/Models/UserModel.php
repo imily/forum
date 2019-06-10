@@ -19,7 +19,7 @@ class UserModel
      */
     public static function getById(int $id)
     {
-        if ((int)$id <= 0) {
+        if ($id <= 0) {
             return new User();
         }
 
@@ -147,24 +147,25 @@ class UserModel
             return array(false, $error);
         }
 
-        $sql = sprintf("
-                SELECT *
-                FROM `User`
-                WHERE `sUsername` = '%s'
-                LIMIT 1"
-                , addslashes($account));
+        $user = static::getByName($account);
 
-        $searchResult = DB::select($sql);
+//        $sql = sprintf("
+//                SELECT *
+//                FROM `User`
+//                WHERE `sUsername` = '%s'
+//                LIMIT 1"
+//                , addslashes($account));
+//
+//        $searchResult = DB::select($sql);
 
         // 判斷帳號是否正確，若資料筆數小於等於0則表示沒有該帳號
-        if (count($searchResult) <= 0) {
+        if ($user->getId() === 0) {
             $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_INCORRECT_USERNAME);
             $result = array(false, $error);
             return $result;
         }
 
         // 比對密碼是否正確
-        $user = new User($searchResult[0]);
         if ( ! $user->verifyPassword($password)) {
             $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_INCORRECT_PASSWORD);
             $result = array(false, $error);
@@ -283,10 +284,10 @@ class UserModel
         $isDeleted = DB::delete($sql);
 
         $error = new ErrorDB(ErrorDB::ERROR_DB_FAILED_DELETE);
-        $result = array(false, $error->convertToDisplayArray());
+        $result = array(false, $error);
         if ($isDeleted) {
             $error = new Error(Error::ERROR_NONE);
-            $result = array(true, $error->convertToDisplayArray());
+            $result = array(true, $error);
         }
 
         return $result;
@@ -347,7 +348,7 @@ class UserModel
      */
     public static function isExist(int $id)
     {
-        if ((int)$id <= 0) {
+        if ($id <= 0) {
             return false;
         }
 

@@ -5,13 +5,12 @@ namespace App\Models;
 use App\Classes\Common\SafeSql;
 use App\Classes\Errors\Error;
 use App\Classes\Errors\ErrorArgument;
-use App\Classes\Errors\ErrorAuth;
 use App\Classes\Errors\ErrorDB;
 use App\Repositories\Filter;
 use Illuminate\Support\Facades\DB;
 use App\Classes\Post;
 
-class PostＭodel
+class PostModel
 {
     /**
      * 取得所有討論主題清單
@@ -30,7 +29,13 @@ class PostＭodel
         $results = DB::SELECT($sql);
         $posts = array();
         foreach ($results as $result) {
-            $posts[] = new Post($result);
+            $post = new Post($result);
+            // getListByMessageIds 裡要作更新日期的排序(order by)
+            $post->setMessages(MessageModel::getListByMessageIds(array(1, 4, 5)));
+            //取得發表主題者
+            $post->setUser(UserModel::getById($post->getIxUser()));
+            //取得留言者
+            $post->setMessageUsers(UserModel::getByIds(array(1, 2, 4)));
         }
         return $posts;
     }
@@ -42,7 +47,7 @@ class PostＭodel
      */
     public static function getById(int $id)
     {
-        if ((int)$id <= 0) {
+        if ($id <= 0) {
             return new Post();
         }
 
