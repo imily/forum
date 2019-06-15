@@ -108,7 +108,7 @@ class UserModel
 
         // 檢查頭像類型是否有效
         if ( ! User::isValidType($user->getStickerType())) {
-            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
+            $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_INCORRECT_STICKER_TYPE);
             return array(false, $error);
         }
 
@@ -149,15 +149,6 @@ class UserModel
 
         $user = static::getByName($account);
 
-//        $sql = sprintf("
-//                SELECT *
-//                FROM `User`
-//                WHERE `sUsername` = '%s'
-//                LIMIT 1"
-//                , addslashes($account));
-//
-//        $searchResult = DB::select($sql);
-
         // 判斷帳號是否正確，若資料筆數小於等於0則表示沒有該帳號
         if ($user->getId() === 0) {
             $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_INCORRECT_USERNAME);
@@ -179,12 +170,12 @@ class UserModel
     }
 
     /**
-     * 修改使用者密碼
-     * @param int $userId
+     * 修改使用者資訊
+     * @param User $user
      * @param string $password
      * @return array
      */
-    public function modifyPassword(int $userId, string $password)
+    public function modify(User $user, string $password)
     {
         // 檢查欄位是否為空字串
         if ($password === '') {
@@ -193,54 +184,25 @@ class UserModel
         }
 
         // 檢查使用者是否存在
-        if ( ! static::isUsernameExist($userId)) {
+        if ( ! static::isExist($user->getId())) {
             $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_FAILED_GET_ID);
             return array(false, $error);
         }
 
-        $sql = sprintf("
-                UPDATE `User`
-                SET `sPassword` = '%s'
-                WHERE `ixUser` = '%d'"
-                , addslashes(user::hashPassword($password))
-                , (int)$userId);
-
-        $isUpdated = DB::update($sql);
-
-        $result = array(false, new ErrorDB(ErrorDB::ERROR_DB_FAILED_UPDATE));
-        if ($isUpdated) {
-            $result = array(true, new Error(Error::ERROR_NONE));
-        }
-
-        return $result;
-    }
-
-    /**
-     * 修改使用者頭像類型
-     * @param int $userId
-     * @param int $stickerType
-     * @return array
-     */
-    public function modifyStickerType(int $userId, int $stickerType)
-    {
         // 檢查使用者頭像類型是否有效
-        if ( ! User::isValidType($stickerType)) {
+        if ( ! User::isValidType($user->getStickerType())) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
-            return array(false, $error);
-        }
-
-        // 檢查使用者是否存在
-        if ( ! static::isUsernameExist($userId)) {
-            $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_FAILED_GET_ID);
             return array(false, $error);
         }
 
         $sql = sprintf("
                 UPDATE `User`
                 SET `nStickerType` = '%d'
+                SET `sPassword` = '%s'
                 WHERE `ixUser` = '%d'"
-            , (int)$stickerType
-            , (int)$userId);
+            , (int)$user->getStickerType()
+            , addslashes(user::hashPassword($password))
+            , (int)$user->getId());
 
         $isUpdated = DB::update($sql);
 
