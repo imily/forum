@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->increments('ixUser');
             $table->string('sUsername',32);
             $table->string('sPassword', 60);
-            $table->integer('nStickerType', User::STICKER_TYPE_FINCH);
+            $table->integer('nStickerType');
             $table->string('sDescription', 255)->default('');
             $table->dateTime('dtCreate')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->dateTime('dtUpdate')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
