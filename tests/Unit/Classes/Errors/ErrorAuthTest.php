@@ -24,23 +24,10 @@ class ErrorAuthTest extends TestCase
             , $error->toString());
 
 
-        $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_EXISTED_EMAIL);
-        $this->assertEquals(ErrorAuth::ERROR_AUTH_EXISTED_EMAIL
-            , $error->getCode());
-        $this->assertEquals('Auth：email 已經存在'
-            , $error->toString());
-
-
         $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_EXISTED_USERNAME);
         $this->assertEquals(ErrorAuth::ERROR_AUTH_EXISTED_USERNAME
             , $error->getCode());
-        $this->assertEquals('Auth：名稱已經存在'
-            , $error->toString());
-
-        $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_INCORRECT_EMAIL);
-        $this->assertEquals(ErrorAuth::ERROR_AUTH_INCORRECT_EMAIL
-            , $error->getCode());
-        $this->assertEquals('Auth：email 輸入有誤'
+        $this->assertEquals('Auth：帳號已經存在'
             , $error->toString());
 
         $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_INCORRECT_PASSWORD);
@@ -49,10 +36,10 @@ class ErrorAuthTest extends TestCase
         $this->assertEquals('Auth：密碼輸入有誤'
             , $error->toString());
 
-        $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_UNMATCHED_PASSWORD);
-        $this->assertEquals(ErrorAuth::ERROR_AUTH_UNMATCHED_PASSWORD
+        $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_INCORRECT_STICKER_TYPE);
+        $this->assertEquals(ErrorAuth::ERROR_AUTH_INCORRECT_STICKER_TYPE
             , $error->getCode());
-        $this->assertEquals('Auth：兩次密碼不相符'
+        $this->assertEquals('Auth：頭像類型輸入有誤'
             , $error->toString());
 
         $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_FAILED_GET_ID);
