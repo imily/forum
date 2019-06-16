@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Classes\Common\SafeSql;
+use App\Classes\Common\VerifyFormat;
 use App\Classes\Errors\Error;
 use App\Classes\Errors\ErrorArgument;
+use App\Classes\Errors\ErrorAuth;
 use App\Classes\Errors\ErrorDB;
 use App\Repositories\Filter;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +16,28 @@ class MessageModel
 {
     /**
      * 取得所有留言清單
+     * @return array
+     */
+    public static function getAllList()
+    {
+        $sql = sprintf(
+            'SELECT * 
+                    FROM `Message`');
+
+        $results = DB::SELECT($sql);
+
+        $messages= array();
+        foreach ($results as $result) {
+            $message = new Message();
+            $message->loadFromDbResult($result);
+            $message->setUser(UserModel::getById($message->getIxUser()));
+            $messages[] = $message;
+        }
+        return $messages;
+    }
+
+    /**
+     * 依範圍取得所有留言清單
      * @param Filter $filter
      * @return array
      */
@@ -26,6 +51,34 @@ class MessageModel
             , (int)$filter->getLimit());
 
         $results = DB::select($sql);
+        $messages = array();
+        foreach ($results as $result) {
+            $message = new Message($result);
+            $message->setUser(UserModel::getById($message->getIxUser()));
+            $messages[] = $message;
+        }
+        return $messages;
+    }
+
+    /**
+     * 依照ids取得資料
+     * @param array $ids
+     * @return Message[]
+     */
+    public static function getByIds(array $ids)
+    {
+        if ((empty($ids)) or
+            ( ! VerifyFormat::isValidIds($ids))) {
+            return array();
+        }
+        $sql = sprintf("
+                SELECT * 
+                FROM `Message`
+                WHERE `ixMessage` 
+                IN (%s)"
+            , SafeSql::transformSqlInArrayByIds($ids));
+
+        $results = DB::SELECT($sql);
         $messages = array();
         foreach ($results as $result) {
             $message = new Message($result);
@@ -91,9 +144,21 @@ class MessageModel
      */
     public static function add(Message $message)
     {
+        // 檢查資料是否有效
+        if ( ! $message->isValid()) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
+            return array(false, $error);
+        }
+
         // 檢查欄位是否為空
         if ($message->getDescription() === '') {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+            return array(false, $error);
+        }
+
+        // 檢查是否為當前使用者
+        if ($message->getIxUser() !== UserModel::getCurrentLoginUser()) {
+            $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_UNAUTHORIZED);
             return array(false, $error);
         }
 
