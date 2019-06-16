@@ -20,11 +20,32 @@
 ```json
 {
     "id": 1,
-    "user_id": 1,
-    "message_ids": [1,2,3,4],
+    "user_name": "Imily",
+    "user_sicker_type": 1,
+    "messages": [
+        {
+            "id": 1,
+            "user_name": "John",
+            "description" : "留言內容"
+        },
+        {
+            "id": 2,
+            "user_name": "Tom",
+            "description" : "留言內容"
+        }
+    ],
     "topic": "討論標題",
     "description": "討論內容",
-    "likes": [1,2,3,4],
+    "likes": [
+         {
+             "user_id": 1,
+             "user_name": "John"
+         },
+         {
+             "user_id": 2,
+             "user_name": "Tom"
+         }
+     ],
     "create_time": "2018-12-19 08:00:00",
     "update_time": "2018-12-20 08:00:00"
 }
@@ -67,21 +88,63 @@
     "data":[
       {
         "id": 1,
-        "user_id": 1,
-        "message_ids": [1,2,3,4],
+        "user_name": "Imily",
+        "user_sicker_type": 1,
+        "messages": [
+            {
+                "id": 1,
+                "user_name": "John",
+                "description" : "留言內容"
+            },
+            {
+                "id": 2,
+                "user_name": "Tom",
+                "description" : "留言內容"
+            }
+        ],
         "topic": "討論標題",
         "description": "討論內容",
-        "likes": [1,2,3,4],
+        "likes": [
+             {
+                 "user_id": 1,
+                 "user_name": "John"
+             },
+             {
+                 "user_id": 2,
+                 "user_name": "Tom"
+             }
+         ],
         "create_time": "2018-12-19 08:00:00",
         "update_time": "2018-12-20 08:00:00"
       },
       {
         "id": 2,
-        "user_id": 2,
-        "message_ids": [5,6,7,8],
-        "topic": "第二則討論標題",
-        "description": "第二則討論內容",
-        "likes": [5,6,7,8],
+        "user_name": "Jessie",
+        "user_sicker_type": 1,
+        "messages": [
+            {
+                "id": 1,
+                "user_name": "John",
+                "description" : "留言內容"
+            },
+            {
+                "id": 2,
+                "user_name": "Tom",
+                "description" : "留言內容"
+            }
+        ],
+        "topic": "討論標題",
+        "description": "討論內容",
+        "likes": [
+             {
+                 "user_id": 1,
+                 "user_name": "John"
+             },
+             {
+                 "user_id": 2,
+                 "user_name": "Tom"
+             }
+         ],
         "create_time": "2019-03-01 08:00:00",
         "update_time": "2019-03-10 08:00:00"
       }
@@ -100,6 +163,10 @@
 | user_id    | int     | 發表主題的人 |
 | topic        | string | 標題 |
 | description  | string     | 敘述 |
+
+##### Response
+
+`Status: 201 OK`
 
 ##### Example
 
@@ -182,7 +249,7 @@ ids  | array | 一個或多個討論主題ID
 
 ##### Example
 
-- `ids`: `array(1,2,3)`
+ `ids`: `array(1,2,3)`
 
 ##### Response
 
@@ -213,6 +280,10 @@ ids  | array | 一個或多個討論主題ID
 | 名稱          | 型別    | 敘述 |
 | ---          | ---     | --- |
 | user_id    | int     | 喜歡此討論主題的使用者 |
+
+##### Response
+
+`Status: 201 OK`
 
 ##### Example
 

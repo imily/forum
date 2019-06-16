@@ -17,7 +17,8 @@
 ```json
 {
     "id": 1,
-    "user_id": 1,
+    "user_name": "Imily",
+    "user_sicker_type": 1,
     "description": "留言內容",
     "create_time": "2018-12-19 08:00:00",
     "update_time": "2018-12-20 08:00:00"
@@ -49,6 +50,10 @@
 | ---          | ---     | --- |
 | user_id    | int     | 留言者 |
 | description  | string     | 敘述 |
+
+##### Response
+
+`Status: 201 OK`
 
 ##### Example
 

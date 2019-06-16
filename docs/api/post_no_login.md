@@ -25,21 +25,63 @@
     "data":[
       {
         "id": 1,
-        "user_id": 1,
-        "message_ids": [1,2,3,4],
+        "user_name": "Imily",
+        "user_sicker_type": 1,
+        "messages": [
+            {
+                "id": 1,
+                "user_name": "John",
+                "description" : "留言內容"
+            },
+            {
+                "id": 2,
+                "user_name": "Tom",
+                "description" : "留言內容"
+            }
+        ],
         "topic": "討論標題",
         "description": "討論內容",
-        "likes": [1,2,3,4],
+        "likes": [
+             {
+                 "user_id": 1,
+                 "user_name": "John"
+             },
+             {
+                 "user_id": 2,
+                 "user_name": "Tom"
+             }
+         ],
         "create_time": "2018-12-19 08:00:00",
         "update_time": "2018-12-20 08:00:00"
       },
       {
         "id": 2,
-        "user_id": 2,
-        "message_ids": [5,6,7,8],
-        "topic": "第二則討論標題",
-        "description": "第二則討論內容",
-        "likes": [5,6,7,8],
+        "user_name": "Jessie",
+        "user_sicker_type": 2,
+        "messages": [
+            {
+                "id": 1,
+                "user_name": "John",
+                "description" : "留言內容"
+            },
+            {
+                "id": 2,
+                "user_name": "Tom",
+                "description" : "留言內容"
+            }
+        ],
+        "topic": "討論標題",
+        "description": "討論內容",
+        "likes": [
+             {
+                 "user_id": 1,
+                 "user_name": "John"
+             },
+             {
+                 "user_id": 2,
+                 "user_name": "Tom"
+             }
+         ],
         "create_time": "2019-03-01 08:00:00",
         "update_time": "2019-03-10 08:00:00"
       }

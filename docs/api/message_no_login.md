@@ -25,13 +25,15 @@
     "data":[
       {
         "id": 1,
-        "user_id": 1,
+        "user_name": "Imily",
+        "user_sicker_type": 1,
         "description": "留言內容",
         "create_time": "2018-12-19 08:00:00"
       },
       {
         "id": 2,
-        "user_id": 2,
+        "user_name": "Imily",
+        "user_sicker_type": 1,
         "description": "第二則留言內容",
         "create_time": "2019-03-01 08:00:00"
       }
