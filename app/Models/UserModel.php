@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Classes\Common\SafeSql;
+use App\Classes\Common\VerifyFormat;
 use App\Classes\Errors\Error;
 use App\Classes\Errors\ErrorArgument;
 use App\Classes\Errors\ErrorAuth;
@@ -73,6 +74,32 @@ class UserModel
                 FROM `User`");
 
         $results = DB::select($sql);
+        $users = array();
+        foreach ($results as $result) {
+            $users[] = new User($result);
+        }
+        return $users;
+    }
+
+    /**
+     * 依照ids取得資料
+     * @param array $ids
+     * @return User[]
+     */
+    public static function getByIds(array $ids)
+    {
+        if ((empty($ids)) or
+            ( ! VerifyFormat::isValidIds($ids))) {
+            return array();
+        }
+        $sql = sprintf("
+                SELECT * 
+                FROM `User`
+                WHERE `ixUser` 
+                IN (%s)"
+            , SafeSql::transformSqlInArrayByIds($ids));
+
+        $results = DB::SELECT($sql);
         $users = array();
         foreach ($results as $result) {
             $users[] = new User($result);
