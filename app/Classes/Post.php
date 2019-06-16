@@ -6,23 +6,35 @@ class Post extends CommonDatabaseRecord
 {
 
     // 討論主題 id
-    private $ixPost          = 0;
+    private $ixPost      = 0;
 
     // 討論主題發表人 id
-    private $ixUser          = 0;
+    private $ixUser      = 0;
 
-    // 討論主題留言者，欄位裡為json文字格式內容
-    private $sMessagePerson  = '[]';
+    // 討論主題的留言，欄位裡為json文字格式內容
+    private $sMessages   = [];
 
     // 討論主題標題
-    private $sTopic          = '';
+    private $sTopic      = '';
 
-    // 討論主題喜歡者，欄位裡為json文字格式內容
-    private $sLike           = '[]';
+    // 討論主題的喜歡者們，欄位裡為json文字格式內容
+    private $sLikes      = [];
 
-    private $user            = null;
+    private $user        = null;
 
-    private $messages         = null;
+    private $message     = null;
+
+    /**
+     * 建構子
+     * CommonDatabaseRecord constructor.
+     * @param array $content
+     */
+    public function __construct($content = array())
+    {
+        parent::__construct($content);
+        $this->setUser(new User());
+        $this->setMessage(new Message());
+    }
 
     /**
      * 資料是否有效
@@ -56,10 +68,10 @@ class Post extends CommonDatabaseRecord
         }
 
         $this->setId(data_get($content, 'ixPost'));
-        $this->setUser(data_get($content, 'ixUser'));
-        $this->setMessagePerson(data_get($content, 'sMessagePerson'));
+        $this->setIxUser(data_get($content, 'ixUser'));
+        $this->setMessages(data_get($content, 'sMessages'));
         $this->setTopic(data_get($content, 'sTopic'));
-        $this->setLikes(data_get($content, 'sLike'));
+        $this->setLikes(data_get($content, 'sLikes'));
     }
 
     /**
@@ -70,10 +82,10 @@ class Post extends CommonDatabaseRecord
     {
         $content = parent::toArray();
         $content['ixPost'] = $this->getId();
-        $content['ixUser'] = $this->getUser();
-        $content['sMessagePerson'] = $this->getMessagePerson();
+        $content['ixUser'] = $this->getIxUser();
+        $content['sMessages'] = $this->getMessages();
         $content['sTopic'] = $this->getTopic();
-        $content['sLike'] = $this-> getLikes();
+        $content['sLikes'] = $this-> getLikes();
 
         return $content;
     }
@@ -117,22 +129,22 @@ class Post extends CommonDatabaseRecord
     }
 
     /**
-     * 設定討論主題留言者們
-     * @param string $messagePerson
+     * 設定討論主題的留言
+     * @param array $messages
      * @return void
      */
-    public function setMessagePerson(string $messagePerson)
+    public function setMessages(array $messages)
     {
-        $this->sMessagePerson = $messagePerson;
+        $this->sMessages = $messages;
     }
 
     /**
-     * 取得討論主題留言者們
-     * @return string
+     * 取得討論主題的留言
+     * @return array
      */
-    public function getMessagePerson():string
+    public function getMessages():array
     {
-        return $this->sMessagePerson;
+        return $this->sMessages;
     }
 
     /**
@@ -156,44 +168,44 @@ class Post extends CommonDatabaseRecord
 
     /**
      * 設定討論主題喜歡者們
-     * @param string $likes
+     * @param array $likes
      * @return void
      */
-    public function setLikes(string $likes)
+    public function setLikes(array $likes)
     {
-        $this->sLike = $likes;
+        $this->sLikes = $likes;
     }
 
     /**
      * 取得討論主題喜歡者們
-     * @return string
+     * @return array
      */
-    public function getLikes():string
+    public function getLikes():array
     {
-        return $this->sLike;
+        return $this->sLikes;
     }
 
     /**
      * 設定message
-     * @param array $messages
+     * @param Message $message
      * @return void
      */
-    public function setMessages(array $messages)
+    public function setMessage(Message $message)
     {
-        $this->messages = $messages;
+        $this->message = $message;
     }
 
     /**
      * 取得message
-     * @return array
+     * @return Message
      */
-    public function getMessages():array
+    public function getMessage():Message
     {
-        return $this->messages;
+        return $this->message;
     }
 
     /**
-     * 設定使用者
+     * 設定User
      * @param User $user
      * @return void
      */
@@ -203,7 +215,7 @@ class Post extends CommonDatabaseRecord
     }
 
     /**
-     * 取得使用者
+     * 取得User
      * @return User
      */
     public function getUser():User

@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Classes\Common\SafeSql;
+use App\Classes\Common\VerifyFormat;
 use App\Classes\Errors\Error;
 use App\Classes\Errors\ErrorArgument;
+use App\Classes\Errors\ErrorAuth;
 use App\Classes\Errors\ErrorDB;
 use App\Repositories\Filter;
 use Illuminate\Support\Facades\DB;
@@ -14,10 +16,42 @@ class PostModel
 {
     /**
      * 取得所有討論主題清單
+     * @return array
+     */
+    public static function getAllList()
+    {
+        $sql = sprintf(
+            'SELECT * 
+                    FROM `Post`');
+
+        $results = DB::SELECT($sql);
+
+        $posts = array();
+        foreach ($results as $result) {
+            $post = new Post();
+            $post->loadFromDbResult($result);
+
+            $messageIds = $post->getMessages();
+            foreach ($messageIds as $messageId) {
+                $post->setMessage(MessageModel::getById($messageId));
+            }
+
+            $userIds = $post->getLikes();
+            foreach ($userIds as $userId) {
+                $post->setUser(UserModel::getById($userId));
+            }
+
+            $posts[] = $post;
+        }
+        return $posts;
+    }
+
+    /**
+     * 依範圍取得所有討論主題清單
      * @param Filter $filter
      * @return array
      */
-    public static function getAllList(Filter $filter)
+    public static function getList(Filter $filter)
     {
         $sql = sprintf("
                 SELECT * 
@@ -29,19 +63,16 @@ class PostModel
         $results = DB::SELECT($sql);
         $posts = array();
         foreach ($results as $result) {
-            $post = new Post($result);
-            // getListByMessageIds 裡要作更新日期的排序(order by)
-            $post->setMessages(MessageModel::getListByMessageIds(array(1, 4, 5)));
-            //取得發表主題者
-            $post->setUser(UserModel::getById($post->getIxUser()));
-            //取得留言者
-            $post->setMessageUsers(UserModel::getByIds(array(1, 2, 4)));
+            $post = new Post();
+            $post->loadFromDbResult($result);
+//            $post->setMessage(MessageModel::getByIds($post->geMessageIds()));
+//            $post->setUser(UserModel::getByIds($post->getUserIds()));
         }
         return $posts;
     }
 
     /**
-     * 依id取得討論主題資料
+     * 依id取得單一討論主題資料
      * @param int $id
      * @return Post
      */
@@ -60,11 +91,13 @@ class PostModel
 
         $result = DB::SELECT($sql);
 
+        $post = new Post();
         if (count($result) > 0) {
-            return new Post($result[0]);
+            $post->loadFromDbResult($result[0]);
+//            $post->setMessage(MessageModel::getByIds($post->geMessageIds()));
+//            $post->setUser(UserModel::getByIds($post->getUserIds()));
         }
-
-        return new Post();
+        return $post;
     }
 
     /**
@@ -73,7 +106,7 @@ class PostModel
      * @param int $userId
      * @return array
      */
-    public static function getByUserId(Filter $filter,  int $userId)
+    public static function getByUserId(Filter $filter, int $userId)
     {
         if ((int)$userId <= 0) {
             return [];
@@ -89,12 +122,13 @@ class PostModel
             , (int)$filter->getLimit());
 
         $results = DB::SELECT($sql);
-
         $posts = array();
         foreach ($results as $result) {
-            $posts[] = new Post($result);
+            $post = new Post();
+            $post->loadFromDbResult($result);
+//            $post->setMessage(MessageModel::getByIds($post->geMessageIds()));
+//            $post->setUser(UserModel::getByIds($post->getUserIds()));
         }
-
         return $posts;
     }
 
@@ -123,17 +157,21 @@ class PostModel
 
     /**
      * 新增討論主題
-     * @param int $userId
-     * @param string $topic
-     * @param string $description
+     * @param Post $post
      * @return array
      */
-    public static function add(int $userId, string $topic, string $description)
+    public static function add(Post $post)
     {
         // 檢查欄位是否為空
-        if (($topic === '') or
-            ($description === '')) {
+        if (($post->getTopic() == '') or
+            ($post->getDescription() === '')) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+            return array(false, $error);
+        }
+
+        // 檢查使用者是否為當前使用者
+        if ($post->getIxUser() == UserModel::getCurrentLoginUser()) {
+            $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_UNAUTHORIZED);
             return array(false, $error);
         }
 
@@ -142,9 +180,9 @@ class PostModel
                 (`ixUser`, `sTopic`, `sDescription`)
                 VALUE 
                 ('%d', '%s', '%s')"
-            , (int)$userId
-            , addslashes($topic)
-            , addslashes($description));
+            , (int)$post->getId()
+            , addslashes($post->getTopic())
+            , addslashes($post->getDescription()));
 
         $inserted = DB::INSERT($sql);
 
@@ -159,68 +197,39 @@ class PostModel
     }
 
     /**
-     * 修改單一討論主題標題
-     * @param int $postId
-     * @param string $topic
+     * 修改單一討論主題
+     * @param Post $post
      * @return array
      */
-    public static function modifyPostTopic(int $postId, string $topic)
+    public static function modifyPostTopic(Post $post)
     {
         // 檢查欄位是否為空
-        if ($topic === '') {
+        if (($post->getTopic() == '') or
+            ($post->getDescription() === '')) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
             return array(false, $error);
         }
 
         // 檢查此留言 id 是否存在
-        if (static::isExist($postId)) {
+        if (static::isExist($post->getId())) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_RESULT_NOT_FOUND);
+            return array(false, $error);
+        }
+
+        // 檢查使用者是否為當前使用者
+        if ($post->getIxUser() == UserModel::getCurrentLoginUser()) {
+            $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_UNAUTHORIZED);
             return array(false, $error);
         }
 
         $sql = sprintf("
                 UPDATE `Post`
                 SET `sTopic` = '%s'
-                WHERE `ixPost` = '%d'"
-            , addslashes($topic)
-            , (int)$postId);
-
-        $isUpdated = DB::update($sql);
-
-        $result = array(false, new ErrorDB(ErrorDB::ERROR_DB_FAILED_UPDATE));
-        if ($isUpdated) {
-            $result = array(true, new Error(Error::ERROR_NONE));
-        }
-
-        return $result;
-    }
-
-    /**
-     * 修改單一討論主題內容
-     * @param int $postId
-     * @param string $description
-     * @return array
-     */
-    public static function modifyPostDescription(int $postId, string $description)
-    {
-        // 檢查欄位是否為空
-        if ($description === '') {
-            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
-            return array(false, $error);
-        }
-
-        // 檢查此留言 id 是否存在
-        if (static::isExist($postId)) {
-            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_RESULT_NOT_FOUND);
-            return array(false, $error);
-        }
-
-        $sql = sprintf("
-                UPDATE `Post`
                 SET `sDescription` = '%s'
                 WHERE `ixPost` = '%d'"
-            , addslashes($description)
-            , (int)$postId);
+            , addslashes($post->getTopic())
+            , addslashes($post->getDescription())
+            , (int)$post->getId());
 
         $isUpdated = DB::update($sql);
 
@@ -239,6 +248,7 @@ class PostModel
      */
     public static function deletePosts(array $ids)
     {
+        // 檢查 ids 是否存在
         if (count($ids) <= 0) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
             return array(false, $error);
@@ -264,6 +274,45 @@ class PostModel
         if ($isDeleted) {
             $error = new Error(Error::ERROR_NONE);
             $result = array(true, $error->convertToDisplayArray());
+        }
+
+        return $result;
+    }
+
+    /**
+     * 新增喜歡單一討論主題
+     * @param Post $post
+     * @return array
+     */
+    public static function addLike(Post $post)
+    {
+        // 檢查此留言 id 是否存在
+        if (static::isExist($post->getId())) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_RESULT_NOT_FOUND);
+            return array(false, $error);
+        }
+
+        // 檢查使用者是否為當前使用者
+        if ($post->getIxUser() == UserModel::getCurrentLoginUser()) {
+            $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_UNAUTHORIZED);
+            return array(false, $error);
+        }
+
+        $sql = sprintf("
+                INSERT INTO `Post`
+                (`ixPost`, `sLikes`)
+                VALUE 
+                ('%d', '%s')"
+            , (int)$post->getId()
+            , addslashes($post->getLikes()));
+
+        $inserted = DB::INSERT($sql);
+
+        $error = new ErrorDB(ErrorDB::ERROR_DB_FAILED_INSERT);
+        $result = array(false, $error);
+        if ($inserted) {
+            $errorNone = new Error(Error::ERROR_NONE);
+            $result = array(true, $errorNone);
         }
 
         return $result;
