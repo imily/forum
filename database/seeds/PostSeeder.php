@@ -9,7 +9,7 @@ class PostSeeder extends Seeder
     {
         $sql = sprintf("
             INSERT INTO `Post`
-            (`ixPost`, `ixUser`, `sMessagePerson`, `sTopic`, `sDescription`
+            (`ixPost`, `ixUser`, `sMessages`, `sTopic`, `sDescription`
             , `sLikes`,  `dtCreate`, `dtUpdate`)
             VALUES
             (1, 1, '[1,2,3,5]',  'topic01', 'description01'
