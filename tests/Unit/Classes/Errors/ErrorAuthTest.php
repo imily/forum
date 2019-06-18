@@ -36,6 +36,12 @@ class ErrorAuthTest extends TestCase
         $this->assertEquals('Auth：密碼輸入有誤'
             , $error->toString());
 
+        $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_UNMATCHED_PASSWORD);
+        $this->assertEquals(ErrorAuth::ERROR_AUTH_UNMATCHED_PASSWORD
+            , $error->getCode());
+        $this->assertEquals('Auth：兩次密碼不相符'
+            , $error->toString());
+
         $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_INCORRECT_STICKER_TYPE);
         $this->assertEquals(ErrorAuth::ERROR_AUTH_INCORRECT_STICKER_TYPE
             , $error->getCode());
