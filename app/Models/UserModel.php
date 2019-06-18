@@ -202,7 +202,7 @@ class UserModel
      * @param string $password
      * @return array
      */
-    public function modify(User $user, string $password)
+    public static function modify(User $user, string $password)
     {
         // 檢查欄位是否為空字串
         if ($password === '') {
@@ -246,7 +246,7 @@ class UserModel
      * @param array $ids
      * @return array
      */
-    public function deleteUsers(array $ids)
+    public static function deleteUsers(array $ids)
     {
         if (count($ids) <= 0) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
