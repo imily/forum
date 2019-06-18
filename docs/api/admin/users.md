@@ -2,10 +2,55 @@
 
 ## 管理員專屬API功能
 
+ 0. [新增使用者](#新增使用者)
  0. [取得所有使用者](#取得使用者)
- 0. [修改使用者密碼](#修改使用者密碼)
- 0. [修改使用者頭像類型](#修改使用者頭像類型)
+ 0. [變更目前使用者資訊](#變更目前使用者資訊)
  0. [批量刪除使用者](#批量刪除使用者)
+
+### 新增使用者
+
+`POST /admin/user`
+
+##### 參數
+
+名稱 | 型別 | 敘述
+--- | --- | ---
+email    | string | 信箱
+username | string | 使用者名稱
+password | string | 密碼
+
+##### Example
+
+```
+{
+    "sticker_type": 1,
+    "username": "foo",
+    "password": "7d8VttAyeTSoyLdL"
+}
+```
+
+##### Response
+
+`Status: 201 Created`
+
+```
+{
+  "id": "2"
+}
+```
+##### Error
+
+代碼: 敘述
+
+1: 未知的錯誤
+
+1003: 帳號已經存在
+
+2001: 新增失敗
+
+3001: 輸入有空值
+
+3002: 無效的參數
 
 ### 取得使用者
 
@@ -21,38 +66,33 @@
 [
   {
     "id": 1,
+    "sticker_type": 1,
     "username": "admin"
   },
   {
     "id": 2,
+    "sticker_type": 1,
     "username": "foo"
   },
   {
     "id": 3,
+    "sticker_type": 1,
     "username": "bar"
   }
 ]
 ```
 
-### 修改使用者密碼
+### 變更目前使用者資訊
 
-`PATCH /admin/users/{user_id}/password`
+`PATCH /admin/users/{user_id}/info`
 
 ##### 參數
 
 名稱 | 型別 | 敘述
 --- | --- | ---
-new_password | string | 新密碼
-confirm_password	 | string | 確認新密碼
-
-##### Example
-
-```
-{
-  "new_password": "EMHi8OKhO5MSBraS",
-  "confirm_password": "EMHi8OKhO5MSBraS"
-}
-```
+sticker_type     | int | 頭像類型
+new_password     | string | 新密碼
+confirm_password | string | 確認新密碼
 
 ##### Response
 
@@ -60,47 +100,21 @@ confirm_password	 | string | 確認新密碼
 
 ##### Error
 
-代碼: 敘述
-
-1: 未知的錯誤
-
-1008: 使用者 id 無效
-
-2002: 修改失敗
-
-3001: 輸入有空值
-
-3002: 無效的參數
-
-### 修改使用者頭像類型
-
-`PATCH /admin/users/{user_id}/sticker_type`
-
-##### 參數
-
-名稱 | 型別 | 敘述
---- | --- | ---
-sticker_type | int | 頭像類型
-
-##### Example
-
 ```
 {
-  "sticker_type": 2,
+  "error": 1007
 }
 ```
 
-##### Response
-
-`Status: 204 No Content`
-
-##### Error
-
 代碼: 敘述
 
 1: 未知的錯誤
 
+1006: 兩次密碼不相符
+
 1008: 使用者 id 無效
+
+1012: 不可被修改
 
 2002: 修改失敗
 

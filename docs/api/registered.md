@@ -12,6 +12,7 @@
 
 名稱 | 型別 | 敘述
 --- | --- | ---
+sticker_type | int | 頭像類型
 username | string | 使用者名稱
 password | string | 密碼
 
@@ -19,6 +20,7 @@ password | string | 密碼
 
 ```
  {
+    "sticker_type": 1,
     "username": "foo",
     "password": "7d8VttAyeTSoyLdL"
  }
@@ -46,7 +48,7 @@ password | string | 密碼
 
 1: 未知的錯誤
 
-1004: 名稱已經存在
+1003: 帳號已經存在
 
 2001: 新增失敗
 

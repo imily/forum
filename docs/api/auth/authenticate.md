@@ -7,7 +7,7 @@
 
 ### 登入
 
-`POST /login`
+`POST /auth/login`
 
 #### 參數
 
@@ -53,7 +53,7 @@ password | string | 密碼
 
 ### 登出
 
-`POST /logout`
+`POST /auth/logout`
 
 #### Response
 
