@@ -190,7 +190,7 @@ class Post extends CommonDatabaseRecord
      * @param array $message
      * @return void
      */
-    public function setMessage(Array $message)
+    public function setMessage(array $message)
     {
         $this->message = $message;
     }
@@ -199,7 +199,7 @@ class Post extends CommonDatabaseRecord
      * 取得message
      * @return array
      */
-    public function getMessage():Array
+    public function getMessage():array
     {
         return $this->message;
     }
