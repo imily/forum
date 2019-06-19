@@ -2,9 +2,9 @@
 
 ## 討論區 API功能
 
-0. [取得所有討論主題](#取得所有討論主題)
+0. [取得部分討論主題](#取得部分討論主題)
 
-### 取得所有討論主題
+### 取得部分討論主題
 
 `GET /posts`
 
@@ -21,22 +21,24 @@
 
 ```json
 {
-    "total_amount": 4,
+    "total_amount": 2,
     "data":[
       {
         "id": 1,
         "user_name": "Imily",
         "user_sicker_type": 1,
-        "messages": [
-            {
-                "user_name": "John",
-                "description" : "留言內容"
-            },
-            {
-                "user_name": "Tom",
-                "description" : "留言內容"
-            }
-        ],
+        "messages": {
+            "total_amount": 2,
+            "data":[
+                {
+                    "user_name": "John",
+                    "description" : "留言內容"
+                },
+                {
+                    "user_name": "Tom",
+                    "description" : "留言內容"
+                }
+        ]},
         "topic": "討論標題",
         "description": "討論內容",
         "likes": [
@@ -54,27 +56,25 @@
         "id": 2,
         "user_name": "Jessie",
         "user_sicker_type": 2,
-        "messages": [
-            {
-                "id": 1,
-                "user_name": "John",
-                "description" : "留言內容"
-            },
-            {
-                "id": 2,
-                "user_name": "Tom",
-                "description" : "留言內容"
-            }
-        ],
+        "messages": {
+            "total_amount": 2,
+            "data":[
+                {
+                    "user_name": "John",
+                    "description" : "留言內容"
+                },
+                {
+                    "user_name": "Tom",
+                    "description" : "留言內容"
+                }
+        ]},
         "topic": "討論標題",
         "description": "討論內容",
         "likes": [
              {
-                 "user_id": 1,
                  "user_name": "John"
              },
              {
-                 "user_id": 2,
                  "user_name": "Tom"
              }
          ],
