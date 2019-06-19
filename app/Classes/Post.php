@@ -12,13 +12,13 @@ class Post extends CommonDatabaseRecord
     private $ixUser      = 0;
 
     // 討論主題的留言，欄位裡為json文字格式內容
-    private $sMessages   = [];
+    private $sMessages   = '[]';
 
     // 討論主題標題
     private $sTopic      = '';
 
     // 討論主題的喜歡者們，欄位裡為json文字格式內容
-    private $sLikes      = [];
+    private $sLikes      = '[]';
 
     private $user        = null;
 
@@ -32,8 +32,8 @@ class Post extends CommonDatabaseRecord
     public function __construct($content = array())
     {
         parent::__construct($content);
-        $this->setUser(new User());
-        $this->setMessage(new Message());
+        $this->setUser(array());
+        $this->setMessage(array());
     }
 
     /**
@@ -130,19 +130,19 @@ class Post extends CommonDatabaseRecord
 
     /**
      * 設定討論主題的留言
-     * @param array $messages
+     * @param string $messages
      * @return void
      */
-    public function setMessages(array $messages)
+    public function setMessages(string $messages)
     {
         $this->sMessages = $messages;
     }
 
     /**
      * 取得討論主題的留言
-     * @return array
+     * @return string
      */
-    public function getMessages():array
+    public function getMessages():string
     {
         return $this->sMessages;
     }
@@ -168,57 +168,57 @@ class Post extends CommonDatabaseRecord
 
     /**
      * 設定討論主題喜歡者們
-     * @param array $likes
+     * @param string $likes
      * @return void
      */
-    public function setLikes(array $likes)
+    public function setLikes(string $likes)
     {
         $this->sLikes = $likes;
     }
 
     /**
      * 取得討論主題喜歡者們
-     * @return array
+     * @return string
      */
-    public function getLikes():array
+    public function getLikes():string
     {
         return $this->sLikes;
     }
 
     /**
      * 設定message
-     * @param Message $message
+     * @param array $message
      * @return void
      */
-    public function setMessage(Message $message)
+    public function setMessage(Array $message)
     {
         $this->message = $message;
     }
 
     /**
      * 取得message
-     * @return Message
+     * @return array
      */
-    public function getMessage():Message
+    public function getMessage():Array
     {
         return $this->message;
     }
 
     /**
      * 設定User
-     * @param User $user
+     * @param array $user
      * @return void
      */
-    public function setUser(User $user)
+    public function setUser(array $user)
     {
         $this->user = $user;
     }
 
     /**
      * 取得User
-     * @return User
+     * @return array
      */
-    public function getUser():User
+    public function getUser():array
     {
         return $this->user;
     }

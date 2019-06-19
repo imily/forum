@@ -29,12 +29,10 @@
         "user_sicker_type": 1,
         "messages": [
             {
-                "id": 1,
                 "user_name": "John",
                 "description" : "留言內容"
             },
             {
-                "id": 2,
                 "user_name": "Tom",
                 "description" : "留言內容"
             }
@@ -43,11 +41,9 @@
         "description": "討論內容",
         "likes": [
              {
-                 "user_id": 1,
                  "user_name": "John"
              },
              {
-                 "user_id": 2,
                  "user_name": "Tom"
              }
          ],

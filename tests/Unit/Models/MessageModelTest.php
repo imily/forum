@@ -5,6 +5,7 @@ use App\Classes\Errors\ErrorArgument;
 use App\Classes\User;
 use App\Models\MessageModel;
 use App\Classes\Message;
+use App\Models\UserModel;
 use App\Repositories\Filter;
 
 class MessageModelTest extends DatabaseTestCase

@@ -33,6 +33,10 @@ class Message extends CommonDatabaseRecord
         if ($this->getIxUser() <= 0) {
             return false;
         }
+        // 檢查欄位是否為空
+        if ($this->getDescription() === '') {
+            return false;
+        }
 
         return parent::isValid();
     }

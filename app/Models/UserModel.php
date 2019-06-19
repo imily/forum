@@ -176,18 +176,16 @@ class UserModel
 
         $user = static::getByName($account);
 
-        // 判斷帳號是否正確，若資料筆數小於等於0則表示沒有該帳號
+        // 判斷帳號是否正確，若資料筆數等於0則表示沒有該帳號
         if ($user->getId() === 0) {
             $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_INCORRECT_USERNAME);
-            $result = array(false, $error);
-            return $result;
+            return array(false, $error);
         }
 
         // 比對密碼是否正確
         if ( ! $user->verifyPassword($password)) {
             $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_INCORRECT_PASSWORD);
-            $result = array(false, $error);
-            return $result;
+            return array(false, $error);
         }
 
         // 紀錄Session
@@ -210,6 +208,11 @@ class UserModel
             return array(false, $error);
         }
 
+        if ( ! $user->isValid()) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
+            return array(false, $error);
+        }
+
         // 檢查使用者是否存在
         if ( ! static::isExist($user->getId())) {
             $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_FAILED_GET_ID);
@@ -218,14 +221,22 @@ class UserModel
 
         // 檢查使用者頭像類型是否有效
         if ( ! User::isValidType($user->getStickerType())) {
-            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
+            $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_INCORRECT_STICKER_TYPE);
             return array(false, $error);
+        }
+
+        $originalUser = UserModel::getById($user->getId());
+
+        //修改的資料與原本資料相同則無須修改
+        if (($user->getStickerType() == $originalUser->getStickerType()) and
+            ($user->verifyPassword($password))) {
+            return array(true, new Error(Error::ERROR_NONE));
         }
 
         $sql = sprintf("
                 UPDATE `User`
-                SET `nStickerType` = '%d'
-                SET `sPassword` = '%s'
+                SET `nStickerType` = '%d',
+                    `sPassword` = '%s'
                 WHERE `ixUser` = '%d'"
             , (int)$user->getStickerType()
             , addslashes(user::hashPassword($password))

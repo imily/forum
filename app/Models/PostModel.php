@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Classes\Common\SafeSql;
-use App\Classes\Common\VerifyFormat;
 use App\Classes\Errors\Error;
 use App\Classes\Errors\ErrorArgument;
 use App\Classes\Errors\ErrorAuth;
@@ -31,16 +30,23 @@ class PostModel
             $post = new Post();
             $post->loadFromDbResult($result);
 
-            $messageIds = $post->getMessages();
+            // messages
+            // string to array
+            $messageIds = json_decode($post->getMessages());
+            $messages = array();
             foreach ($messageIds as $messageId) {
-                $post->setMessage(MessageModel::getById($messageId));
+                $messages[] = MessageModel::getById($messageId);
             }
+            $post->setMessage($messages);
 
-            $userIds = $post->getLikes();
+            // userIds
+            // string to array
+            $likes = array();
+            $userIds = json_decode($post->getLikes());
             foreach ($userIds as $userId) {
-                $post->setUser(UserModel::getById($userId));
+                $likes[] = UserModel::getById($userId);
             }
-
+            $post->setUser($likes);
             $posts[] = $post;
         }
         return $posts;
@@ -65,8 +71,9 @@ class PostModel
         foreach ($results as $result) {
             $post = new Post();
             $post->loadFromDbResult($result);
-//            $post->setMessage(MessageModel::getByIds($post->geMessageIds()));
-//            $post->setUser(UserModel::getByIds($post->getUserIds()));
+            $post->setMessage(MessageModel::getByIds(json_decode($post->getMessages())));
+            $post->setUser(UserModel::getByIds(json_decode($post->getLikes())));
+            $posts[] = $post;
         }
         return $posts;
     }
@@ -281,30 +288,35 @@ class PostModel
 
     /**
      * 新增喜歡單一討論主題
-     * @param Post $post
+     * @param $ixPost
+     * @param $userId
      * @return array
      */
-    public static function addLike(Post $post)
+    public static function addLike($ixPost, $userId)
     {
         // 檢查此留言 id 是否存在
-        if (static::isExist($post->getId())) {
+        if ( ! static::isExist($ixPost)) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_RESULT_NOT_FOUND);
             return array(false, $error);
         }
 
         // 檢查使用者是否為當前使用者
-        if ($post->getIxUser() == UserModel::getCurrentLoginUser()) {
+        if ($userId !== UserModel::getCurrentLoginUser()->getId()) {
             $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_UNAUTHORIZED);
             return array(false, $error);
         }
 
+        $post = PostModel::getById($ixPost);
+        $likes = json_decode($post->getLikes());
+        array_push($likes, $userId);
+        $newLikes = json_encode($likes);
+
         $sql = sprintf("
-                INSERT INTO `Post`
-                (`ixPost`, `sLikes`)
-                VALUE 
-                ('%d', '%s')"
-            , (int)$post->getId()
-            , addslashes($post->getLikes()));
+                UPDATE `Post`
+                SET `sLikes` = '%s'
+                WHERE `ixPost` = '%d'"
+            , addslashes($newLikes)
+            , (int)$post->getId());
 
         $inserted = DB::INSERT($sql);
 

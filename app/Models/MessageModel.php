@@ -37,7 +37,7 @@ class MessageModel
     }
 
     /**
-     * 依範圍取得所有留言清單
+     * 取得部份留言清單
      * @param Filter $filter
      * @return array
      */
@@ -150,14 +150,8 @@ class MessageModel
             return array(false, $error);
         }
 
-        // 檢查欄位是否為空
-        if ($message->getDescription() === '') {
-            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
-            return array(false, $error);
-        }
-
         // 檢查是否為當前使用者
-        if ($message->getIxUser() !== UserModel::getCurrentLoginUser()) {
+        if ($message->getIxUser() !== UserModel::getCurrentLoginUser()->getId()) {
             $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_UNAUTHORIZED);
             return array(false, $error);
         }
@@ -183,21 +177,25 @@ class MessageModel
 
     /**
      * 修改單一留言內容
-     * @param int $messageId
-     * @param string $description
+     * @param Message $message
      * @return array
      */
-    public static function modifyDescription(int $messageId, string $description)
+    public static function modifyDescription(Message $message)
     {
         // 檢查欄位是否為空
-        if ($description === '') {
+        if ($message->getDescription() === '') {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
             return array(false, $error);
         }
-
         // 檢查此留言 id 是否存在
-        if (static::isExist($messageId)) {
+        if (static::isExist($message->getId())) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_RESULT_NOT_FOUND);
+            return array(false, $error);
+        }
+
+        // 檢查是否為當前使用者
+        if ($message->getIxUser() !== UserModel::getCurrentLoginUser()->getId()) {
+            $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_UNAUTHORIZED);
             return array(false, $error);
         }
 
@@ -205,8 +203,8 @@ class MessageModel
                 UPDATE `Message`
                 SET `sDescription` = '%s'
                 WHERE `ixMessage` = '%d'"
-            , addslashes($description)
-            , (int)$messageId);
+            , addslashes($message->getDescription())
+            , (int)$message->getId());
 
         $isUpdated = DB::update($sql);
 
