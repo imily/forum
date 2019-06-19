@@ -61,7 +61,7 @@ class MessageModel
     }
 
     /**
-     * 依照ids取得資料
+     * 依照ids取得所有資料
      * @param array $ids
      * @return Message[]
      */
@@ -77,6 +77,38 @@ class MessageModel
                 WHERE `ixMessage` 
                 IN (%s)"
             , SafeSql::transformSqlInArrayByIds($ids));
+
+        $results = DB::SELECT($sql);
+        $messages = array();
+        foreach ($results as $result) {
+            $message = new Message($result);
+            $message->setUser(UserModel::getById($message->getIxUser()));
+            $messages[] = $message;
+        }
+        return $messages;
+    }
+
+    /**
+     * 依照ids取得部分資料
+     * @param array $ids
+     * @param Filter $filter
+     * @return Message[]
+     */
+    public static function getByIdsByFilter(array $ids, Filter $filter)
+    {
+        if ((empty($ids)) or
+            ( ! VerifyFormat::isValidIds($ids))) {
+            return array();
+        }
+        $sql = sprintf("
+                SELECT * 
+                FROM `Message`
+                WHERE `ixMessage` 
+                IN (%s)
+                LIMIT %d, %d"
+            , SafeSql::transformSqlInArrayByIds($ids)
+            , (int)$filter->getOffset()
+            , (int)$filter->getLimit());
 
         $results = DB::SELECT($sql);
         $messages = array();
