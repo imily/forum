@@ -12,8 +12,13 @@ class PostModelTest extends DatabaseTestCase
      */
     public function testGetAllList()
     {
-        session()->put('userId', 4);
-        list($isSuccess, $error) = PostModel::addLike(2, 4);
-        print_r(PostModel::getById(2));
+        $postFilter = new Filter();
+        $postFilter->setLimit(2);
+        $postFilter->setOffset(0);
+
+        $messageFilter = new Filter();
+        $messageFilter->setLimit(1);
+        $messageFilter->setOffset(0);
+        dd(PostModel::getList($postFilter, $messageFilter));
     }
 }

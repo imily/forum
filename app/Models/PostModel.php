@@ -15,9 +15,10 @@ class PostModel
 {
     /**
      * 取得所有討論主題清單
+     * @param Filter $filter
      * @return array
      */
-    public static function getAllList()
+    public static function getAllList(Filter $filter)
     {
         $sql = sprintf(
             'SELECT * 
@@ -29,49 +30,34 @@ class PostModel
         foreach ($results as $result) {
             $post = new Post();
             $post->loadFromDbResult($result);
-
-            // messages
-            // string to array
-            $messageIds = json_decode($post->getMessages());
-            $messages = array();
-            foreach ($messageIds as $messageId) {
-                $messages[] = MessageModel::getById($messageId);
-            }
-            $post->setMessage($messages);
-
-            // userIds
-            // string to array
-            $likes = array();
-            $userIds = json_decode($post->getLikes());
-            foreach ($userIds as $userId) {
-                $likes[] = UserModel::getById($userId);
-            }
-            $post->setUser($likes);
+            $post->setMessage(MessageModel::getByIdsByFilter(json_decode($post->getMessages()), $filter));
+            $post->setUser(UserModel::getByIds(json_decode($post->getLikes())));
             $posts[] = $post;
         }
         return $posts;
     }
 
     /**
-     * 依範圍取得所有討論主題清單
-     * @param Filter $filter
+     * 取得部分討論主題清單
+     * @param Filter $postFilter
+     * @param Filter $messageFilter
      * @return array
      */
-    public static function getList(Filter $filter)
+    public static function getList(Filter $postFilter, Filter $messageFilter)
     {
         $sql = sprintf("
                 SELECT * 
                 FROM `Post`
                 LIMIT %d, %d"
-            , (int)$filter->getOffset()
-            , (int)$filter->getLimit());
+            , (int)$postFilter->getOffset()
+            , (int)$postFilter->getLimit());
 
         $results = DB::SELECT($sql);
         $posts = array();
         foreach ($results as $result) {
             $post = new Post();
             $post->loadFromDbResult($result);
-            $post->setMessage(MessageModel::getByIds(json_decode($post->getMessages())));
+            $post->setMessage(MessageModel::getByIdsByFilter(json_decode($post->getMessages()), $messageFilter));
             $post->setUser(UserModel::getByIds(json_decode($post->getLikes())));
             $posts[] = $post;
         }
@@ -81,9 +67,10 @@ class PostModel
     /**
      * 依id取得單一討論主題資料
      * @param int $id
+     * @param Filter $filter
      * @return Post
      */
-    public static function getById(int $id)
+    public static function getById(int $id, Filter $filter)
     {
         if ($id <= 0) {
             return new Post();
@@ -101,19 +88,20 @@ class PostModel
         $post = new Post();
         if (count($result) > 0) {
             $post->loadFromDbResult($result[0]);
-//            $post->setMessage(MessageModel::getByIds($post->geMessageIds()));
-//            $post->setUser(UserModel::getByIds($post->getUserIds()));
+            $post->setMessage(MessageModel::getByIdsByFilter(json_decode($post->getMessages()), $filter));
+            $post->setUser(UserModel::getByIds(json_decode($post->getLikes())));
         }
         return $post;
     }
 
     /**
-     * 依指定user id取得所有討論主題資料
-     * @param Filter $filter
+     * 依指定user id 取得部分討論主題資料
+     * @param Filter $postFilter
+     * @param Filter $messageFilter
      * @param int $userId
      * @return array
      */
-    public static function getByUserId(Filter $filter, int $userId)
+    public static function getByUserId(Filter $postFilter, Filter $messageFilter, int $userId)
     {
         if ((int)$userId <= 0) {
             return [];
@@ -125,16 +113,17 @@ class PostModel
                 WHERE `ixUser` = '%d'
                 LIMIT %d, %d"
             , (int)$userId
-            , (int)$filter->getOffset()
-            , (int)$filter->getLimit());
+            , (int)$postFilter->getOffset()
+            , (int)$postFilter->getLimit());
 
         $results = DB::SELECT($sql);
         $posts = array();
         foreach ($results as $result) {
             $post = new Post();
             $post->loadFromDbResult($result);
-//            $post->setMessage(MessageModel::getByIds($post->geMessageIds()));
-//            $post->setUser(UserModel::getByIds($post->getUserIds()));
+            $post->setMessage(MessageModel::getByIdsByFilter(json_decode($post->getMessages()), $messageFilter));
+            $post->setUser(UserModel::getByIds(json_decode($post->getLikes())));
+            $posts[] = $post;
         }
         return $posts;
     }
@@ -288,8 +277,8 @@ class PostModel
 
     /**
      * 新增喜歡單一討論主題
-     * @param $ixPost
-     * @param $userId
+     * @param $ixPost int
+     * @param $userId int
      * @return array
      */
     public static function addLike($ixPost, $userId)
@@ -306,8 +295,11 @@ class PostModel
             return array(false, $error);
         }
 
+        // 取得目前的喜歡人數
         $post = PostModel::getById($ixPost);
         $likes = json_decode($post->getLikes());
+
+        // 新增喜歡
         array_push($likes, $userId);
         $newLikes = json_encode($likes);
 
