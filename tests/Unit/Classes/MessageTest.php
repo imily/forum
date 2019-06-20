@@ -18,7 +18,7 @@ class MessageTest extends TestCase
         $this->content = array();
         $this->content['ixMessage'] = 1;
         $this->content['ixUser']    = 2;
-        $this->content['sDescription'] = '';
+        $this->content['sDescription'] = '描述';
         $this->content['dtCreate'] = '0000-00-00 00:00:00';
         $this->content['dtUpdate'] = '0000-00-00 00:00:00';
     }
@@ -110,20 +110,36 @@ class MessageTest extends TestCase
     }
 
     /**
+     * 測試有效資料(fail:內容欄位為空)
+     * @return void
+     */
+    public function testDataNotValidByDescription()
+    {
+        $content = $this->content;
+        $message = new Message();
+
+        $message->loadFromDbResult($content);
+        $this->assertTrue($message->isValid());
+
+        $message->setDescription('');
+        $this->assertFalse($message->isValid());
+    }
+
+    /**
      * 測試取得User物件
      * @return void
      */
     public function testGetUser()
     {
         $message = new Message();
-        //測試放入物件前的狀態是否為空物件
+        // 測試放入物件前的狀態是否為空物件
         $this->assertEquals(new User(), $message->getUser());
-        //存入生成的物件
+        // 存入生成的物件
         $user = $this->generateUser();
         $message->setUser($user);
-        //檢查資料是否有效
+        // 檢查資料是否有效
         $this->assertTrue($message->getUser()->isValid());
-        //檢查取得的資料是否符合預期
+        // 檢查取得的資料是否符合預期
         $this->assertEquals($user, $message->getUser());
     }
 }
