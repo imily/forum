@@ -1,6 +1,8 @@
 <?php namespace Tests;
 
+use App\Classes\Message;
 use App\Classes\Post;
+use App\Classes\User;
 
 class PostTest extends TestCase
 {
@@ -13,12 +15,49 @@ class PostTest extends TestCase
         $this->content = array ();
         $this->content['ixPost']         = 1;
         $this->content['ixUser']         = 2;
-        $this->content['sMessagePerson'] = '[1,2,3]';
-        $this->content['sTopic']         = 'topic';
-        $this->content['sLike']          = '[1,2,3]';
-        $this->content['sDescription'] = '';
-        $this->content['dtCreate'] = '0000-00-00 00:00:00';
-        $this->content['dtUpdate'] = '0000-00-00 00:00:00';
+        $this->content['sMessages']      = '[1,2,3]';
+        $this->content['sTopic']         = '主題標題';
+        $this->content['sLikes']         = '[1,2,3]';
+        $this->content['sDescription']   = '主題內容';
+        $this->content['dtCreate']       = '0000-00-00 00:00:00';
+        $this->content['dtUpdate']       = '0000-00-00 00:00:00';
+    }
+
+    /**
+     * 生成message陣列
+     * @return array
+     */
+    public function generateMessages()
+    {
+        $messages = [];
+        $message = new Message();
+        $message->setId(1);
+        $message->setIxUser(2);
+        $message->setDescription('描述');
+        $message->setDtCreate('1970-01-01 08:00:01');
+        $message->setDtUpdate('1970-01-01 08:00:01');
+
+        $messages[] = $message;
+        return $messages;
+    }
+
+    /**
+     * 生成User陣列
+     * @return array
+     */
+    private function generateUsers()
+    {
+        $users = [];
+        $user = new User();
+        $user->setId(1);
+        $user->setUsername('testUser');
+        $user->setStickerType(2);
+        $user->setDescription('描述');
+        $user->setDtCreate('1970-01-01 08:00:01');
+        $user->setDtUpdate('1970-01-01 08:00:01');
+
+        $users[] = $user;
+        return $users;
     }
 
     /**
@@ -33,10 +72,10 @@ class PostTest extends TestCase
         $this->assertEquals($this->content, $post->toArray());
 
         $this->assertEquals($this->content['ixPost'], $post->getId());
-        $this->assertEquals($this->content['ixUser'], $post->getUser());
-        $this->assertEquals($this->content['sMessagePerson'], $post->getMessagePerson());
+        $this->assertEquals($this->content['ixUser'], $post->getIxUser());
+        $this->assertEquals($this->content['sMessages'], $post->getMessages());
         $this->assertEquals($this->content['sTopic'], $post->getTopic());
-        $this->assertEquals($this->content['sLike'], $post->getLikes());
+        $this->assertEquals($this->content['sLikes'], $post->getLikes());
         $this->assertEquals($this->content['sDescription'], $post->getDescription());
         $this->assertEquals($this->content['dtCreate'], $post->getDtCreate());
         $this->assertEquals($this->content['dtUpdate'], $post->getDtUpdate());
@@ -54,10 +93,10 @@ class PostTest extends TestCase
         $this->assertEquals($this->content, $post->toArray());
 
         $this->assertEquals($this->content['ixPost'], $post->getId());
-        $this->assertEquals($this->content['ixUser'], $post->getUser());
-        $this->assertEquals($this->content['sMessagePerson'], $post->getMessagePerson());
+        $this->assertEquals($this->content['ixUser'], $post->getIxUser());
+        $this->assertEquals($this->content['sMessages'], $post->getMessages());
         $this->assertEquals($this->content['sTopic'], $post->getTopic());
-        $this->assertEquals($this->content['sLike'], $post->getLikes());
+        $this->assertEquals($this->content['sLikes'], $post->getLikes());
         $this->assertEquals($this->content['sDescription'], $post->getDescription());
         $this->assertEquals($this->content['dtCreate'], $post->getDtCreate());
         $this->assertEquals($this->content['dtUpdate'], $post->getDtUpdate());
@@ -88,15 +127,15 @@ class PostTest extends TestCase
         $post->loadFromDbResult($content);
         $this->assertTrue($post->isValid());
 
-        $post->setUser(0);
+        $post->setIxUser(0);
         $this->assertFalse($post->isValid());
 
-        $post->setUser(-1);
+        $post->setIxUser(-1);
         $this->assertFalse($post->isValid());
     }
 
     /**
-     * 測試有效資料(fail:討論主題標題無效)
+     * 測試有效資料(fail:討論主題標題為空)
      * @return void
      */
     public function testDataNotValidByTopic()
@@ -109,5 +148,67 @@ class PostTest extends TestCase
 
         $post->setTopic('');
         $this->assertFalse($post->isValid());
+    }
+
+    /**
+     * 測試有效資料(fail:討論主題內容為空)
+     * @return void
+     */
+    public function testDataNotValidByDescription()
+    {
+        $content = $this->content;
+        $post = new Post();
+
+        $post->loadFromDbResult($content);
+        $this->assertTrue($post->isValid());
+
+        $post->setDescription('');
+        $this->assertFalse($post->isValid());
+    }
+
+    /**
+     * 測試取得Message陣列
+     * @return void
+     */
+    public function testGetMessages()
+    {
+        $post = new Post();
+        // 測試放入陣列前的狀態是否為空陣列
+        $this->assertEquals(array(), $post->getMessage());
+
+        // 存入生成的陣列
+        $messages = $this->generateMessages();
+        $post->setMessage($messages);
+
+        // 檢查資料是否有效
+        foreach ($messages as $message) {
+            $this->assertTrue($message->isValid());
+        }
+
+        // 檢查取得的資料是否符合預期
+        $this->assertEquals($messages, $post->getMessage());
+    }
+
+    /**
+     * 測試取得User陣列
+     * @return void
+     */
+    public function testGetUsers()
+    {
+        $post = new Post();
+        // 測試放入陣列前的狀態是否為空陣列
+        $this->assertEquals(array(), $post->getUser());
+
+        // 存入生成的陣列
+        $users = $this->generateUsers();
+        $post->setUser($users);
+
+        // 檢查資料是否有效
+        foreach ($users as $user) {
+            $this->assertTrue($user->isValid());
+        }
+
+        // 檢查取得的資料是否符合預期
+        $this->assertEquals($users, $post->getUser());
     }
 }
