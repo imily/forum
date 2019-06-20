@@ -129,13 +129,13 @@ class UserModel
 
         // 檢查帳號是否存在
         if (static::isUsernameExist($user->getUsername())) {
-            $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_INCORRECT_USERNAME);
+            $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_EXISTED_USERNAME);
             return array(false, $error);
         }
 
         // 檢查頭像類型是否有效
         if ( ! User::isValidType($user->getStickerType())) {
-            $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_INCORRECT_STICKER_TYPE);
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             return array(false, $error);
         }
 
@@ -277,10 +277,10 @@ class UserModel
         }
 
         $sql = sprintf("
-                DELETE
-                FROM `User`
-                WHERE `ixUser` IN '%s'"
-                , SafeSql::transformSqlInArrayByIds($ids));
+            DELETE 
+            FROM `User` 
+            WHERE `ixUser` IN (%s)"
+            , SafeSql::transformSqlInArrayByIds($ids));
 
         $isDeleted = DB::delete($sql);
 
@@ -357,7 +357,7 @@ class UserModel
             SELECT `ixUser` 
             FROM `User` 
             WHERE `ixUser` = '%d'"
-            , int($id));
+            , (int)$id);
 
         $result = DB::select($sql);
 
