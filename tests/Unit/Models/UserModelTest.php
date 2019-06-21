@@ -660,4 +660,124 @@ class UserModelTest extends DatabaseTestCase
 //        $this->assertFalse(UserModel::isExist(0));
 //        $this->assertFalse(UserModel::isExist(5));
 //    }
+
+    /**
+     * 測試使用者登入登出
+     * @return void
+     */
+    public function testLoginLogoutAndIsLogin ()
+    {
+        // session內無資料，也無使用者登入
+        $this->assertFalse(session()->has('userId'));
+        $this->assertFalse(UserModel::isLogin());
+
+        // 設定有效的資料
+        $username = 'imily';
+        $password = 1234;
+
+        // 使用者登入，確認回傳無錯誤
+        list($isSuccess, $error) = UserModel::login($username, $password);
+        $this->assertTrue($isSuccess);
+        $this->assertEquals(Error::ERROR_NONE, $error->getCode());
+
+        // 取得session，使用者已登入
+        $this->assertTrue(session()->has('userId'));
+        $this->assertTrue(UserModel::isLogin());
+
+        // 使用者登出，session內無資料，也無使用者登入
+        UserModel::logout();
+        $this->assertFalse(session()->has('userId'));
+        $this->assertFalse(UserModel::isLogin());
+    }
+
+    /**
+     * 測試使用者登入
+     * (Fail:無效的使用者名稱)
+     * @return void
+     */
+    public function testLoginByInvalidUsername()
+    {
+        // session內無資料
+        $this->assertFalse(session()->has('userId'));
+
+        // 設定無效的帳號
+        $username = 'test';
+        $password = 1234;
+
+        // 測試使用者登入，接收錯誤:帳號輸入有誤'
+        list($isSuccess, $error) = UserModel::login($username, $password);
+        $this->assertFalse($isSuccess);
+        $this->assertEquals(ErrorAuth::ERROR_AUTH_INCORRECT_USERNAME, $error->getCode());
+
+        // session內無資料
+        $this->assertFalse(session()->has('userId'));
+    }
+
+    /**
+     * 測試使用者登入
+     * (Fail:無效的密碼)
+     * @return void
+     */
+    public function testLoginByInvalidPassword()
+    {
+        // session內無資料
+        $this->assertFalse(session()->has('userId'));
+
+        // 設定無效的密碼
+        $username = 'imily';
+        $password = 5678;
+
+        // 測試使用者登入，接收錯誤:密碼輸入有誤'
+        list($isSuccess, $error) = UserModel::login($username, $password);
+        $this->assertFalse($isSuccess);
+        $this->assertEquals(ErrorAuth::ERROR_AUTH_INCORRECT_PASSWORD, $error->getCode());
+
+        // session內無資料
+        $this->assertFalse(session()->has('userId'));
+    }
+
+    /**
+     * 測試取得當前登入的使用者
+     * @return void
+     */
+    public function testGetCurrentLoginUser()
+    {
+        // session內無資料
+        $this->assertFalse(session()->has('userId'));
+
+        // 取得當前使用者，無資料
+        $result = UserModel::getCurrentLoginUser();
+        $this->assertEquals(0, $result->getId());
+
+        // 使用者登入
+        UserModel::login('imily',1234);
+        $this->assertTrue(session()->has('userId'));
+
+        // 取得當前使用者，確認資料是否正確
+        $result = UserModel::getCurrentLoginUser();
+        $this->assertEquals(2, $result->getId());
+        $this->assertEquals('imily', $result->getUsername());
+    }
+
+    /**
+     * 測試取得使用者資料
+     * @return void
+     */
+    public function testGetById()
+    {
+        // 設定正確的id，確認取得的資料是否正確
+        $id = 2;
+        $result = UserModel::getById($id);
+        $this->assertEquals(2, $result->getId());
+
+        // 設定錯誤的id，取得資料失敗，id為0
+        $id = 7;
+        $result = UserModel::getById($id);
+        $this->assertEquals(0, $result->getId());
+
+        // 設定id為0，取得資料失敗，id為0
+        $id = 0;
+        $result = UserModel::getById($id);
+        $this->assertEquals(0, $result->getId());
+    }
 }
