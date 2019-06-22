@@ -15,10 +15,9 @@ class PostModel
 {
     /**
      * 取得所有討論主題清單
-     * @param Filter $filter
      * @return array
      */
-    public static function getAllList(Filter $filter)
+    public static function getAllList()
     {
         $sql = sprintf(
             'SELECT * 
@@ -30,7 +29,7 @@ class PostModel
         foreach ($results as $result) {
             $post = new Post();
             $post->loadFromDbResult($result);
-            $post->setMessage(MessageModel::getByIdsByFilter(json_decode($post->getMessages()), $filter));
+            $post->setMessage(MessageModel::getByIds(json_decode($post->getMessages())));
             $post->setUser(UserModel::getByIds(json_decode($post->getLikes())));
             $posts[] = $post;
         }
