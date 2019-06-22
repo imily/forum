@@ -44,9 +44,9 @@ class MessageModel
     public static function getList(Filter $filter)
     {
         $sql = sprintf("
-                SELECT * 
-                FROM `Message`
-                LIMIT %d, %d"
+                 SELECT * 
+                 FROM `Message` 
+                 LIMIT %d, %d"
             , (int)$filter->getOffset()
             , (int)$filter->getLimit());
 
@@ -170,6 +170,25 @@ class MessageModel
     }
 
     /**
+     * 檢查多筆資料存在於否
+     * @param array $ids
+     * @return bool
+     */
+    public static function isIdsExist(array $ids)
+    {
+        if ( ! VerifyFormat::isValidIds($ids)) {
+            return false;
+        }
+
+        foreach ($ids as $id) {
+            if ( ! static::isExist($id)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * 新增單一留言
      * @param Message $message
      * @return array
@@ -212,15 +231,16 @@ class MessageModel
      * @param Message $message
      * @return array
      */
-    public static function modifyDescription(Message $message)
+    public static function modify(Message $message)
     {
-        // 檢查欄位是否為空
-        if ($message->getDescription() === '') {
-            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+        // 檢查資料是否有效
+        if ( ! $message->isValid()) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             return array(false, $error);
         }
+
         // 檢查此留言 id 是否存在
-        if (static::isExist($message->getId())) {
+        if ( ! static::isExist($message->getId())) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_RESULT_NOT_FOUND);
             return array(false, $error);
         }

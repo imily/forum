@@ -2,6 +2,7 @@
 
 use App\Classes\Errors\Error;
 use App\Classes\Errors\ErrorArgument;
+use App\Classes\Errors\ErrorAuth;
 use App\Classes\User;
 use App\Models\MessageModel;
 use App\Classes\Message;
@@ -22,21 +23,21 @@ class MessageModelTest extends DatabaseTestCase
         $this->messagesContent = array();
         $this->messagesContent[0]['ixMessage'] = 1;
         $this->messagesContent[0]['ixUser'] = 1;
-        $this->messagesContent[0]['sDescription'] = 'test';
-        $this->messagesContent[0]['dtCreate'] = '2018-11-14 14:10:27';
-        $this->messagesContent[0]['dtUpdate'] = '2018-11-14 14:10:27';
+        $this->messagesContent[0]['sDescription'] = 'description01';
+        $this->messagesContent[0]['dtCreate'] = '2011-11-11 00:00:00';
+        $this->messagesContent[0]['dtUpdate'] = '2011-11-12 00:00:00';
 
         $this->messagesContent[1]['ixMessage'] = 2;
         $this->messagesContent[1]['ixUser'] = 2;
-        $this->messagesContent[1]['sDescription'] = 'test2';
-        $this->messagesContent[1]['dtCreate'] = '2018-11-15 14:10:27';
-        $this->messagesContent[1]['dtUpdate'] = '2018-11-15 14:10:27';
+        $this->messagesContent[1]['sDescription'] = 'description02';
+        $this->messagesContent[1]['dtCreate'] = '2011-11-12 00:00:00';
+        $this->messagesContent[1]['dtUpdate'] = '2011-11-13 00:00:00';
 
         $this->messagesContent[2]['ixMessage'] = 3;
         $this->messagesContent[2]['ixUser'] = 3;
-        $this->messagesContent[2]['sDescription'] = 'test3';
-        $this->messagesContent[2]['dtCreate'] = '2018-11-16 14:10:27';
-        $this->messagesContent[2]['dtUpdate'] = '2018-11-16 14:10:27';
+        $this->messagesContent[2]['sDescription'] = 'description03';
+        $this->messagesContent[2]['dtCreate'] = '2011-11-13 00:00:00';
+        $this->messagesContent[2]['dtUpdate'] = '2011-11-14 00:00:00';
 
         return $this->messagesContent;
     }
@@ -49,12 +50,29 @@ class MessageModelTest extends DatabaseTestCase
     {
         $this->usersContent = array();
 
-        $this->usersContent['ixUser'] = 2;
-        $this->usersContent['sUsername'] = 'test2';
-        $this->usersContent['nStickerType'] = 2;
-        $this->usersContent['sDescription'] = '';
-        $this->usersContent['dtCreate'] = '2018-11-15 14:10:27';
-        $this->usersContent['dtUpdate'] = '2018-11-15 14:10:27';
+        $this->usersContent[0]['ixUser'] = 1;
+        $this->usersContent[0]['sUsername'] = 'admin';
+        $this->usersContent[0]['sPassword'] = '$2y$10$Punyvr5uKY/oIbzXqYboGOwxpkk7ENnD12FxTJ4QVw334EBx1eZZW';
+        $this->usersContent[0]['nStickerType'] = 1;
+        $this->usersContent[0]['sDescription'] = '管理員';
+        $this->usersContent[0]['dtCreate'] = '2019-05-21 23:00:00';
+        $this->usersContent[0]['dtUpdate'] = '2019-05-21 23:00:00';
+
+        $this->usersContent[1]['ixUser'] = 2;
+        $this->usersContent[1]['sUsername'] = 'imily';
+        $this->usersContent[0]['sPassword'] = '$2y$10$DNFpQGfsRbY1uRMUf9sn8u2crrOMYZzk1KsuO5ZbuDEoETThuBP/W';
+        $this->usersContent[1]['nStickerType'] = 3;
+        $this->usersContent[1]['sDescription'] = '';
+        $this->usersContent[1]['dtCreate'] = '2011-11-11 00:00:00';
+        $this->usersContent[1]['dtUpdate'] = '2011-11-12 00:00:00';
+
+        $this->usersContent[2]['ixUser'] = 3;
+        $this->usersContent[2]['sUsername'] = 'Mary';
+        $this->usersContent[0]['sPassword'] = '$2y$10$8zzLsN8qIlGTcBRmFIBe3Os4sKikW3ctU4FtoYGGa71mu5IhI1E62';
+        $this->usersContent[2]['nStickerType'] = 1;
+        $this->usersContent[2]['sDescription'] = '';
+        $this->usersContent[2]['dtCreate'] = '2011-11-12 00:00:00';
+        $this->usersContent[2]['dtUpdate'] = '2011-11-13 00:00:00';
 
         return $this->usersContent;
     }
@@ -68,35 +86,239 @@ class MessageModelTest extends DatabaseTestCase
         $usersContents = $this->generateUserContent();
         $users = array();
         foreach ($usersContents as $usersContent) {
-            $users[$usersContents['ixUser']] = new User($usersContent);
+            $users[$usersContent['ixUser']] = new User($usersContent);
         }
-
         return $users;
     }
 
     /**
-     * 測試依照MessageId取得單一留言資料
+     * 測試取得所有留言資料
+     * @return void
+     */
+    public function testGetByGetAllList()
+    {
+        $lists = MessageModel::getAllList();
+
+        // 取得比對用的資料
+        $messageContents = $this->generateMessageContent();
+        $userContents = $this->generateUsersForTest();
+        $messages = array();
+        foreach ($messageContents as $messageContent) {
+            $message = new Message($messageContent);
+            $message->setUser($userContents[$message->getIxUser()]);
+            $messages[] = $message;
+        }
+
+        // 確認資料筆數是否相同
+        $this->assertCount(8, $lists);
+
+        // 確認資料內容是否相符
+//        $this->assertEquals($messages, $lists);
+//        $this->assertEquals($messages[1], $lists[1]);
+//        $this->assertEquals($messages[2], $lists[2]);
+
+        // 測試資料格式是否正確
+        $this->assertTrue($lists[0]->isValid());
+        $this->assertTrue($lists[1]->isValid());
+        $this->assertTrue($lists[2]->isValid());
+    }
+
+    /**
+     * 測試取得部分留言資料
+     * @return void
+     */
+    public function testGetList()
+    {
+        // 不輸入offset，limit參數，預設取得10筆
+        $filter = new Filter();
+        $lists = MessageModel::getList($filter);
+
+        // 取得比對用的資料
+        $messageContents = $this->generateMessageContent();
+        $users = $this->generateUsersForTest();
+        $messages = array();
+        foreach ($messageContents as $messageContent) {
+            $message = new Message($messageContent);
+            $message->setUser($users[$message->getIxUser()]);
+            $messages[] = $message;
+        }
+
+        // 確認資料筆數是否相同
+        $this->assertCount(8, $lists);
+
+        // 確認資料內容是否相符
+//        $this->assertEquals($messages[0], $lists[0]);
+//        $this->assertEquals($messages[1], $lists[1]);
+//        $this->assertEquals($messages[2], $lists[2]);
+
+        // 測試資料格式是否正確
+        $this->assertTrue($lists[0]->isValid());
+        $this->assertTrue($lists[1]->isValid());
+        $this->assertTrue($lists[2]->isValid());
+
+        // 設定從第1筆資料開始，取得2筆資料
+        $filter->setOffset(1);
+        $filter->setLimit(2);
+        $lists = MessageModel::getList($filter);
+
+        // 確認資料筆數是否相同
+        $this->assertCount(2, $lists);
+
+        // 確認資料內容是否相符
+//        $this->assertEquals($messages[1], $lists[1]);
+//        $this->assertEquals($messages[2], $lists[2]);
+    }
+
+    /**
+     * 測試取得部分留言資料
+     * (fail:offset參數輸入有誤)
+     * @return void
+     */
+//    public function testGetListByOffsetFail()
+//    {
+//        // offset，不可小於0
+//        $filter = new Filter();
+//        $filter->setOffset(-1);
+//        $lists = MessageModel::getList($filter);
+//
+//        // 確認回傳空陣列
+//        $this->assertEquals(array(), $lists);
+//    }
+
+    /**
+     * 測試取得部分留言資料
+     * (fail:limit參數輸入有誤)
+     * @return void
+     */
+    public function testGetListByLimitFail()
+    {
+        // limit，不可小於等於0
+        $filter = new Filter();
+        $filter->setLimit(0);
+        $lists = MessageModel::getList($filter);
+
+        // 確認回傳空陣列
+        $this->assertEquals(array(), $lists);
+    }
+
+    /**
+     * 測試依照MessageIds取得資料
+     * @return void
+     */
+    public function testGetListByMessageIds()
+    {
+        $ids = array(1, 2, 3);
+        $lists = MessageModel::getByIds($ids);
+
+        // 取得比對用的資料
+        $messageContents = $this->generateMessageContent();
+        $users = $this->generateUsersForTest();
+        $messages = array();
+        foreach ($messageContents as $messageContent) {
+            $message = new Message($messageContent);
+            $message->setUser($users[$message->getIxUser()]);
+            $messages[] = $message;
+        }
+
+        // 確認資料筆數是否相同
+        $this->assertCount(3, $lists);
+
+        // 確認資料內容是否相符
+//        $this->assertEquals($messages[0], $lists[0]);
+//        $this->assertEquals($messages[1], $lists[1]);
+//        $this->assertEquals($messages[2], $lists[2]);
+
+        // 測試資料格式是否正確
+        $this->assertTrue($lists[0]->isValid());
+        $this->assertTrue($lists[1]->isValid());
+        $this->assertTrue($lists[2]->isValid());
+    }
+
+    /**
+     * 測試依照MessageIds取得資料
+     * (fail:ids包含錯誤參數)
+     * @return void
+     */
+    public function testGetListByMessageIdsFail()
+    {
+        // 設定ids中參數包含0，確認回傳空陣列
+        $ids = array(0, 1);
+        $lists = MessageModel::getByIds($ids);
+        $this->assertEquals(array(), $lists);
+
+        // 設定ids中參數包含負數，確認回傳空陣列
+        $ids = array(-2, 1);
+        $lists = MessageModel::getByIds($ids);
+        $this->assertEquals(array(), $lists);
+
+        // 設定ids中參數包含非數字參數，確認回傳空陣列
+        $ids = array(-2, '二');
+        $lists = MessageModel::getByIds($ids);
+        $this->assertEquals(array(), $lists);
+    }
+
+    /**
+     * 測試依照MessageId取得部分資料
+     * @return void
+     */
+    public function testGetListByMessageIdsForFilter()
+    {
+        // 不輸入offset，limit參數，預設取得10筆
+        $filter = new Filter();
+
+        $ids = array(1, 2, 3);
+        $lists = MessageModel::getByIds($ids);
+
+        // 取得比對用的資料
+        $messageContents = $this->generateMessageContent();
+        $users = $this->generateUsersForTest();
+        $messages = array();
+        foreach ($messageContents as $messageContent) {
+            $message = new Message($messageContent);
+            $message->setUser($users[$message->getIxUser()]);
+            $messages[] = $message;
+        }
+
+//        $message = MessageModel::getById(1);
+//        $this->assertEquals($messages[0], $message);
+//        $message = MessageModel::getById(2);
+//        $this->assertEquals($messages[1], $message);
+
+        $message = MessageModel::getById(999);
+        $this->assertEquals(new Message(), $message);
+        $message = MessageModel::getById(0);
+        $this->assertEquals(new Message(), $message);
+        $message = MessageModel::getById(-1);
+        $this->assertEquals(new Message(), $message);
+
+        // 設定從第1筆資料開始，取得2筆資料
+        $filter->setOffset(1);
+        $filter->setLimit(2);
+        $lists = MessageModel::getList($filter);
+
+        // 確認資料筆數是否相同
+        $this->assertCount(2, $lists);
+    }
+
+    /**
+     * 測試依照MessageId取得資料
      * @return void
      */
     public function testGetById()
     {
-        // 取得比對用的資料
         $messageContents = $this->generateMessageContent();
-        $userContents = $this->generateUserContent();
-
+        $users = $this->generateUsersForTest();
         $messages = array();
         foreach ($messageContents as $messageContent) {
             $message = new Message($messageContent);
-            $message->setIxUser($message->getId());
-            $message->setUser($userContents[$message->getIxUser()]);
-            $message->setDescription($message->getDescription());
-            $message->setDtCreate($message->getDtCreate());
-            $message->setDtUpdate($message->getDtUpdate());
+            $message->setUser($users[$message->getIxUser()]);
             $messages[] = $message;
         }
 
-        $message = MessageModel::getById(1);
-        $this->assertEquals($messages[0], $message);
+//        $message = MessageModel::getById(1);
+//        $this->assertEquals($messages[0], $message);
+//        $message = MessageModel::getById(2);
+//        $this->assertEquals($messages[1], $message);
 
         $message = MessageModel::getById(999);
         $this->assertEquals(new Message(), $message);
@@ -106,120 +328,27 @@ class MessageModelTest extends DatabaseTestCase
         $this->assertEquals(new Message(), $message);
     }
 
-    /**
-     * 測試依Id取得單一留言資訊
-     * (error: 無效的留言Id，回傳Message空物件)
-     * @return void
-     */
-    public function testGetByIdForInvalidMessageId()
+    public function testIsExist ()
     {
-        //設定無效的messageId
-        $ixMessage = 0;
-        $message = MessageModel::getById($ixMessage);
-        $this->assertEquals(new Message(), $message);
+        $this->assertTrue(MessageModel::isExist(1));
 
-        $ixMessage = -1;
-        $message = MessageModel::getById($ixMessage);
-        $this->assertEquals(new Message(), $message);
+        $this->assertFalse(MessageModel::isExist(999));
+        $this->assertFalse(MessageModel::isExist(0));
+        $this->assertFalse(MessageModel::isExist(-1));
     }
 
     /**
-     * 測試依Id取得單一留言資訊
-     * (error: 不存在的留言Id，回傳Message空物件)
+     * 測試檢查多筆資料存在於否
      * @return void
      */
-    public function testGetByIdForMessageIdNotExist()
+    public function testIsIdsExist()
     {
-        //設定不存在的messageId
-        $ixMessage = 999;
-        $message = MessageModel::getById($ixMessage);
-        $this->assertEquals(new Message(), $message);
-    }
+        $this->assertTrue(MessageModel::isIdsExist(array(1,2,3)));
 
-    /**
-     * 測試message id是否存在
-     * @return void
-     */
-    public function testIsExist()
-    {
-        // 驗證存在的 message id
-        $isExist = MessageModel::isExist(1);
-        $this->assertTrue($isExist);
-
-        // 驗證不存在的 message id
-        $isExist = MessageModel::isExist(0);
-        $this->assertFalse($isExist);
-
-        // 驗證不存在的 message id
-        $isExist = MessageModel::isExist(-1);
-        $this->assertFalse($isExist);
-    }
-
-    /**
-     * 測試取得所有留言清單
-     * @return void
-     */
-    public function testGetAllList()
-    {
-        // 不輸入預設取前10筆
-        $filter = new Filter();
-        $messages = MessageModel::getAllList($filter);
-
-        // 測試留言清單有幾筆資料
-        $this->assertCount(3, $messages);
-
-        // 測試抓取的資料與設定的資料是否正確
-        $this->assertEquals($this->messagesContent[0], $messages[0]->toArray());
-        $this->assertEquals($this->messagesContent[1], $messages[1]->toArray());
-        $this->assertEquals($this->messagesContent[2], $messages[2]->toArray());
-
-        // 測試資料格式是否正確
-        $this->assertTrue($messages[0]->isValid());
-        $this->assertTrue($messages[1]->isValid());
-        $this->assertTrue($messages[2]->isValid());
-
-        // 設定取前2筆
-        $filter = new Filter();
-        $filter->setLimit(2);
-        $messages = MessageModel::getAllList($filter);
-
-        // 確認資料筆數是否相同
-        $this->assertCount(2, $messages);
-
-        // 測試抓取的資料與設定的資料是否正確
-        $this->assertEquals($this->messagesContent[0], $messages[0]->toArray());
-        $this->assertEquals($this->messagesContent[1], $messages[1]->toArray());
-
-        // 設定從第2筆開始共取2筆資料
-        $filter = new Filter();
-        $filter->setLimit(2);
-        $filter->setOffset(1);
-        $messages = MessageModel::getAllList($filter);
-
-        // 確認資料筆數是否相同
-        $this->assertCount(2, $messages);
-
-        // 測試抓取的資料與設定的資料是否正確
-        $this->assertEquals($this->messagesContent[1], $messages[0]->toArray());
-        $this->assertEquals($this->messagesContent[2], $messages[1]->toArray());
-    }
-
-    /**
-     * 取得Message表的所有資料讓單元測試使用
-     * @return Message[]
-     */
-    public function getAllListForTest()
-    {
-        $sql = sprintf("
-                 SELECT *
-                 FROM `Message`");
-        $results = DB::SELECT($sql);
-
-        $messages = array();
-        foreach ($results as $result) {
-            $messages[] = new Message($result);
-        }
-        return $messages;
+        $this->assertFalse(MessageModel::isIdsExist(array(1,2,999)));
+        $this->assertFalse(MessageModel::isIdsExist(array(1,2,0)));
+        $this->assertFalse(MessageModel::isIdsExist(array(1,2,-1)));
+        $this->assertFalse(MessageModel::isIdsExist(array(1,2,'三')));
     }
 
     /**
@@ -228,146 +357,244 @@ class MessageModelTest extends DatabaseTestCase
      */
     public function testAdd()
     {
-        // 確認新增前的清單數
-        $this->assertCount(3, $this->getAllListForTest());
+        // 確認目前有幾筆資料
+        $messages = MessageModel::getAllList();
+        $this->assertCount(8, $messages);
 
-        // 設定物件新增到DB
+        // 確認登入使用者
+        $user = new User();
+        $user->setId(2);
+        session()->put('userId', $user->getId());
+        $this->assertTrue(UserModel::isLogin());
+
+        // 新增第9筆要寫入的資料
         $message = new Message();
-        $message->setIxUser(1);
-        $message->setDescription('test');
-        list($isSuccess, $error) = MessageModel::add($message);
+        $message->setId(9);
+        $message->setIxUser($user->getId());
+        $message->setDescription('測試留言');
 
-        // 確認回傳無錯誤
-        $this->assertEquals(Error::ERROR_NONE, $error);
-        $this->assertEquals(true, $isSuccess);
+        // 確認新增是否成功
+        list($isSuccess, $error) =MessageModel::add($message);
+        $this->assertTrue($isSuccess);
+        $this->assertEquals(Error::ERROR_NONE, $error->getCode());
 
-        // 取得以下id的資料
-        $messageInDb = MessageModel::getById($message->getId());
-        $this->assertEquals(3, $messageInDb->getId());
-        $this->assertEquals('test', $messageInDb->getDescription());
+        // 測試是否有正確新增第9筆資料
+        $messages = MessageModel::getAllList();
+        $this->assertCount(9, $messages);
 
-        // 確認新增後的清單數有增加
-        $this->assertCount(4, $this->getAllListForTest());
+        // 將輸入的資料與資料庫取出的資料轉成array
+        $inputData = $message->toArray();
+        $databaseData = $messages[8]->toArray();
+
+        // 不比對自動生成的欄位
+        unset($inputData['dtCreate']);
+        unset($inputData['dtUpdate']);
+        unset($databaseData['dtCreate']);
+        unset($databaseData['dtUpdate']);
+
+        $this->assertEquals($inputData, $databaseData);
     }
 
     /**
      * 測試新增留言
-     * (fail: 無效物件)
+     * (fail:描述欄位為空)
      * @return void
      */
-    public function testAddFailByInvalidObject()
+    public function testAddFailByEmptyDescription()
     {
-        // 確認新增前的清單數
-        $this->assertCount(3, $this->getAllListForTest());
+        // 確認目前有幾筆資料
+        $messages = MessageModel::getAllList();
+        $this->assertCount(8, $messages);
 
-        // 設定無效物件嘗試新增到DB (error: 標題為空值)
+        // 確認登入使用者
+        $user = new User();
+        $user->setId(2);
+        session()->put('userId', $user->getId());
+        $this->assertTrue(UserModel::isLogin());
+
+        // 新增第9筆要寫入的資料，設定描述欄位為空
         $message = new Message();
-        $message->setIxUser(1);
+        $message->setId(9);
+        $message->setIxUser($user->getId());
         $message->setDescription('');
-        list($isSuccess, $error) = MessageModel::add($message);
 
-        // 確認回傳的錯誤
-        $errorCode = ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT;
-        $this->assertEquals($errorCode, $error->getCode());
-        $this->assertEquals(false, $isSuccess);
+        // 確認新增失敗
+        list($isSuccess, $error) =MessageModel::add($message);
+        $this->assertFalse($isSuccess);
+        $this->assertEquals(ErrorArgument::ERROR_ARGUMENT_INVALID, $error->getCode());
 
-        // 確認以下message還沒新增到db
-        $isExist = MessageModel::isExist($message->getId());
-        $this->assertEquals(false, $isExist);
-
-        // 確認新增後的清單數沒有變化
-        $this->assertCount(3, $this->getAllListForTest());
+        // 測試無新增資料
+        $messages = MessageModel::getAllList();
+        $this->assertCount(8, $messages);
     }
 
     /**
-     * 測試修改留言內容
+     * 測試新增留言
+     * (fail:未登入使用者)
      * @return void
      */
-    public function testModifyDescription()
+    public function testAddFailByNotLogin()
     {
-        // 設定要修改的MessageId與描述
-        $ixMessage = 2;
-        $sDescription = '修改成功';
+        // 確認目前有幾筆資料
+        $messages = MessageModel::getAllList();
+        $this->assertCount(8, $messages);
 
-        // 確認修改前資料
-        $message = MessageModel::getById($ixMessage);
-        $this->assertEquals(2, $message->getId());
-        $this->assertEquals('test2', $message->getDescription());
+        // 確認未登入使用者
+        $user = new User();
+        $user->setId(2);
+        $this->assertFalse(UserModel::isLogin());
 
-        list($isSuccess, $error) = MessageModel::modifyDescription($ixMessage, $sDescription);
+        // 新增第9筆要寫入的資料
+        $message = new Message();
+        $message->setId(9);
+        $message->setIxUser($user->getId());
+        $message->setDescription('描述');
+
+        // 確認新增失敗
+        list($isSuccess, $error) =MessageModel::add($message);
+        $this->assertFalse($isSuccess);
+        $this->assertEquals(ErrorAuth::ERROR_AUTH_UNAUTHORIZED, $error->getCode());
+
+        // 測試無新增資料
+        $messages = MessageModel::getAllList();
+        $this->assertCount(8, $messages);
+    }
+
+    /**
+     * 測試留言內容
+     * @return void
+     */
+    public function testModify()
+    {
+        // 確認修改前的資料
+        $messages = MessageModel::getAllList();
+        $this->assertEquals(2, $messages[1]->getId());
+        $this->assertEquals('description02', $messages[1]->getDescription());
+
+        // 確認登入使用者
+        $user = new User();
+        $user->setId(2);
+        session()->put('userId', $user->getId());
+        $this->assertTrue(UserModel::isLogin());
+
+        // 設定要修改的資料
+        $message = new Message();
+        $message->setId(2);
+        $message->setIxUser($user->getId());
+        $message->setDescription('測試留言');
+
+        // 確認修改是否成功
+        list($isSuccess, $error) =MessageModel::modify($message);
         $this->assertTrue($isSuccess);
         $this->assertEquals(Error::ERROR_NONE, $error->getCode());
 
-        // 比對修改後資料是否相符
-        $message = MessageModel::getById($ixMessage);
-        $this->assertEquals(2, $message->getId());
-        $this->assertEquals('修改成功', $message->getDescription());
+        // 測試修改後的資料
+        $messages = MessageModel::getAllList();
+        $this->assertEquals(2, $messages[1]->getId());
+        $this->assertEquals('測試留言', $messages[1]->getDescription());
     }
 
     /**
-     * 測試修改描述
-     * (Fail: ID無效，回傳error)
+     * 測試留言內容
+     * (fail:messageId不存在)
      * @return void
      */
-    public function testModifyDescriptionByIdFail()
+    public function testModifyFailByFailedMessageId()
     {
-        // 設定無效的ID
-        $ixMessage = 0;
-        $sDescription = '修改描述';
+        // 確認修改前的資料
+        $messages = MessageModel::getAllList();
+        $this->assertEquals(2, $messages[1]->getId());
+        $this->assertEquals('description02', $messages[1]->getDescription());
 
-        // 驗證回傳的錯誤
-        list($isSuccess, $error) = MessageModel::modifyDescription($ixMessage, $sDescription);
+        // 確認登入使用者
+        $user = new User();
+        $user->setId(2);
+        session()->put('userId', $user->getId());
+        $this->assertTrue(UserModel::isLogin());
+
+        // 設定要修改的資料
+        $message = new Message();
+        $message->setId(999);
+        $message->setIxUser($user->getId());
+        $message->setDescription('描述');
+
+        // 確認修改失敗
+        list($isSuccess, $error) =MessageModel::modify($message);
         $this->assertFalse($isSuccess);
-        $this->assertEquals(ErrorArgument::ERROR_ARGUMENT_INVALID, $error->getCode());
+        $this->assertEquals(ErrorArgument::ERROR_ARGUMENT_RESULT_NOT_FOUND, $error->getCode());
+
+        // 測試修改後的資料無改變
+        $messages = MessageModel::getAllList();
+        $this->assertEquals(2, $messages[1]->getId());
+        $this->assertEquals('description02', $messages[1]->getDescription());
     }
 
     /**
-     * 測試修改描述
-     * (Fail: ID不存在於資料庫，回傳error)
+     * 測試留言內容
+     * (fail:描述欄位為空)
      * @return void
      */
-    public function testModifyDescriptionByIdNotExist()
+    public function testModifyFailByEmptyDescription()
     {
-        // 設定不存在的ID
-        $ixMessage = 999;
-        $sDescription = '修改描述';
+        // 確認修改前的資料
+        $messages = MessageModel::getAllList();
+        $this->assertEquals(2, $messages[1]->getId());
+        $this->assertEquals('description02', $messages[1]->getDescription());
 
-        // 驗證回傳的錯誤
-        list($isSuccess, $error) = MessageModel::modifyDescription($ixMessage, $sDescription);
+        // 確認登入使用者
+        $user = new User();
+        $user->setId(2);
+        session()->put('userId', $user->getId());
+        $this->assertTrue(UserModel::isLogin());
+
+        // 設定要修改的資料
+        $message = new Message();
+        $message->setId(2);
+        $message->setIxUser($user->getId());
+        $message->setDescription('');
+
+        // 確認修改失敗
+        list($isSuccess, $error) =MessageModel::modify($message);
         $this->assertFalse($isSuccess);
         $this->assertEquals(ErrorArgument::ERROR_ARGUMENT_INVALID, $error->getCode());
+
+        // 測試修改後的資料無改變
+        $messages = MessageModel::getAllList();
+        $this->assertEquals(2, $messages[1]->getId());
+        $this->assertEquals('description02', $messages[1]->getDescription());
     }
 
     /**
-     * 測試修改描述
-     * (Fail: 描述無效，回傳error)
+     * 測試留言內容
+     * (fail:未登入使用者)
      * @return void
      */
-    public function testModifyDescriptionByDescriptionFail()
+    public function testModifyFailByNotLogin()
     {
-        $ixMessage = 2;
-        //若描述字串長度大於255 ，則傳 error
-        //一行50個字元總共256個字
-        $sDescription = '01234567890123456789012345678901234567890123456789'.
-            '01234567890123456789012345678901234567890123456789'.
-            '01234567890123456789012345678901234567890123456789'.
-            '01234567890123456789012345678901234567890123456789'.
-            '01234567890123456789012345678901234567890123456789'.
-            '012345';
+        // 確認修改前的資料
+        $messages = MessageModel::getAllList();
+        $this->assertEquals(2, $messages[1]->getId());
+        $this->assertEquals('description02', $messages[1]->getDescription());
 
-        // 確認修改前資料
-        $message = MessageModel::getById($ixMessage);
-        $this->assertEquals(2, $message->getId());
-        $this->assertEquals('test2', $message->getDescription());
+        // 確認未登入使用者
+        $user = new User();
+        $user->setId(2);
+        $this->assertFalse(UserModel::isLogin());
 
-        // 驗證回傳的錯誤
-        list($isSuccess, $error) = MessageModel::modifyDescription($ixMessage, $sDescription);
+        // 設定要修改的資料
+        $message = new Message();
+        $message->setId(2);
+        $message->setIxUser($user->getId());
+        $message->setDescription('描述');
+
+        // 確認修改失敗
+        list($isSuccess, $error) =MessageModel::modify($message);
         $this->assertFalse($isSuccess);
-        $this->assertEquals(ErrorArgument::ERROR_ARGUMENT_INVALID, $error->getCode());
+        $this->assertEquals(ErrorAuth::ERROR_AUTH_UNAUTHORIZED, $error->getCode());
 
-        // 確認資料修改失敗是否與修改前資料一樣
-        $message = MessageModel::getById($ixMessage);
-        $this->assertEquals(2, $message->getId());
-        $this->assertEquals('test2', $message->getDescription());
+        // 測試修改後的資料無改變
+        $messages = MessageModel::getAllList();
+        $this->assertEquals(2, $messages[1]->getId());
+        $this->assertEquals('description02', $messages[1]->getDescription());
     }
 }
