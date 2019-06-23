@@ -31,6 +31,7 @@ class PostModel
             $post->loadFromDbResult($result);
             $post->setMessage(MessageModel::getByIds(json_decode($post->getMessages())));
             $post->setUser(UserModel::getByIds(json_decode($post->getLikes())));
+            $post->setUserObject(UserModel::getById($post->getIxUser()));
             $posts[] = $post;
         }
         return $posts;
@@ -58,13 +59,14 @@ class PostModel
             $post->loadFromDbResult($result);
             $post->setMessage(MessageModel::getByIdsByFilter(json_decode($post->getMessages()), $messageFilter));
             $post->setUser(UserModel::getByIds(json_decode($post->getLikes())));
+            $post->setUserObject(UserModel::getById($post->getIxUser()));
             $posts[] = $post;
         }
         return $posts;
     }
 
     /**
-     * 依id取得單一討論主題資料
+     * 依id取得全部討論主題資料
      * @param int $id
      * @param Filter $filter
      * @return Post
@@ -89,8 +91,40 @@ class PostModel
             $post->loadFromDbResult($result[0]);
             $post->setMessage(MessageModel::getByIdsByFilter(json_decode($post->getMessages()), $filter));
             $post->setUser(UserModel::getByIds(json_decode($post->getLikes())));
+            $post->setUserObject(UserModel::getById($post->getIxUser()));
         }
         return $post;
+    }
+
+    /**
+     * 依指定user id 取得全部討論主題資料
+     * @param Filter $messageFilter
+     * @param int $userId
+     * @return array
+     */
+    public static function getByUserId(Filter $messageFilter, int $userId)
+    {
+        if ((int)$userId <= 0) {
+            return [];
+        }
+
+        $sql = sprintf("
+                SELECT * 
+                FROM `Post` 
+                WHERE `ixUser` = '%d'"
+            , (int)$userId);
+
+        $results = DB::SELECT($sql);
+        $posts = array();
+        foreach ($results as $result) {
+            $post = new Post();
+            $post->loadFromDbResult($result);
+            $post->setMessage(MessageModel::getByIdsByFilter(json_decode($post->getMessages()), $messageFilter));
+            $post->setUser(UserModel::getByIds(json_decode($post->getLikes())));
+            $post->setUserObject(UserModel::getById($post->getIxUser()));
+            $posts[] = $post;
+        }
+        return $posts;
     }
 
     /**
@@ -100,7 +134,7 @@ class PostModel
      * @param int $userId
      * @return array
      */
-    public static function getByUserId(Filter $postFilter, Filter $messageFilter, int $userId)
+    public static function getByUserIdForFilter(Filter $postFilter, Filter $messageFilter, int $userId)
     {
         if ((int)$userId <= 0) {
             return [];
@@ -122,6 +156,7 @@ class PostModel
             $post->loadFromDbResult($result);
             $post->setMessage(MessageModel::getByIdsByFilter(json_decode($post->getMessages()), $messageFilter));
             $post->setUser(UserModel::getByIds(json_decode($post->getLikes())));
+            $post->setUserObject(UserModel::getById($post->getIxUser()));
             $posts[] = $post;
         }
         return $posts;
@@ -157,15 +192,14 @@ class PostModel
      */
     public static function add(Post $post)
     {
-        // 檢查欄位是否為空
-        if (($post->getTopic() == '') or
-            ($post->getDescription() === '')) {
-            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+        // 檢查資料是否有效
+        if ( ! $post->isValid()) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             return array(false, $error);
         }
 
         // 檢查使用者是否為當前使用者
-        if ($post->getIxUser() == UserModel::getCurrentLoginUser()) {
+        if ($post->getIxUser() !== UserModel::getCurrentLoginUser()->getId()) {
             $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_UNAUTHORIZED);
             return array(false, $error);
         }
@@ -196,31 +230,30 @@ class PostModel
      * @param Post $post
      * @return array
      */
-    public static function modifyPostTopic(Post $post)
+    public static function modify(Post $post)
     {
-        // 檢查欄位是否為空
-        if (($post->getTopic() == '') or
-            ($post->getDescription() === '')) {
-            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+        // 檢查資料是否有效
+        if ( ! $post->isValid()) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             return array(false, $error);
         }
 
         // 檢查此留言 id 是否存在
-        if (static::isExist($post->getId())) {
+        if ( ! static::isExist($post->getId())) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_RESULT_NOT_FOUND);
             return array(false, $error);
         }
 
         // 檢查使用者是否為當前使用者
-        if ($post->getIxUser() == UserModel::getCurrentLoginUser()) {
+        if ($post->getIxUser() !== UserModel::getCurrentLoginUser()->getId()) {
             $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_UNAUTHORIZED);
             return array(false, $error);
         }
 
         $sql = sprintf("
                 UPDATE `Post`
-                SET `sTopic` = '%s'
-                SET `sDescription` = '%s'
+                SET `sTopic` = '%s' ,
+                    `sDescription` = '%s'
                 WHERE `ixPost` = '%d'"
             , addslashes($post->getTopic())
             , addslashes($post->getDescription())
@@ -241,7 +274,7 @@ class PostModel
      * @param array $ids
      * @return array
      */
-    public static function deletePosts(array $ids)
+    public static function delete(array $ids)
     {
         // 檢查 ids 是否存在
         if (count($ids) <= 0) {
@@ -259,32 +292,32 @@ class PostModel
         $sql = sprintf("
                 DELETE
                 FROM `Post`
-                WHERE `ixPost` IN '%s'"
+                WHERE `ixPost` IN (%s)"
             , SafeSql::transformSqlInArrayByIds($ids));
 
         $isDeleted = DB::delete($sql);
 
         $error = new ErrorDB(ErrorDB::ERROR_DB_FAILED_DELETE);
-        $result = array(false, $error->convertToDisplayArray());
+        $result = array(false, $error);
         if ($isDeleted) {
             $error = new Error(Error::ERROR_NONE);
-            $result = array(true, $error->convertToDisplayArray());
+            $result = array(true, $error);
         }
 
         return $result;
     }
 
     /**
-     * 新增喜歡單一討論主題
+     * 更新喜歡單一討論主題
      * @param $ixPost int
      * @param $userId int
      * @return array
      */
-    public static function addLike($ixPost, $userId)
+    public static function updateLikes($ixPost, $userId)
     {
         // 檢查此留言 id 是否存在
         if ( ! static::isExist($ixPost)) {
-            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_RESULT_NOT_FOUND);
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             return array(false, $error);
         }
 
@@ -295,12 +328,23 @@ class PostModel
         }
 
         // 取得目前的喜歡人數
-        $post = PostModel::getById($ixPost);
+        $messageFilter = new Filter();
+        $post = PostModel::getById($ixPost, $messageFilter);
         $likes = json_decode($post->getLikes());
 
-        // 新增喜歡
-        array_push($likes, $userId);
-        $newLikes = json_encode($likes);
+        // 確認目前的使用者是否已存在喜歡的清單中
+        $hasKey = array_search($userId, $likes);
+
+        // 若已存在，移除清單中的使用者
+        if ($hasKey > 0) {
+            unset($likes[$hasKey]);
+        }
+        // 若不存在，新增使用者至清單
+        if ($hasKey === false) {
+            array_push($likes, $userId);
+        }
+
+        $newLikes = json_encode(array_values($likes));
 
         $sql = sprintf("
                 UPDATE `Post`

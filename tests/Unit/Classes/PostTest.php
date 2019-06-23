@@ -211,4 +211,38 @@ class PostTest extends TestCase
         // 檢查取得的資料是否符合預期
         $this->assertEquals($users, $post->getUser());
     }
+
+    /**
+     * 生成User物件
+     * @return User
+     */
+    private function generateUser()
+    {
+        $user = new User();
+        $user->setId(1);
+        $user->setUsername('testUser');
+        $user->setStickerType(2);
+        $user->setDescription('描述');
+        $user->setDtCreate('1970-01-01 08:00:01');
+        $user->setDtUpdate('1970-01-01 08:00:01');
+        return $user;
+    }
+
+    /**
+     * 測試取得User物件
+     * @return void
+     */
+    public function testGetUser()
+    {
+        $post = new Post();
+        // 測試放入物件前的狀態是否為空物件
+        $this->assertEquals(new User(), $post->getUserObject());
+        // 存入生成的物件
+        $user = $this->generateUser();
+        $post->setUserObject($user);
+        // 檢查資料是否有效
+        $this->assertTrue($post->getUserObject()->isValid());
+        // 檢查取得的資料是否符合預期
+        $this->assertEquals($user, $post->getUserObject());
+    }
 }

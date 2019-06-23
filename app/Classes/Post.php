@@ -24,6 +24,8 @@ class Post extends CommonDatabaseRecord
 
     private $message     = null;
 
+    private $userObject  = null;
+
     /**
      * 建構子
      * CommonDatabaseRecord constructor.
@@ -34,6 +36,7 @@ class Post extends CommonDatabaseRecord
         parent::__construct($content);
         $this->setUser(array());
         $this->setMessage(array());
+        $this->setUserObject(new User());
     }
 
     /**
@@ -226,5 +229,24 @@ class Post extends CommonDatabaseRecord
     public function getUser():array
     {
         return $this->user;
+    }
+
+    /**
+     * 設定User物件
+     * @param User $userObject
+     * @return void
+     */
+    public function setUserObject(User $userObject)
+    {
+        $this->userObject = $userObject;
+    }
+
+    /**
+     * 取得User物件
+     * @return User
+     */
+    public function getUserObject():User
+    {
+        return $this->userObject;
     }
 }
