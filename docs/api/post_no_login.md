@@ -14,6 +14,8 @@
 | ---------- | ------ | ------------------------ |
 | offset    | int | 非必要，主題偏移量  |
 | limit     | int | 非必要，限制主題數量 |
+| message_offset    | int | 非必要，留言偏移量  |
+| message_limit     | int | 非必要，留言主題數量 |
 
 ##### Response
 
