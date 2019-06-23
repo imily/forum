@@ -6,9 +6,9 @@
 0. [新增單一討論主題的單一留言](#新增單一討論主題的單一留言)
 0. [修改單一討論主題的單一留言](#修改單一討論主題的單一留言)
 
-### 取得單一討論主題的單一留言
+### 取得單一留言
 
-`GET /posts/{postId}/messages/{messageId}`
+`GET messages/{messageId}`
 
 ##### Response
 
@@ -40,9 +40,9 @@
 
 3003: 查無指定參數的內容
 
-### 新增單一討論主題的單一留言
+### 新增單一留言
 
-`POST /posts/{postId}/message`
+`POST /message`
 
 ##### 參數
 
@@ -82,9 +82,9 @@
 
 3002: 無效的參數
 
-### 修改單一討論主題的單一留言
+### 修改單一留言
 
-`PATCH /posts/{postId}/messages/{messageId}`
+`PATCH /messages/{messageId}`
 
 ##### 參數
 
