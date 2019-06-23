@@ -6,6 +6,7 @@ use App\Classes\Errors\ErrorAuth;
 use App\Classes\User;
 use App\Models\MessageModel;
 use App\Classes\Message;
+use App\Models\PostModel;
 use App\Models\UserModel;
 use App\Repositories\Filter;
 
@@ -328,6 +329,10 @@ class MessageModelTest extends DatabaseTestCase
         $this->assertEquals(new Message(), $message);
     }
 
+    /**
+     * 測試驗證messageId是否存在
+     * @return void
+     */
     public function testIsExist ()
     {
         $this->assertTrue(MessageModel::isExist(1));
@@ -461,7 +466,7 @@ class MessageModelTest extends DatabaseTestCase
     }
 
     /**
-     * 測試留言內容
+     * 測試修改留言內容
      * @return void
      */
     public function testModify()
@@ -495,7 +500,7 @@ class MessageModelTest extends DatabaseTestCase
     }
 
     /**
-     * 測試留言內容
+     * 測試修改留言內容
      * (fail:messageId不存在)
      * @return void
      */
@@ -530,7 +535,7 @@ class MessageModelTest extends DatabaseTestCase
     }
 
     /**
-     * 測試留言內容
+     * 測試修改留言內容
      * (fail:描述欄位為空)
      * @return void
      */
@@ -565,7 +570,7 @@ class MessageModelTest extends DatabaseTestCase
     }
 
     /**
-     * 測試留言內容
+     * 測試修改留言內容
      * (fail:未登入使用者)
      * @return void
      */
