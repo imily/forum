@@ -589,7 +589,7 @@ class UserModelTest extends DatabaseTestCase
 
         $ids = array();
 
-        // 測試刪除使用者，接收錯誤:無效的參數
+        // 測試刪除使用者，接收錯誤:輸入有空值
         list($isSuccess, $error) = UserModel::deleteUsers($ids);
         $this->assertFalse($isSuccess);
         $this->assertEquals(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT, $error->getCode());

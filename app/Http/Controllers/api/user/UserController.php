@@ -1,7 +1,6 @@
 <?php namespace App\Http\Controllers\api\user;
 
 use App\Classes\Common\HttpStatusCode;
-use App\Classes\Errors\Error;
 use App\Classes\Errors\ErrorArgument;
 use App\Classes\Errors\ErrorAuth;
 use App\Classes\User;
@@ -10,7 +9,7 @@ use Illuminate\Http\Response;
 use App\Models\UserModel;
 use Illuminate\Support\Facades\Input;
 
-class UsersController extends Controller
+class UserController extends Controller
 {
     /**
      * 使用者註冊
@@ -19,6 +18,9 @@ class UsersController extends Controller
      */
     public function userRegistered()
     {
+        $statusCode = HttpStatusCode::STATUS_201_CREATED;
+        $response = array();
+
         $hasStickerType = Input::has('sticker_type');
         $hasAccount = Input::has('username');
         $hasPassword = Input::has('password');
@@ -49,11 +51,7 @@ class UsersController extends Controller
 
         list($isSuccess, $error) = UserModel::registerUser($user, $password);
 
-        $statusCode = HttpStatusCode::STATUS_201_CREATED;
-        $response = array();
-
         if (! $isSuccess) {
-            $error = new Error(Error::ERROR_UNKNOWN);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
@@ -120,15 +118,12 @@ class UsersController extends Controller
         $user = UserModel::getCurrentLoginUser();
         list($isSuccess, $error) = UserModel::modify($user, $newPassword);
 
-        $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-        $error = new Error(Error::ERROR_UNKNOWN);
-
-        if ($isSuccess) {
+        if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_204_NO_CONTENT;
-            $error = new Error(Error::ERROR_NONE);
-            return response()->json($error->convertToDisplayArray(), $statusCode);
+            return response()->json($error, $statusCode);
         }
 
-        return response()->json($error->convertToDisplayArray(), $statusCode);
+        $statusCode = HttpStatusCode::STATUS_204_NO_CONTENT;
+        return response()->json(array(), $statusCode);
     }
 }

@@ -19,6 +19,9 @@ class UsersController extends Controller
      */
     public function createUser()
     {
+        $statusCode = HttpStatusCode::STATUS_201_CREATED;
+        $response = array();
+
         $hasStickerType = Input::has('sticker_type');
         $hasAccount = Input::has('username');
         $hasPassword = Input::has('password');
@@ -49,11 +52,7 @@ class UsersController extends Controller
 
         list($isSuccess, $error) = UserModel::registerUser($user, $password);
 
-        $statusCode = HttpStatusCode::STATUS_201_CREATED;
-        $response = array();
-
-        if (!$isSuccess) {
-            $error = new Error(Error::ERROR_UNKNOWN);
+        if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
@@ -132,15 +131,13 @@ class UsersController extends Controller
         $user = UserModel::getById($id);
         list($isSuccess, $error) = UserModel::modify($user, $newPassword);
 
-        $response = array();
-        $statusCode = HttpStatusCode::STATUS_204_NO_CONTENT;
-
         if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-            return response()->json($error->convertToDisplayArray(), $statusCode);
+            return response()->json($error, $statusCode);
         }
 
-        return response()->json($response, $statusCode);
+        $statusCode = HttpStatusCode::STATUS_204_NO_CONTENT;
+        return response()->json(array(), $statusCode);
     }
 
     /**
@@ -158,16 +155,14 @@ class UsersController extends Controller
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
-        $response = array();
-        $statusCode = HttpStatusCode::STATUS_204_NO_CONTENT;
-
         list($isSuccess, $error) = UserModel::deleteUsers($ids);
 
         if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-            return response()->json($error->convertToDisplayArray(), $statusCode);
+            return response()->json($error, $statusCode);
         }
 
-        return response()->json($response, $statusCode);
+        $statusCode = HttpStatusCode::STATUS_204_NO_CONTENT;
+        return response()->json(array(), $statusCode);
     }
 }
