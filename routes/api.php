@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['namespace' => 'api\user'], function () {
+    //以名稱取得資料的API
+    Route::get('posts', 'PostController@getPost');
 });
