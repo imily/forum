@@ -52,7 +52,7 @@ class PostController extends Controller
                 $likeContents[] = $likeContent;
             }
 
-            $postContent['messages']['likes'] = $likeContents;
+            $postContent['likes'] = $likeContents;
             $postContent['create_time'] = $post->getDtCreate();
             $postContent['update_time'] = $post->getDtUpdate();
             $response[] = $postContent;
