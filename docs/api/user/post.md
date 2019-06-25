@@ -167,10 +167,6 @@
 | topic        | string | 標題 |
 | description  | string     | 敘述 |
 
-##### Response
-
-`Status: 201 OK`
-
 ##### Example
 
 ```json
@@ -180,7 +176,15 @@
   "description": "第二則留言內容"
 }
 ```
+##### Response
 
+`Status: 201 Created`
+
+```
+{
+  "id": 1
+}
+```
 ##### Error
 
 ```
@@ -210,9 +214,18 @@
 | topic        | string     | 標題 |
 | description  | string | 敘述 |
 
+##### Example
+
+```json
+  {
+    "topic": "修改第二則留言標題",
+    "description" : "修改第二則留言內容"
+  }
+```
+
 ##### Response
 
-`Status: 204 OK`
+`Status: 204 No Content`
 
 ##### Example
 
@@ -274,9 +287,9 @@ ids  | array | 一個或多個討論主題ID
 
 3002: 無效的參數
 
-### 新增喜歡單一討論主題
+### 更新喜歡單一討論主題
 
-`POST /posts/{postId}/like`
+`PATCH /posts/{postId}/like`
 
 ##### 參數
 
@@ -284,23 +297,23 @@ ids  | array | 一個或多個討論主題ID
 | ---          | ---     | --- |
 | user_id    | int     | 喜歡此討論主題的使用者 |
 
-##### Response
-
-`Status: 201 OK`
-
 ##### Example
 
-```json
+```
 {
   "user_id": 1
 }
 ```
 
+##### Response
+
+`Status: 204 No Content`
+
 ##### Error
 
 ```
 {
-  "error": 2001
+  "error": 2002
 }
 ```
 
@@ -308,7 +321,7 @@ ids  | array | 一個或多個討論主題ID
 
 1: 未知的錯誤
 
-2001: 新增失敗
+2002: 修改失敗
 
 3001: 輸入有空值
 
