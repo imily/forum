@@ -9,6 +9,7 @@ use App\Repositories\Filter;
 use App\Classes\Post;
 use App\Classes\Message;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Input;
 
 class PostController extends Controller
 {
@@ -29,21 +30,29 @@ class PostController extends Controller
             $postContent['id'] = $post->getId();
             $postContent['user_name'] = $postUser->getUsername();
             $postContent['user_sicker_type'] = $postUser->getStickerType();
-
             $postContent['messages']['total_amount'] = count($messages);
+
+            $messageContents = array();
+            $messageContent = array();
             foreach ($messages as $message) {
                 $messageUser = $message->getUser();
-                $postContent['messages']['data']['user_name'] = $messageUser->getUsername();
-                $postContent['messages']['data']['description'] = $message->getDescription();
+                $messageContent['user_name'] = $messageUser->getUsername();
+                $messageContent['description'] = $message->getDescription();
+                $messageContents[] = $messageContent;
             }
 
+            $postContent['messages']['data'] = $messageContents;
             $postContent['topic'] = $post->getTopic();
             $postContent['description'] = $post->getDescription();
 
+            $likeContents = array();
+            $likeContent = array();
             foreach ($users as $user) {
-                $postContent['likes']['user_name'] = $user->getUsername();
+                $likeContent['user_name'] = $user->getUsername();
+                $likeContents[] = $likeContent;
             }
 
+            $postContent['messages']['likes'] = $likeContents;
             $postContent['create_time'] = $post->getDtCreate();
             $postContent['update_time'] = $post->getDtUpdate();
             $response[] = $postContent;
