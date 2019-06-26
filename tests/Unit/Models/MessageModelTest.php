@@ -53,7 +53,6 @@ class MessageModelTest extends DatabaseTestCase
 
         $this->usersContent[0]['ixUser'] = 1;
         $this->usersContent[0]['sUsername'] = 'admin';
-        $this->usersContent[0]['sPassword'] = '$2y$10$Punyvr5uKY/oIbzXqYboGOwxpkk7ENnD12FxTJ4QVw334EBx1eZZW';
         $this->usersContent[0]['nStickerType'] = 1;
         $this->usersContent[0]['sDescription'] = '管理員';
         $this->usersContent[0]['dtCreate'] = '2019-05-21 23:00:00';
@@ -61,7 +60,6 @@ class MessageModelTest extends DatabaseTestCase
 
         $this->usersContent[1]['ixUser'] = 2;
         $this->usersContent[1]['sUsername'] = 'imily';
-        $this->usersContent[0]['sPassword'] = '$2y$10$DNFpQGfsRbY1uRMUf9sn8u2crrOMYZzk1KsuO5ZbuDEoETThuBP/W';
         $this->usersContent[1]['nStickerType'] = 3;
         $this->usersContent[1]['sDescription'] = '';
         $this->usersContent[1]['dtCreate'] = '2011-11-11 00:00:00';
@@ -69,7 +67,6 @@ class MessageModelTest extends DatabaseTestCase
 
         $this->usersContent[2]['ixUser'] = 3;
         $this->usersContent[2]['sUsername'] = 'Mary';
-        $this->usersContent[0]['sPassword'] = '$2y$10$8zzLsN8qIlGTcBRmFIBe3Os4sKikW3ctU4FtoYGGa71mu5IhI1E62';
         $this->usersContent[2]['nStickerType'] = 1;
         $this->usersContent[2]['sDescription'] = '';
         $this->usersContent[2]['dtCreate'] = '2011-11-12 00:00:00';
@@ -103,6 +100,7 @@ class MessageModelTest extends DatabaseTestCase
         // 取得比對用的資料
         $messageContents = $this->generateMessageContent();
         $userContents = $this->generateUsersForTest();
+
         $messages = array();
         foreach ($messageContents as $messageContent) {
             $message = new Message($messageContent);
@@ -114,14 +112,15 @@ class MessageModelTest extends DatabaseTestCase
         $this->assertCount(8, $lists);
 
         // 確認資料內容是否相符
-//        $this->assertEquals($messages, $lists);
-//        $this->assertEquals($messages[1], $lists[1]);
-//        $this->assertEquals($messages[2], $lists[2]);
+        print_r($messages[0]->toArray());
+        $this->assertEquals($messages[0]->toArray(), $lists[0]->toArray());
+//        $this->assertEquals($messages[1], $lists[1]->toArray());
+//        $this->assertEquals($messages[2], $lists[2]->toArray());
 
-        // 測試資料格式是否正確
-        $this->assertTrue($lists[0]->isValid());
-        $this->assertTrue($lists[1]->isValid());
-        $this->assertTrue($lists[2]->isValid());
+//        // 測試資料格式是否正確
+//        $this->assertTrue($lists[0]->isValid());
+//        $this->assertTrue($lists[1]->isValid());
+//        $this->assertTrue($lists[2]->isValid());
     }
 
     /**
@@ -175,16 +174,16 @@ class MessageModelTest extends DatabaseTestCase
      * (fail:offset參數輸入有誤)
      * @return void
      */
-//    public function testGetListByOffsetFail()
-//    {
-//        // offset，不可小於0
-//        $filter = new Filter();
-//        $filter->setOffset(-1);
-//        $lists = MessageModel::getList($filter);
-//
-//        // 確認回傳空陣列
-//        $this->assertEquals(array(), $lists);
-//    }
+    public function testGetListByOffsetFail()
+    {
+        // offset，不可小於0
+        $filter = new Filter();
+        $filter->setOffset(-1);
+        $lists = MessageModel::getList($filter);
+
+        // 確認回傳空陣列
+        $this->assertEquals(array(), $lists);
+    }
 
     /**
      * 測試取得部分留言資料
@@ -487,6 +486,40 @@ class MessageModelTest extends DatabaseTestCase
         $message->setId(2);
         $message->setIxUser($user->getId());
         $message->setDescription('測試留言');
+
+        // 確認修改是否成功
+        list($isSuccess, $error) =MessageModel::modify($message);
+        $this->assertTrue($isSuccess);
+        $this->assertEquals(Error::ERROR_NONE, $error->getCode());
+
+        // 測試修改後的資料
+        $messages = MessageModel::getAllList();
+        $this->assertEquals(2, $messages[1]->getId());
+        $this->assertEquals('測試留言', $messages[1]->getDescription());
+    }
+
+    /**
+     * 測試修改留言內容 (留言內容一樣)
+     * @return void
+     */
+    public function testModifyBySameData()
+    {
+        // 確認修改前的資料
+        $messages = MessageModel::getAllList();
+        $this->assertEquals(2, $messages[1]->getId());
+        $this->assertEquals('description02', $messages[1]->getDescription());
+
+        // 確認登入使用者
+        $user = new User();
+        $user->setId(2);
+        session()->put('userId', $user->getId());
+        $this->assertTrue(UserModel::isLogin());
+
+        // 設定要修改的資料
+        $message = new Message();
+        $message->setId(2);
+        $message->setIxUser($user->getId());
+        $message->setDescription('description02');
 
         // 確認修改是否成功
         list($isSuccess, $error) =MessageModel::modify($message);

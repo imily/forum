@@ -68,10 +68,10 @@ class PostModel
     /**
      * 依id取得全部討論主題資料
      * @param int $id
-     * @param Filter $filter
+     * @param Filter $messageFilter
      * @return Post
      */
-    public static function getById(int $id, Filter $filter)
+    public static function getById(int $id, Filter $messageFilter)
     {
         if ($id <= 0) {
             return new Post();
@@ -89,7 +89,7 @@ class PostModel
         $post = new Post();
         if (count($result) > 0) {
             $post->loadFromDbResult($result[0]);
-            $post->setMessage(MessageModel::getByIdsByFilter(json_decode($post->getMessages()), $filter));
+            $post->setMessage(MessageModel::getByIdsByFilter(json_decode($post->getMessages()), $messageFilter));
             $post->setUser(UserModel::getByIds(json_decode($post->getLikes())));
             $post->setUserObject(UserModel::getById($post->getIxUser()));
         }
@@ -209,7 +209,7 @@ class PostModel
                 (`ixUser`, `sTopic`, `sDescription`)
                 VALUE 
                 ('%d', '%s', '%s')"
-            , (int)$post->getId()
+            , (int)$post->getIxUser()
             , addslashes($post->getTopic())
             , addslashes($post->getDescription()));
 
@@ -339,6 +339,7 @@ class PostModel
         if ($hasKey > 0) {
             unset($likes[$hasKey]);
         }
+
         // 若不存在，新增使用者至清單
         if ($hasKey === false) {
             array_push($likes, $userId);

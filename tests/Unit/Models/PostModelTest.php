@@ -463,7 +463,6 @@ class PostModelTest extends DatabaseTestCase
 
         // 新增第8筆要寫入的資料
         $post = new Post();
-        $post->setId(8);
         $post->setIxUser($userId);
         $post->setTopic('標題');
         $post->setDescription('描述');
@@ -474,20 +473,15 @@ class PostModelTest extends DatabaseTestCase
         $this->assertEquals(Error::ERROR_NONE, $error->getCode());
 
         // 測試有正確新增第8筆資料
-//        $posts = PostModel::getAllList();
-//        $this->assertCount(8, $posts);
-//
-//        // 將輸入的資料與資料庫取出的資料轉成array
-//        $inputData = $post->toArray();
-//        $databaseData = $inputData[8]->toArray();
-//
-//        // 不比對自動生成的欄位
-//        unset($inputData['dtCreate']);
-//        unset($inputData['dtUpdate']);
-//        unset($databaseData['dtCreate']);
-//        unset($databaseData['dtUpdate']);
-//
-//        $this->assertEquals($inputData, $databaseData);
+        $posts = PostModel::getAllList();
+        $this->assertCount(8, $posts);
+
+        // 確認是否DB裡資料是否符合預期
+        $messageFilter = new Filter();
+        $postIndDB = PostModel::getById(8, $messageFilter);
+        $this->assertEquals(2, $postIndDB->getIxUser());
+        $this->assertEquals('標題', $postIndDB->getTopic());
+        $this->assertEquals('描述', $postIndDB->getDescription());
     }
 
     /**

@@ -16,10 +16,10 @@ class CreatePostTable extends Migration
         Schema::create('Post', function (Blueprint $table) {
             $table->bigIncrements('ixPost');
             $table->integer('ixUser');
-            $table->string('sMessages')->default('');
+            $table->string('sMessages')->default('[]');
             $table->string('sTopic',255);
             $table->string('sDescription',255);
-            $table->string('sLikes')->default('');
+            $table->string('sLikes')->default('[]');
             $table->dateTime('dtCreate')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->dateTime('dtUpdate')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });

@@ -144,6 +144,7 @@ class UserModelTest extends DatabaseTestCase
         $content = $this->generateUserContent();
         $user = UserModel::getAllList();
         $this->assertCount(4, $user);
+        dd($content[0], $user[0]->toArray());
         $this->assertEquals($content[0], $user[0]->toArray());
     }
 

@@ -15,7 +15,7 @@ class MessageController extends Controller
      * @param $id
      * @return Response
      */
-    public function searchMessageById($id)
+    public function getMessageById($id)
     {
         // 設定response
         $response = array();
@@ -86,16 +86,16 @@ class MessageController extends Controller
     /**
      * 修改留言
      * URI：POST /api/messages/{messageId}
-     * @param $id
+     * @param $messageId
      * @return Response
      */
-    public function modifyMessage($id)
+    public function modifyMessage($messageId)
     {
         $response = array();
 
         $description = (String)Input::get('description');
 
-        if ((int)$id <= 0) {
+        if ((int)$messageId <= 0) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
@@ -106,7 +106,7 @@ class MessageController extends Controller
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
-        $message = MessageModel::getById($id);
+        $message = MessageModel::getById($messageId);
         $message->setDescription($description);
         list($isSuccess, $error) = MessageModel::modify($message);
 

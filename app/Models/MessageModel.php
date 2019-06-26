@@ -43,6 +43,10 @@ class MessageModel
      */
     public static function getList(Filter $filter)
     {
+        if ( ! $filter->isValid()) {
+            return array();
+        }
+
         $sql = sprintf("
                  SELECT * 
                  FROM `Message` 
@@ -249,6 +253,12 @@ class MessageModel
         if ($message->getIxUser() !== UserModel::getCurrentLoginUser()->getId()) {
             $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_UNAUTHORIZED);
             return array(false, $error);
+        }
+
+        // 判斷輸入的內容是否等於資料庫內容
+        if ($message->getDescription() === MessageModel::getById($message->getId())->getDescription()) {
+            $error = new Error(Error::ERROR_NONE);
+            return array(true, $error);
         }
 
         $sql = sprintf("

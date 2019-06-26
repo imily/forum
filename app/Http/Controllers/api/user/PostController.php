@@ -230,13 +230,24 @@ class PostController extends Controller
     {
         $response = array();
 
-        $userId = (int)Input::get('user_id', '');
-        $topic = (string)Input::get('topic', '');
-        $description = (string)Input::get('description', '');
+        // 判斷有無欄位
+
+
+        $userId = Input::get('user_id');
+        $topic = (string)Input::get('topic');
+        $description = (string)Input::get('description');
+
+        // 判斷 userId 是否為正整數
+        if ( ! VerifyFormat::isPositiveInteger($userId)) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
+            $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
+            return response()->json($error->convertToDisplayArray(), $statusCode);
+        }
+
+        $userId = (int)$userId;
 
         // 如果欄位為空時，回傳錯誤
-        if (($userId == '') or
-            ($topic == '') or
+        if (($topic == '') or
             ($description == '')) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
@@ -329,16 +340,16 @@ class PostController extends Controller
     /**
      * 更新喜歡單一討論主題
      * URI: GET /api/posts/{postId}/like
-     * @param $id
+     * @param $postId
      * @return Response
      */
-    public function updateLikesForPosts($id)
+    public function updateLikesForPosts($postId)
     {
         $response = array();
 
         $userId = (int)Input::get('user_id', '');
 
-        if ((int)$id <= 0) {
+        if ((int)$postId <= 0) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
@@ -350,9 +361,9 @@ class PostController extends Controller
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
-        list($isSuccess, $error) = PostModel::updateLikes($id, $userId);
+        list($isSuccess, $error) = PostModel::updateLikes($postId, $userId);
 
-        if (!$isSuccess) {
+        if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
