@@ -223,9 +223,17 @@ class PostModelTest extends DatabaseTestCase
         $this->assertCount(7, $lists);
 
         // 確認資料內容是否相符
-//        $this->assertEquals($posts, $lists);
-//        $this->assertEquals($posts[0], $lists[0]);
-//        $this->assertEquals($posts[1], $lists[1]);
+        $this->assertEquals($posts[0]->toArray(), $lists[0]->toArray());
+        $this->assertEquals($posts[1]->toArray(), $lists[1]->toArray());
+        $this->assertEquals($posts[2]->toArray(), $lists[2]->toArray());
+
+        // 驗證密碼
+        $this->assertTrue($lists[0]->getUserObject()->verifyPassword('messagepassword'));
+        $this->assertFalse($lists[0]->getUserObject()->verifyPassword('wrong'));
+        $this->assertTrue($lists[1]->getUserObject()->verifyPassword(1234));
+        $this->assertFalse($lists[1]->getUserObject()->verifyPassword('wrong'));
+        $this->assertTrue($lists[2]->getUserObject()->verifyPassword(1234));
+        $this->assertFalse($lists[2]->getUserObject()->verifyPassword('wrong'));
 
         // 測試資料格式是否正確
         $this->assertTrue($lists[0]->isValid());
@@ -277,9 +285,17 @@ class PostModelTest extends DatabaseTestCase
         $this->assertCount(7, $lists);
 
         // 確認資料內容是否相符
-//        $this->assertEquals($posts, $lists);
-//        $this->assertEquals($posts[0], $lists[0]);
-//        $this->assertEquals($posts[1], $lists[1]);
+        $this->assertEquals($posts[0]->toArray(), $lists[0]->toArray());
+        $this->assertEquals($posts[1]->toArray(), $lists[1]->toArray());
+        $this->assertEquals($posts[2]->toArray(), $lists[2]->toArray());
+
+        // 驗證密碼
+        $this->assertTrue($lists[0]->getUserObject()->verifyPassword('messagepassword'));
+        $this->assertFalse($lists[0]->getUserObject()->verifyPassword('wrong'));
+        $this->assertTrue($lists[1]->getUserObject()->verifyPassword(1234));
+        $this->assertFalse($lists[1]->getUserObject()->verifyPassword('wrong'));
+        $this->assertTrue($lists[2]->getUserObject()->verifyPassword(1234));
+        $this->assertFalse($lists[2]->getUserObject()->verifyPassword('wrong'));
 
         // 測試資料格式是否正確
         $this->assertTrue($lists[0]->isValid());
@@ -295,10 +311,6 @@ class PostModelTest extends DatabaseTestCase
 
         // 確認資料筆數是否相同
         $this->assertCount(2, $lists);
-
-        // 確認資料內容是否相符
-//        $this->assertEquals($posts[1], $lists[1]);
-//        $this->assertEquals($posts[2], $lists[2]);
     }
 
     /**
@@ -306,17 +318,17 @@ class PostModelTest extends DatabaseTestCase
      * (fail:offset參數輸入有誤)
      * @return void
      */
-//    public function testGetListByOffsetFail()
-//    {
-//        // offset，不可小於0
-//        $filter = new Filter();
-//        $messageFilter = new Filter();
-//        $filter->setOffset(-1);
-//        $lists = PostModel::getList($filter, $messageFilter);
-//
-//        // 確認回傳空陣列
-//        $this->assertEquals(array(), $lists);
-//    }
+    public function testGetListByOffsetFail()
+    {
+        // offset，不可小於0
+        $filter = new Filter();
+        $messageFilter = new Filter();
+        $filter->setOffset(-1);
+        $lists = PostModel::getList($filter, $messageFilter);
+
+        // 確認回傳空陣列
+        $this->assertEquals(array(), $lists);
+    }
 
     /**
      * 測試取得部分留言資料
@@ -373,10 +385,10 @@ class PostModelTest extends DatabaseTestCase
             $posts[] = $post;
         }
 
-//        $post = PostModel::getById(1, $messageFilter);
-//        $this->assertEquals($posts[0], $post);
-//        $post = PostModel::getById(2, $messageFilter);
-//        $this->assertEquals($posts[1], $post);
+        $post = PostModel::getById(1, $messageFilter);
+        $this->assertEquals($posts[0]->toArray(), $post->toArray());
+        $post = PostModel::getById(2, $messageFilter);
+        $this->assertEquals($posts[1]->toArray(), $post->toArray());
 
         $post = PostModel::getById(999, $messageFilter);
         $this->assertEquals(new Post(), $post);
@@ -616,6 +628,42 @@ class PostModelTest extends DatabaseTestCase
         $this->assertEquals(2, $posts[1]->getId());
         $this->assertEquals('修改標題', $posts[1]->getTopic());
         $this->assertEquals('修改描述', $posts[1]->getDescription());
+    }
+
+    /**
+     * 測試修改討論主題 (主題內容一樣)
+     * @return void
+     */
+    public function testModifyBySameData()
+    {
+        // 確認修改前的資料
+        $posts = PostModel::getAllList();
+        $this->assertEquals(2, $posts[1]->getId());
+        $this->assertEquals('topic02', $posts[1]->getTopic());
+        $this->assertEquals('description02', $posts[1]->getDescription());
+
+        // 確認登入使用者
+        $userId = 2;
+        session()->put('userId', $userId);
+        $this->assertTrue(UserModel::isLogin());
+
+        // 設定要修改的資料
+        $post = new Post();
+        $post->setId(2);
+        $post->setIxUser($userId);
+        $post->setTopic('topic02');
+        $post->setDescription('description02');
+
+        // 確認修改成功
+        list($isSuccess, $error) = PostModel::modify($post);
+        $this->assertTrue($isSuccess);
+        $this->assertEquals(Error::ERROR_NONE, $error->getCode());
+
+        // 測試修改後的資料
+        $posts = PostModel::getAllList();
+        $this->assertEquals(2, $posts[1]->getId());
+        $this->assertEquals('topic02', $posts[1]->getTopic());
+        $this->assertEquals('description02', $posts[1]->getDescription());
     }
 
     /**

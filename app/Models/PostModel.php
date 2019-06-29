@@ -45,6 +45,11 @@ class PostModel
      */
     public static function getList(Filter $postFilter, Filter $messageFilter)
     {
+        if (( ! $postFilter->isValid()) or
+            ( ! $messageFilter->isValid())) {
+            return array();
+        }
+
         $sql = sprintf("
                 SELECT * 
                 FROM `Post`
@@ -66,13 +71,47 @@ class PostModel
     }
 
     /**
-     * 依id取得全部討論主題資料
+     * 依id取得部分討論主題資料
+     * @param int $id
+     * @return Post
+     */
+    public static function getAllById(int $id)
+    {
+        if ($id <= 0) {
+            return new Post();
+        }
+
+        $sql = sprintf("
+                SELECT * 
+                FROM `Post` 
+                WHERE `ixPost` = '%d' 
+                LIMIT 1"
+            , (int)$id);
+
+        $result = DB::SELECT($sql);
+
+        $post = new Post();
+        if (count($result) > 0) {
+            $post->loadFromDbResult($result[0]);
+            $post->setMessage(MessageModel::getByIds(json_decode($post->getMessages())));
+            $post->setUser(UserModel::getByIds(json_decode($post->getLikes())));
+            $post->setUserObject(UserModel::getById($post->getIxUser()));
+        }
+        return $post;
+    }
+
+    /**
+     * 依id取得部分討論主題資料
      * @param int $id
      * @param Filter $messageFilter
      * @return Post
      */
     public static function getById(int $id, Filter $messageFilter)
     {
+        if ( ! $messageFilter->isValid()) {
+            return new Post();
+        }
+
         if ($id <= 0) {
             return new Post();
         }
@@ -104,8 +143,12 @@ class PostModel
      */
     public static function getByUserId(Filter $messageFilter, int $userId)
     {
+        if ( ! $messageFilter->isValid()) {
+            return array();
+        }
+
         if ((int)$userId <= 0) {
-            return [];
+            return array();
         }
 
         $sql = sprintf("
@@ -136,8 +179,13 @@ class PostModel
      */
     public static function getByUserIdForFilter(Filter $postFilter, Filter $messageFilter, int $userId)
     {
+        if (( ! $postFilter->isValid()) or
+            ( ! $messageFilter->isValid())) {
+            return array();
+        }
+
         if ((int)$userId <= 0) {
-            return [];
+            return array();
         }
 
         $sql = sprintf("
@@ -248,6 +296,13 @@ class PostModel
         if ($post->getIxUser() !== UserModel::getCurrentLoginUser()->getId()) {
             $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_UNAUTHORIZED);
             return array(false, $error);
+        }
+
+        // 判斷輸入的內容是否等於資料庫內容
+        if (($post->getDescription() === PostModel::getAllById($post->getId())->getDescription()) or
+            ($post->getTopic() === PostModel::getAllById($post->getId())->getTopic())) {
+            $error = new Error(Error::ERROR_NONE);
+            return array(true, $error);
         }
 
         $sql = sprintf("
