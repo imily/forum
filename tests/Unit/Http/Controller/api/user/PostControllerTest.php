@@ -200,4 +200,63 @@ class PostControllerTest extends ApiTestCase
 
         $this->assertEquals($testContents, $contents);
     }
+
+    /**
+     * 測試以API取得部分討論主題
+     * (offset設定為6)
+     * @return void
+     */
+    public function testGetPostForOffset()
+    {
+        $input = array('offset'   => 0
+                     , 'limit' => 2
+                     , 'message_offset' => 0
+                     , 'message_limit' => 2);
+
+        $header = $this->header;
+        $path = sprintf("/api/posts");
+        $response = $this->json('GET', $path, $input, $header);
+
+        $this->assertEquals(HttpStatusCode::STATUS_200_OK, $response->getStatusCode());
+
+        $contents = json_decode($response->getContent(), true);
+        $testContents = array();
+        $testContents['total_amount'] = 2;
+        $testContents['data'][0] =
+            array('id' => 6
+            , 'user_name'        => 'Mary'
+            , 'user_sicker_type' => 1
+            , 'messages' => array('total_amount' => 3,
+                'data' => array(
+                    array('user_name' => "admin",
+                        'description' => "description01")
+                    ,array('user_name' => "imily",
+                        'description' => "description05")))
+            , 'topic' => 'topic06'
+            , 'description' => 'description06'
+            , 'likes' => array(
+                array('user_name' => 'admin'),
+                array('user_name' => 'imily'))
+            , 'create_time' => "2011-11-16 00:00:00"
+            , 'update_time' => "2011-11-17 00:00:00");
+        $testContents['data'][1] =
+            array('id' => 7
+            , 'user_name'        => 'imily'
+            , 'user_sicker_type' => 3
+            , 'messages' => array('total_amount' => 3,
+                'data' => array(
+                    array('user_name' => "imily",
+                        'description' => "description02")
+                    ,array('user_name' => "imily",
+                        'description' => "description05")))
+            , 'topic' => 'topic07'
+            , 'description' => 'description07'
+            , 'likes' => array(
+                array('user_name' => 'admin'),
+                array('user_name' => 'imily'))
+            , 'create_time' => "2011-11-17 00:00:00"
+            , 'update_time' => "2011-11-18 00:00:00");
+
+        $this->assertEquals($testContents, $contents);
+    }
 }

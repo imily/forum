@@ -70,7 +70,8 @@ class PostController extends Controller
      */
     private function generatePostsByFilter(Filter $filter, Filter $messageFilter)
     {
-        if (!$filter->isValid()) {
+        if (( ! $filter->isValid()) or
+            ( ! $messageFilter->isValid())) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
@@ -128,7 +129,7 @@ class PostController extends Controller
         $messageOffset = (int)Input::get('message_offset', 0);
         $messageLimit = (int)Input::get('message_limit', 0);
 
-        if (!VerifyFormat::isValidId($userId)) {
+        if ( ! VerifyFormat::isValidId($userId)) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
@@ -154,29 +155,26 @@ class PostController extends Controller
     /**
      * 取得單一討論主題
      * URI: GET /api/posts/{postId}
-     * @param $id
+     * @param $postId
      * @return Response
      */
-    public function getPostById($id)
+    public function getPostById($postId)
     {
-        // 設定response
-        $response = array();
-
-        $messageOffset = (int)Input::get('message_offset', 0);
-        $messageLimit = (int)Input::get('message_limit', 10);
-
         // 當Id小於等於0時，回傳錯誤
-        if ((int)$id <= 0) {
+        if ((int)$postId <= 0) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
+        $messageOffset = (int)Input::get('message_offset', 0);
+        $messageLimit = (int)Input::get('message_limit', 10);
+
         // 取得資料
         $messageFilter = new Filter();
         $messageFilter->setOffset($messageOffset);
         $messageFilter->setLimit($messageLimit);
-        $post = PostModel::getById($id, $messageFilter);
+        $post = PostModel::getById($postId, $messageFilter);
 
         // 當取得的留言Id為0時，回傳錯誤
         if ($post->getId() == 0) {
@@ -184,6 +182,9 @@ class PostController extends Controller
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
+
+        // 設定response
+        $response = array();
 
         $postUser = $post->getUserObject();
         $messages = $post->getMessage();
@@ -228,10 +229,18 @@ class PostController extends Controller
      */
     public function addPost()
     {
-        $response = array();
-
         // 判斷有無欄位
+        $hasUserId = Input::has('user_id');
+        $hasTopic = Input::has('topic');
+        $hasDescription = Input::has('description');
 
+        if (( ! $hasUserId) or
+            ( ! $hasTopic) or
+            ( ! $hasDescription)) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+            $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
+            return response()->json($error->convertToDisplayArray(), $statusCode);
+        }
 
         $userId = Input::get('user_id');
         $topic = (string)Input::get('topic');
@@ -254,15 +263,17 @@ class PostController extends Controller
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
+        $response = array();
+
         $post = new Post();
         $post->setIxUser($userId);
         $post->setTopic($topic);
         $post->setDescription($description);
         list($isSuccess, $error) = PostModel::add($post);
 
-        if (!$isSuccess) {
+        if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-            return response()->json($error->convertToDisplayArray(), $statusCode);
+            return response()->json($error, $statusCode);
         }
 
         $statusCode = HttpStatusCode::STATUS_201_CREATED;
@@ -272,21 +283,30 @@ class PostController extends Controller
     /**
      * 修改單一討論主題
      * URI: GET /api/posts/{postId}
-     * @param $id
+     * @param $postId
      * @return Response
      */
-    public function modifyPost($id)
+    public function modifyPost($postId)
     {
-        $response = array();
-
-        $topic = (string)Input::get('topic', '');
-        $description = (string)Input::get('description', '');
-
-        if ((int)$id <= 0) {
+        if ((int)$postId <= 0) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
+
+        // 判斷有無欄位
+        $hasTopic = Input::has('topic');
+        $hasDescription = Input::has('description');
+
+        if (( ! $hasTopic) or
+            ( ! $hasDescription)) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+            $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
+            return response()->json($error->convertToDisplayArray(), $statusCode);
+        }
+
+        $topic = (string)Input::get('topic', '');
+        $description = (string)Input::get('description', '');
 
         if (($topic == '') or
             ($description == '')) {
@@ -295,14 +315,16 @@ class PostController extends Controller
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
+        $response = array();
+
         $post = new Post();
         $post->setTopic($topic);
         $post->setDescription($description);
         list($isSuccess, $error) = PostModel::modify($post);
 
-        if (!$isSuccess) {
+        if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-            return response()->json($error->convertToDisplayArray(), $statusCode);
+            return response()->json($error, $statusCode);
         }
 
         $statusCode = HttpStatusCode::STATUS_204_NO_CONTENT;
@@ -316,23 +338,31 @@ class PostController extends Controller
      */
     public function deletePost()
     {
-        $response = array();
+        // 判斷有無欄位
+        $ids = Input::has('ids');
 
-        $ids = Input::get('ids', array());
-
-        if (count($ids) <= 0) {
+        if ( ! $ids) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+            $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
+            return response()->json($error->convertToDisplayArray(), $statusCode);
+        }
+
+        $ids = Input::get('ids');
+
+        if ( ! VerifyFormat::isValidIds($ids)) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
         list($isSuccess, $error) = PostModel::delete($ids);
 
-        if (!$isSuccess) {
+        if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-            return response()->json($error->convertToDisplayArray(), $statusCode);
+            return response()->json($error, $statusCode);
         }
 
+        $response = array();
         $statusCode = HttpStatusCode::STATUS_204_NO_CONTENT;
         return response()->json($response, $statusCode);
     }
@@ -345,17 +375,24 @@ class PostController extends Controller
      */
     public function updateLikesForPosts($postId)
     {
-        $response = array();
-
-        $userId = (int)Input::get('user_id', '');
-
         if ((int)$postId <= 0) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
-        if ($userId == '') {
+        // 判斷有無欄位
+        $hasUserId = Input::has('user_id');
+
+        if ( ! $hasUserId) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+            $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
+            return response()->json($error->convertToDisplayArray(), $statusCode);
+        }
+
+        $userId = (int)Input::get('user_id');
+
+        if ( ! VerifyFormat::isValidId($userId)) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
@@ -365,9 +402,10 @@ class PostController extends Controller
 
         if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-            return response()->json($error->convertToDisplayArray(), $statusCode);
+            return response()->json($error, $statusCode);
         }
 
+        $response = array();
         $statusCode = HttpStatusCode::STATUS_204_NO_CONTENT;
         return response()->json($response, $statusCode);
     }
