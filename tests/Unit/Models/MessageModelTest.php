@@ -112,15 +112,22 @@ class MessageModelTest extends DatabaseTestCase
         $this->assertCount(8, $lists);
 
         // 確認資料內容是否相符
-        print_r($messages[0]->toArray());
         $this->assertEquals($messages[0]->toArray(), $lists[0]->toArray());
-//        $this->assertEquals($messages[1], $lists[1]->toArray());
-//        $this->assertEquals($messages[2], $lists[2]->toArray());
+        $this->assertEquals($messages[1]->toArray(), $lists[1]->toArray());
+        $this->assertEquals($messages[2]->toArray(), $lists[2]->toArray());
 
-//        // 測試資料格式是否正確
-//        $this->assertTrue($lists[0]->isValid());
-//        $this->assertTrue($lists[1]->isValid());
-//        $this->assertTrue($lists[2]->isValid());
+        // 驗證密碼
+        $this->assertTrue($lists[0]->getUser()->verifyPassword('messagepassword'));
+        $this->assertFalse($lists[0]->getUser()->verifyPassword('wrong'));
+        $this->assertTrue($lists[1]->getUser()->verifyPassword(1234));
+        $this->assertFalse($lists[1]->getUser()->verifyPassword('wrong'));
+        $this->assertTrue($lists[2]->getUser()->verifyPassword(1234));
+        $this->assertFalse($lists[2]->getUser()->verifyPassword('wrong'));
+
+        // 測試資料格式是否正確
+        $this->assertTrue($lists[0]->isValid());
+        $this->assertTrue($lists[1]->isValid());
+        $this->assertTrue($lists[2]->isValid());
     }
 
     /**
@@ -147,9 +154,17 @@ class MessageModelTest extends DatabaseTestCase
         $this->assertCount(8, $lists);
 
         // 確認資料內容是否相符
-//        $this->assertEquals($messages[0], $lists[0]);
-//        $this->assertEquals($messages[1], $lists[1]);
-//        $this->assertEquals($messages[2], $lists[2]);
+        $this->assertEquals($messages[0]->toArray(), $lists[0]->toArray());
+        $this->assertEquals($messages[1]->toArray(), $lists[1]->toArray());
+        $this->assertEquals($messages[2]->toArray(), $lists[2]->toArray());
+
+        // 驗證密碼
+        $this->assertTrue($lists[0]->getUser()->verifyPassword('messagepassword'));
+        $this->assertFalse($lists[0]->getUser()->verifyPassword('wrong'));
+        $this->assertTrue($lists[1]->getUser()->verifyPassword(1234));
+        $this->assertFalse($lists[1]->getUser()->verifyPassword('wrong'));
+        $this->assertTrue($lists[2]->getUser()->verifyPassword(1234));
+        $this->assertFalse($lists[2]->getUser()->verifyPassword('wrong'));
 
         // 測試資料格式是否正確
         $this->assertTrue($lists[0]->isValid());
@@ -163,10 +178,6 @@ class MessageModelTest extends DatabaseTestCase
 
         // 確認資料筆數是否相同
         $this->assertCount(2, $lists);
-
-        // 確認資料內容是否相符
-//        $this->assertEquals($messages[1], $lists[1]);
-//        $this->assertEquals($messages[2], $lists[2]);
     }
 
     /**
@@ -224,9 +235,17 @@ class MessageModelTest extends DatabaseTestCase
         $this->assertCount(3, $lists);
 
         // 確認資料內容是否相符
-//        $this->assertEquals($messages[0], $lists[0]);
-//        $this->assertEquals($messages[1], $lists[1]);
-//        $this->assertEquals($messages[2], $lists[2]);
+        $this->assertEquals($messages[0]->toArray(), $lists[0]->toArray());
+        $this->assertEquals($messages[1]->toArray(), $lists[1]->toArray());
+        $this->assertEquals($messages[2]->toArray(), $lists[2]->toArray());
+
+        // 驗證密碼
+        $this->assertTrue($lists[0]->getUser()->verifyPassword('messagepassword'));
+        $this->assertFalse($lists[0]->getUser()->verifyPassword('wrong'));
+        $this->assertTrue($lists[1]->getUser()->verifyPassword(1234));
+        $this->assertFalse($lists[1]->getUser()->verifyPassword('wrong'));
+        $this->assertTrue($lists[2]->getUser()->verifyPassword(1234));
+        $this->assertFalse($lists[2]->getUser()->verifyPassword('wrong'));
 
         // 測試資料格式是否正確
         $this->assertTrue($lists[0]->isValid());
@@ -261,13 +280,10 @@ class MessageModelTest extends DatabaseTestCase
      * 測試依照MessageId取得部分資料
      * @return void
      */
-    public function testGetListByMessageIdsForFilter()
+    public function testGetListByMessageIdForFilter()
     {
         // 不輸入offset，limit參數，預設取得10筆
         $filter = new Filter();
-
-        $ids = array(1, 2, 3);
-        $lists = MessageModel::getByIds($ids);
 
         // 取得比對用的資料
         $messageContents = $this->generateMessageContent();
@@ -279,10 +295,10 @@ class MessageModelTest extends DatabaseTestCase
             $messages[] = $message;
         }
 
-//        $message = MessageModel::getById(1);
-//        $this->assertEquals($messages[0], $message);
-//        $message = MessageModel::getById(2);
-//        $this->assertEquals($messages[1], $message);
+        $message = MessageModel::getById(1);
+        $this->assertEquals($messages[0]->toArray(), $message->toArray());
+        $message = MessageModel::getById(2);
+        $this->assertEquals($messages[1]->toArray(), $message->toArray());
 
         $message = MessageModel::getById(999);
         $this->assertEquals(new Message(), $message);
@@ -315,10 +331,10 @@ class MessageModelTest extends DatabaseTestCase
             $messages[] = $message;
         }
 
-//        $message = MessageModel::getById(1);
-//        $this->assertEquals($messages[0], $message);
-//        $message = MessageModel::getById(2);
-//        $this->assertEquals($messages[1], $message);
+        $message = MessageModel::getById(1);
+        $this->assertEquals($messages[0]->toArray(), $message->toArray());
+        $message = MessageModel::getById(2);
+        $this->assertEquals($messages[1]->toArray(), $message->toArray());
 
         $message = MessageModel::getById(999);
         $this->assertEquals(new Message(), $message);
@@ -529,7 +545,7 @@ class MessageModelTest extends DatabaseTestCase
         // 測試修改後的資料
         $messages = MessageModel::getAllList();
         $this->assertEquals(2, $messages[1]->getId());
-        $this->assertEquals('測試留言', $messages[1]->getDescription());
+        $this->assertEquals('description02', $messages[1]->getDescription());
     }
 
     /**
