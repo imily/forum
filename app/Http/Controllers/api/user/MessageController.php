@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers\api\user;
 
 use App\Classes\Common\HttpStatusCode;
+use App\Classes\Common\VerifyFormat;
 use App\Classes\Errors\ErrorArgument;
 use App\Classes\Message;
 use App\Http\Controllers\Controller;
@@ -12,16 +13,16 @@ class MessageController extends Controller
     /**
      * 取得指定Id的留言
      * URI：GET /api/messages/{messageId}
-     * @param $id
+     * @param $messageId
      * @return Response
      */
-    public function getMessageById($id)
+    public function getMessageById($messageId)
     {
         // 設定response
         $response = array();
 
         // 當Id小於等於0時，回傳錯誤
-        if ((int)$id <= 0) {
+        if ((int)$messageId <= 0) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
@@ -56,10 +57,27 @@ class MessageController extends Controller
      */
     public function addMessage()
     {
-        $response = array();
+        $hasUserId = Input::has('user_id');
+        $hasDescription = Input::has('description');
 
-        $userId = (int)Input::get('user_id');
+        if (( ! $hasUserId) or
+            ( ! $hasDescription)) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+            $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
+            return response()->json($error->convertToDisplayArray(), $statusCode);
+        }
+
+        $userId = Input::get('user_id');
         $description = (String)Input::get('description');
+
+        // 判斷 userId 是否為正整數
+        if ( ! VerifyFormat::isPositiveInteger($userId)) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
+            $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
+            return response()->json($error->convertToDisplayArray(), $statusCode);
+        }
+
+        $userId = (int)$userId;
 
         if (($userId == '') or
             ($description == '')) {
@@ -67,6 +85,8 @@ class MessageController extends Controller
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
+
+        $response = array();
 
         $message = new Message();
         $message->setIxUser($userId);
@@ -76,7 +96,7 @@ class MessageController extends Controller
 
         if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-            return response()->json($error->convertToDisplayArray(), $statusCode);
+            return response()->json($error, $statusCode);
         }
 
         $statusCode = HttpStatusCode::STATUS_201_CREATED;
@@ -91,20 +111,29 @@ class MessageController extends Controller
      */
     public function modifyMessage($messageId)
     {
-        $response = array();
-
-        $description = (String)Input::get('description');
-
         if ((int)$messageId <= 0) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
+
+        $hasDescription = Input::has('description');
+
+        if ( ! $hasDescription) {
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+            $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
+            return response()->json($error->convertToDisplayArray(), $statusCode);
+        }
+
+        $description = (String)Input::get('description');
+
         if ($description == '') {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
+
+        $response = array();
 
         $message = MessageModel::getById($messageId);
         $message->setDescription($description);
@@ -112,7 +141,7 @@ class MessageController extends Controller
 
         if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-            return response()->json($error->convertToDisplayArray(), $statusCode);
+            return response()->json($error, $statusCode);
         }
 
         $statusCode = HttpStatusCode::STATUS_204_NO_CONTENT;
