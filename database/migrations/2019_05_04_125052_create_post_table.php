@@ -14,8 +14,8 @@ class CreatePostTable extends Migration
     public function up()
     {
         Schema::create('Post', function (Blueprint $table) {
-            $table->bigIncrements('ixPost');
-            $table->integer('ixUser');
+            $table->increments('ixPost');
+            $table->tinyInteger('ixUser')->default(0);
             $table->string('sMessages')->default('[]');
             $table->string('sTopic',255);
             $table->string('sDescription',255);
