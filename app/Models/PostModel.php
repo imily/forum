@@ -266,6 +266,9 @@ class PostModel
         $error = new ErrorDB(ErrorDB::ERROR_DB_FAILED_INSERT);
         $result = array(false, $error);
         if ($inserted) {
+            $postId = DB::getPdo()->lastInsertId();
+            print_r($postId);
+            $post->setId($postId);
             $errorNone = new Error(Error::ERROR_NONE);
             $result = array(true, $errorNone);
         }

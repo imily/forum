@@ -291,7 +291,7 @@ class PostController extends Controller
 
         if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-            return response()->json($error, $statusCode);
+            return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
         // 取得最新ID
@@ -345,7 +345,7 @@ class PostController extends Controller
 
         if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-            return response()->json($error, $statusCode);
+            return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
         $statusCode = HttpStatusCode::STATUS_204_NO_CONTENT;
@@ -380,7 +380,7 @@ class PostController extends Controller
 
         if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-            return response()->json($error, $statusCode);
+            return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
         $response = array();
@@ -423,7 +423,7 @@ class PostController extends Controller
 
         if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-            return response()->json($error, $statusCode);
+            return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
         $response = array();
