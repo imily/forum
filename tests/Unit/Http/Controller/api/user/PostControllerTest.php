@@ -1,14 +1,11 @@
 <?php namespace Tests\api\user;
 
 use App\Classes\Common\HttpStatusCode;
-use App\Classes\Errors\Error;
 use App\Classes\Errors\ErrorArgument;
 use App\Classes\Errors\ErrorAuth;
-use App\Classes\Post;
 use App\Classes\User;
 use App\Models\PostModel;
 use App\Models\UserModel;
-use App\Repositories\Filter;
 use Tests\ApiTestCase;
 
 class PostControllerTest extends ApiTestCase
