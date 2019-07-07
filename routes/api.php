@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 */
 
 Route::group(['namespace' => 'api'], function () {
+    // 使用者註冊
+    Route::post('registered', 'UserController@userRegistered');
     // 取得討論主題部分資料
     Route::get('posts', 'PostController@getPost');
 });

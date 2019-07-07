@@ -176,9 +176,9 @@ class UserModelTest extends DatabaseTestCase
         $this->assertFalse($lists[2]->verifyPassword('555'));
 
         // 確認資料內容是否相符
-//        $this->assertEquals($users[0], $lists[0]);
-//        $this->assertEquals($users[1], $lists[1]);
-//        $this->assertEquals($users[2], $lists[2]);
+        $this->assertEquals($users[0]->toArray(), $lists[0]->toArray());
+        $this->assertEquals($users[1]->toArray(), $lists[1]->toArray());
+        $this->assertEquals($users[2]->toArray(), $lists[2]->toArray());
 
         //測試資料格式是否正確
         $this->assertTrue($lists[0]->isValid());
@@ -378,7 +378,7 @@ class UserModelTest extends DatabaseTestCase
 
         list($isSuccess, $error) = UserModel::registerUser($user, $password);
         $this->assertEquals(false, $isSuccess);
-        $this->assertEquals(ErrorArgument::ERROR_ARGUMENT_INVALID, $error->getCode());
+        $this->assertEquals(ErrorAuth::ERROR_AUTH_INCORRECT_STICKER_TYPE, $error->getCode());
 
         // 取得目前使用者清單，資料沒有改變
         $lists = UserModel::getAllList();

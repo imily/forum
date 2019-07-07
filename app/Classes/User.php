@@ -43,11 +43,6 @@ class User extends CommonDatabaseRecord
             return false;
         }
 
-        // 驗證使用者頭像類型是否有效
-        if ( ! $this->isValidType($this->nStickerType)) {
-            return false;
-        }
-
         return parent::isValid();
     }
 

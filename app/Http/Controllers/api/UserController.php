@@ -52,7 +52,7 @@ class UserController extends Controller
 
         if (! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-            return response()->json($error, $statusCode);
+            return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
         $response['id'] = $user->getId();

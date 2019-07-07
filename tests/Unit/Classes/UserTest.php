@@ -97,25 +97,6 @@ class UserTest extends TestCase
     }
 
     /**
-     * 測試有效資料(fail:頭像類型無效)
-     * @return void
-     */
-    public function testDataNotValidByStickerType()
-    {
-        $content = $this->content;
-        $user = new User();
-
-        $user->loadFromDbResult($content);
-        $this->assertTrue($user->isValid());
-
-        $user->setStickerType(0);
-        $this->assertFalse($user->isValid());
-
-        $user->setStickerType(7);
-        $this->assertFalse($user->isValid());
-    }
-
-    /**
      * 測試驗證密碼
      * @return void
      */

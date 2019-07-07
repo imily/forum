@@ -135,7 +135,7 @@ class UserModel
 
         // 檢查頭像類型是否有效
         if ( ! User::isValidType($user->getStickerType())) {
-            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
+            $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_INCORRECT_STICKER_TYPE);
             return array(false, $error);
         }
 
@@ -153,6 +153,8 @@ class UserModel
         $error = new ErrorDB(ErrorDB::ERROR_DB_FAILED_INSERT);
         $result = array(false, $error);
         if ($inserted) {
+            $userId = DB::getPdo()->lastInsertId();
+            $user->setId($userId);
             $errorNone = new Error(Error::ERROR_NONE);
             $result = array(true, $errorNone);
         }
