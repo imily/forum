@@ -223,6 +223,8 @@ class MessageModel
         $error = new ErrorDB(ErrorDB::ERROR_DB_FAILED_INSERT);
         $result = array(false, $error);
         if ($isInsert) {
+            $messageId = DB::getPdo()->lastInsertId();
+            $message->setId($messageId);
             $error = new Error(Error::ERROR_NONE);
             $result = array(true, $error);
         }

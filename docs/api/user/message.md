@@ -42,7 +42,7 @@
 
 ### 新增單一留言
 
-`POST /message`
+`POST /messages`
 
 ##### 參數
 

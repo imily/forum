@@ -31,4 +31,11 @@ Route::group(['namespace' => 'api\user'], function () {
     Route::delete('posts/postIds', 'PostController@deletePosts');
     // 更新喜歡單一討論主題
     Route::patch('posts/{postId}/like', 'PostController@updateLikesForPost');
+
+    // 以messageId取得單一留言
+    Route::get('messages/{messageId}', 'MessageController@getMessageById');
+    // 新增單一留言
+    Route::post('messages', 'MessageController@addMessage');
+    // 修改單一討論留言
+    Route::patch('messages/{messageId}', 'MessageController@modifyMessage');
 });

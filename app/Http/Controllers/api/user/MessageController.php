@@ -7,6 +7,7 @@ use App\Classes\Message;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use App\Models\MessageModel;
+use Illuminate\Support\Facades\Input;
 
 class MessageController extends Controller
 {
@@ -23,17 +24,17 @@ class MessageController extends Controller
 
         // 當Id小於等於0時，回傳錯誤
         if ((int)$messageId <= 0) {
-            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
         // 取得資料
-        $message = MessageModel::getById($id);
+        $message = MessageModel::getById($messageId);
 
         // 當取得的留言Id為0時，回傳錯誤
         if ($message->getId() == 0) {
-            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
@@ -52,7 +53,7 @@ class MessageController extends Controller
 
     /**
      * 新增留言
-     * URI：POST /api/message
+     * URI：POST /api/messages
      * @return Response
      */
     public function addMessage()
@@ -96,8 +97,11 @@ class MessageController extends Controller
 
         if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-            return response()->json($error, $statusCode);
+            return response()->json($error->convertToDisplayArray(), $statusCode);
         }
+
+        // 取得最新ID
+        $response['id'] = $message->getId();
 
         $statusCode = HttpStatusCode::STATUS_201_CREATED;
         return response()->json($response, $statusCode);
@@ -141,7 +145,7 @@ class MessageController extends Controller
 
         if ( ! $isSuccess) {
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
-            return response()->json($error, $statusCode);
+            return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
         $statusCode = HttpStatusCode::STATUS_204_NO_CONTENT;
