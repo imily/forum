@@ -54,7 +54,7 @@ class AuthController extends Controller
      * URL POST /api/auth/logout
      * @return Response
      */
-    public function logOut()
+    public function logout()
     {
         UserModel::logout();
         $response = array();

@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::group(['namespace' => 'api\auth'], function () {
+    Route::post('auth/login', 'AuthController@login');
+    Route::post('auth/logout', 'AuthController@logout');
+});
+
 Route::group(['namespace' => 'api'], function () {
     // 使用者註冊
     Route::post('registered', 'UserController@userRegistered');
