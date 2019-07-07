@@ -45,11 +45,6 @@ class Post extends CommonDatabaseRecord
      */
     public function isValid()
     {
-        // 討論主題發表人 id 是否小於等於 0
-        if ($this->getIxUser() <= 0) {
-            return false;
-        }
-
         // 討論主題標題是否為空
         if ($this->getTopic() === '') {
             return false;

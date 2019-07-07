@@ -116,25 +116,6 @@ class PostTest extends TestCase
     }
 
     /**
-     * 測試有效資料(fail:討論主題發表人無效)
-     * @return void
-     */
-    public function testDataNotValidByUser()
-    {
-        $content = $this->content;
-        $post = new Post();
-
-        $post->loadFromDbResult($content);
-        $this->assertTrue($post->isValid());
-
-        $post->setIxUser(0);
-        $this->assertFalse($post->isValid());
-
-        $post->setIxUser(-1);
-        $this->assertFalse($post->isValid());
-    }
-
-    /**
      * 測試有效資料(fail:討論主題標題為空)
      * @return void
      */

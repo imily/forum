@@ -178,7 +178,7 @@ class PostControllerTest extends ApiTestCase
         $this->assertEquals($testContents, $contents);
     }
 
-        /**
+    /**
      * 測試以API取得部分討論主題
      * (offset設定為5，limit設定為2)
      * @return void
@@ -310,5 +310,4 @@ class PostControllerTest extends ApiTestCase
         $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
         $this->assertEquals($error->convertToDisplayArray(), $contents);
     }
-
 }

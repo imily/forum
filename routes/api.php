@@ -26,5 +26,9 @@ Route::group(['namespace' => 'api\user'], function () {
     // 新增單一討論主題
     Route::post('posts', 'PostController@addPost');
     // 修改單一討論主題
+    Route::patch('posts/{postId}', 'PostController@modifyPost');
     // 批量刪除討論主題
+    Route::delete('posts/postIds', 'PostController@deletePosts');
+    // 更新喜歡單一討論主題
+    Route::patch('posts/{postId}/like', 'PostController@updateLikesForPost');
 });

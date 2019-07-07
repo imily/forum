@@ -309,7 +309,8 @@ class PostController extends Controller
      */
     public function modifyPost($postId)
     {
-        if ((int)$postId <= 0) {
+        // 判斷 postId 是否為正整數
+        if ( ! VerifyFormat::isPositiveInteger($postId)) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
@@ -326,8 +327,8 @@ class PostController extends Controller
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
-        $topic = (string)Input::get('topic', '');
-        $description = (string)Input::get('description', '');
+        $topic = (string)Input::get('topic');
+        $description = (string)Input::get('description');
 
         if (($topic == '') or
             ($description == '')) {
@@ -335,10 +336,9 @@ class PostController extends Controller
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
-
         $response = array();
 
-        $post = new Post();
+        $post = PostModel::getAllById($postId);
         $post->setTopic($topic);
         $post->setDescription($description);
         list($isSuccess, $error) = PostModel::modify($post);
@@ -357,7 +357,7 @@ class PostController extends Controller
      * URI: GET /api/posts/postIds
      * @return Response
      */
-    public function deletePost()
+    public function deletePosts()
     {
         // 判斷有無欄位
         $ids = Input::has('ids');
@@ -394,7 +394,7 @@ class PostController extends Controller
      * @param $postId
      * @return Response
      */
-    public function updateLikesForPosts($postId)
+    public function updateLikesForPost($postId)
     {
         if ((int)$postId <= 0) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
@@ -414,7 +414,7 @@ class PostController extends Controller
         $userId = (int)Input::get('user_id');
 
         if ( ! VerifyFormat::isValidId($userId)) {
-            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
+            $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
             $statusCode = HttpStatusCode::STATUS_400_BAD_REQUEST;
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
