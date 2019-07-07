@@ -89,6 +89,11 @@ class UsersControllerTest extends ApiTestCase
      */
     public function testUserModify()
     {
+        // 確認修改前資料
+        $user = UserModel::getCurrentLoginUser();
+        $this->assertEquals($user->getStickerType(), 3);
+        $this->assertTrue($user->verifyPassword(1234));
+
         // 設定input
         $input = array();
         $input['sticker_type'] = 1;
@@ -121,6 +126,11 @@ class UsersControllerTest extends ApiTestCase
      */
     public function testUserModifyByUnmatched()
     {
+        // 確認修改前資料
+        $user = UserModel::getCurrentLoginUser();
+        $this->assertEquals($user->getStickerType(), 3);
+        $this->assertTrue($user->verifyPassword(1234));
+
         // 設定input
         $input = array();
         $input['sticker_type'] = 1;
@@ -159,6 +169,11 @@ class UsersControllerTest extends ApiTestCase
      */
     public function testUserModifyByEmptyPassword()
     {
+        // 確認修改前資料
+        $user = UserModel::getCurrentLoginUser();
+        $this->assertEquals($user->getStickerType(), 3);
+        $this->assertTrue($user->verifyPassword(1234));
+
         // 設定input
         $input = array();
         $input['sticker_type'] = 1;
@@ -197,6 +212,11 @@ class UsersControllerTest extends ApiTestCase
      */
     public function testUserModifyByEmptyConfirmPassword()
     {
+        // 確認修改前資料
+        $user = UserModel::getCurrentLoginUser();
+        $this->assertEquals($user->getStickerType(), 3);
+        $this->assertTrue($user->verifyPassword(1234));
+
         // 設定input
         $input = array();
         $input['sticker_type'] = 1;
@@ -235,6 +255,11 @@ class UsersControllerTest extends ApiTestCase
      */
     public function testUserModifyByNullValue()
     {
+        // 確認修改前資料
+        $user = UserModel::getCurrentLoginUser();
+        $this->assertEquals($user->getStickerType(), 3);
+        $this->assertTrue($user->verifyPassword(1234));
+
         // 設定input，沒有參數
         $input = array();
 
@@ -305,6 +330,11 @@ class UsersControllerTest extends ApiTestCase
      */
     public function testUserModifyByInvalidStickerType()
     {
+        // 確認修改前資料
+        $user = UserModel::getCurrentLoginUser();
+        $this->assertEquals($user->getStickerType(), 3);
+        $this->assertTrue($user->verifyPassword(1234));
+
         // 設定input
         $input = array();
         $input['sticker_type'] = 999;

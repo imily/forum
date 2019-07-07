@@ -8,6 +8,19 @@ class ApiTestCase extends DatabaseTestCase
     protected $header = array();
 
     /**
+     * 登入管理員帳號
+     * @return void
+     */
+    protected function loginAdminForTest()
+    {
+        $account = 'admin';
+        $password = 'messagepassword';
+        list($isSuccess, $error) = UserModel::login($account, $password);
+        $this->assertTrue($isSuccess);
+        $this->assertEquals(Error::ERROR_NONE, $error->getcode());
+    }
+
+    /**
      * 登入一般使用者
      * @return void
      */

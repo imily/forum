@@ -25,6 +25,17 @@ Route::group(['namespace' => 'api\user'], function () {
     Route::patch('user/info', 'UserController@userModify');
 });
 
+Route::group(['namespace' => 'api\admin'], function () {
+    // 取得所有使用者清單
+    Route::get('admin/users', 'UserController@getUsers');
+    // 新增使用者
+    Route::post('admin/users', 'UserController@createUser');
+    // 修改使用者資訊
+    Route::patch('admin/users/{user_id}/info', 'UserController@userModify');
+    // 批量刪除使用者
+    Route::delete('admin/users', 'UserController@deleteUsers');
+});
+
 Route::group(['namespace' => 'api'], function () {
     // 使用者註冊
     Route::post('registered', 'UserController@userRegistered');
