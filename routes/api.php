@@ -18,6 +18,13 @@ Route::group(['namespace' => 'api\auth'], function () {
     Route::post('auth/logout', 'AuthController@logout');
 });
 
+Route::group(['namespace' => 'api\user'], function () {
+    // 取得目前使用者
+    Route::get('user/info', 'UserController@getUser');
+    // 修改目前使用者資訊
+    Route::patch('user/info', 'UserController@userModify');
+});
+
 Route::group(['namespace' => 'api'], function () {
     // 使用者註冊
     Route::post('registered', 'UserController@userRegistered');

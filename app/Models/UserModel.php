@@ -204,6 +204,12 @@ class UserModel
      */
     public static function modify(User $user, string $password)
     {
+        // 檢查使用者是否存在
+        if ( ! static::isExist($user->getId())) {
+            $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_UNAUTHORIZED);
+            return array(false, $error);
+        }
+
         // 檢查資料是否有效
         if ( ! $user->isValid()) {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_INVALID);
@@ -213,12 +219,6 @@ class UserModel
         // 檢查欄位是否為空字串
         if ($password === '') {
             $error = new ErrorArgument(ErrorArgument::ERROR_ARGUMENT_EMPTY_INPUT);
-            return array(false, $error);
-        }
-
-        // 檢查使用者是否存在
-        if ( ! static::isExist($user->getId())) {
-            $error = new ErrorAuth(ErrorAuth::ERROR_AUTH_FAILED_GET_ID);
             return array(false, $error);
         }
 

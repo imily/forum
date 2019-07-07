@@ -462,10 +462,10 @@ class UserModelTest extends DatabaseTestCase
         $user->setStickerType(5);
         $newPassword = '5678';
 
-        // 測試修改使用者資訊，接收錯誤:取得ID失敗
+        // 測試修改使用者資訊，接收錯誤:未授權
         list($isSuccess, $error) = UserModel::modify($user, $newPassword);
         $this->assertFalse($isSuccess);
-        $this->assertEquals(ErrorAuth::ERROR_AUTH_FAILED_GET_ID, $error->getCode());
+        $this->assertEquals(ErrorAuth::ERROR_AUTH_UNAUTHORIZED, $error->getCode());
     }
 
     /**
