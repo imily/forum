@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import MemeItem from './MemeItem';
+import React, { Component } from 'react';
+import {connect} from "react-redux";
+import PostItem from "./PostItem";
+import {fetchMemes} from "../../redux/actions/post";
 
-class App extends Component {
+class Post extends Component {
     constructor(props) {
         super(props);
     }
@@ -15,13 +16,13 @@ class App extends Component {
                 {
                     this.props.memes.map((meme, index) => {
                         return (
-                            <MemeItem key={index}
+                            <PostItem key={index}
                                       meme={meme} />
                         )
                     })
                 }
             </div>
-        )
+        );
     }
 }
 
@@ -29,4 +30,6 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, null)(App);
+const mapDisPatchToProps = (dispatch) => { };
+
+export default connect(mapStateToProps, mapDisPatchToProps())(Post);

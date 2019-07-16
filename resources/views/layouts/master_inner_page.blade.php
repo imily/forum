@@ -20,12 +20,9 @@
     <div class="wrap">
         <div class="header">
             @include('layouts.header')
-            <div class="slider-wrapper theme-default banner">
-                <div id="slider" class="nivoSlider">
-                    <img src="{{ URL::asset('images/banner01.jpg') }}" data-thumb="images/banner01.jpg" alt="" />
-                    <img src="{{ URL::asset('images/banner02.jpg') }}" data-thumb="images/banner02.jpg" alt="" />
-                    <img src="{{ URL::asset('images/banner03.jpg') }}" data-thumb="images/banner03.jpg" alt="" />
-                </div>
+
+            <div class="banner">
+                <img src="{{ URL::asset('images/page_banner.jpg') }}" alt="" />
             </div>
         </div>
         @yield('content')

@@ -64947,52 +64947,17 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ "./resources/assets/js/actions/index..js":
-/*!***********************************************!*\
-  !*** ./resources/assets/js/actions/index..js ***!
-  \***********************************************/
-/*! exports provided: fetchMemes, RECEIVE_MEMES */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchMemes", function() { return fetchMemes; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_MEMES", function() { return RECEIVE_MEMES; });
-/* harmony import */ var _api_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../api/index */ "./resources/assets/js/api/index.js");
-// 匯入API
- // 定義行為
-
-function receiveMemes(json) {
-  var memes = json.data;
-  return {
-    type: RECEIVE_MEMES,
-    memes: memes
-  };
-} // 匯出行為(取得API)的dispatch
-
-
-function fetchMemes() {
-  return function (dispatch) {
-    return Object(_api_index__WEBPACK_IMPORTED_MODULE_0__["fetchMemesJson"])().then(function (json) {
-      return dispatch(receiveMemes(json));
-    });
-  };
-}
-var RECEIVE_MEMES = 'RECEIVE_MEMES';
-
-/***/ }),
-
-/***/ "./resources/assets/js/api/index.js":
-/*!******************************************!*\
-  !*** ./resources/assets/js/api/index.js ***!
-  \******************************************/
+/***/ "./resources/assets/js/api/post.js":
+/*!*****************************************!*\
+  !*** ./resources/assets/js/api/post.js ***!
+  \*****************************************/
 /*! exports provided: fetchMemesJson */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchMemesJson", function() { return fetchMemesJson; });
-var url = '/forum/public/api/posts';
+var url = '/message_board/public//api/posts';
 var params = {
   offset: 0,
   limit: 2,
@@ -65103,10 +65068,10 @@ if (token) {
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/App.js":
-/*!***********************************************!*\
-  !*** ./resources/assets/js/components/App.js ***!
-  \***********************************************/
+/***/ "./resources/assets/js/components/post/Post.js":
+/*!*****************************************************!*\
+  !*** ./resources/assets/js/components/post/Post.js ***!
+  \*****************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -65115,7 +65080,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _MemeItem__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MemeItem */ "./resources/assets/js/components/MemeItem.js");
+/* harmony import */ var _PostItem__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PostItem */ "./resources/assets/js/components/post/PostItem.js");
+/* harmony import */ var _redux_actions_post__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../redux/actions/post */ "./resources/assets/js/redux/actions/post.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -65138,22 +65104,23 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var App =
+
+var Post =
 /*#__PURE__*/
 function (_Component) {
-  _inherits(App, _Component);
+  _inherits(Post, _Component);
 
-  function App(props) {
-    _classCallCheck(this, App);
+  function Post(props) {
+    _classCallCheck(this, Post);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props));
+    return _possibleConstructorReturn(this, _getPrototypeOf(Post).call(this, props));
   }
 
-  _createClass(App, [{
+  _createClass(Post, [{
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, " Welcome to the Meme Generator!"), this.props.memes.map(function (meme, index) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_MemeItem__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PostItem__WEBPACK_IMPORTED_MODULE_2__["default"], {
           key: index,
           meme: meme
         });
@@ -65161,21 +65128,23 @@ function (_Component) {
     }
   }]);
 
-  return App;
+  return Post;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 function mapStateToProps(state) {
   return state;
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, null)(App));
+var mapDisPatchToProps = function mapDisPatchToProps(dispatch) {};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDisPatchToProps())(Post));
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/MemeItem.js":
-/*!****************************************************!*\
-  !*** ./resources/assets/js/components/MemeItem.js ***!
-  \****************************************************/
+/***/ "./resources/assets/js/components/post/PostItem.js":
+/*!*********************************************************!*\
+  !*** ./resources/assets/js/components/post/PostItem.js ***!
+  \*********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -65203,28 +65172,28 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var MemeItem =
+var PostItem =
 /*#__PURE__*/
 function (_Component) {
-  _inherits(MemeItem, _Component);
+  _inherits(PostItem, _Component);
 
-  function MemeItem() {
-    _classCallCheck(this, MemeItem);
+  function PostItem() {
+    _classCallCheck(this, PostItem);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(MemeItem).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(PostItem).apply(this, arguments));
   }
 
-  _createClass(MemeItem, [{
+  _createClass(PostItem, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, this.props.meme.user_name));
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.meme.user_name);
     }
   }]);
 
-  return MemeItem;
+  return PostItem;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-/* harmony default export */ __webpack_exports__["default"] = (MemeItem);
+/* harmony default export */ __webpack_exports__["default"] = (PostItem);
 
 /***/ }),
 
@@ -65241,31 +65210,66 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/App */ "./resources/assets/js/components/App.js");
+/* harmony import */ var _components_post_Post__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/post/Post */ "./resources/assets/js/components/post/Post.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./store */ "./resources/assets/js/store.js");
+/* harmony import */ var _redux_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./redux/store */ "./resources/assets/js/redux/store.js");
 
 
 
 
 
 react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_redux__WEBPACK_IMPORTED_MODULE_3__["Provider"], {
-  store: _store__WEBPACK_IMPORTED_MODULE_4__["default"]
-}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_App__WEBPACK_IMPORTED_MODULE_2__["default"], null)), document.getElementById('example'));
+  store: _redux_store__WEBPACK_IMPORTED_MODULE_4__["default"]
+}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_post_Post__WEBPACK_IMPORTED_MODULE_2__["default"], null)), document.getElementById('example'));
 
 /***/ }),
 
-/***/ "./resources/assets/js/reducers/index.js":
-/*!***********************************************!*\
-  !*** ./resources/assets/js/reducers/index.js ***!
-  \***********************************************/
+/***/ "./resources/assets/js/redux/actions/post.js":
+/*!***************************************************!*\
+  !*** ./resources/assets/js/redux/actions/post.js ***!
+  \***************************************************/
+/*! exports provided: fetchMemes, RECEIVE_MEMES */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchMemes", function() { return fetchMemes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_MEMES", function() { return RECEIVE_MEMES; });
+/* harmony import */ var _api_post__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/post */ "./resources/assets/js/api/post.js");
+// 匯入API
+ // 定義行為
+
+function receiveMemes(json) {
+  var memes = json.data;
+  return {
+    type: RECEIVE_MEMES,
+    memes: memes
+  };
+} // 匯出行為(取得API)的dispatch
+
+
+function fetchMemes() {
+  return function (dispatch) {
+    return Object(_api_post__WEBPACK_IMPORTED_MODULE_0__["fetchMemesJson"])().then(function (json) {
+      return dispatch(receiveMemes(json));
+    });
+  };
+}
+var RECEIVE_MEMES = 'RECEIVE_MEMES';
+
+/***/ }),
+
+/***/ "./resources/assets/js/redux/reducers/post.js":
+/*!****************************************************!*\
+  !*** ./resources/assets/js/redux/reducers/post.js ***!
+  \****************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
-/* harmony import */ var _actions_index___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../actions/index. */ "./resources/assets/js/actions/index..js");
+/* harmony import */ var _actions_post__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../actions/post */ "./resources/assets/js/redux/actions/post.js");
 
 
 
@@ -65274,7 +65278,7 @@ function memes() {
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
   switch (action.type) {
-    case _actions_index___WEBPACK_IMPORTED_MODULE_1__["RECEIVE_MEMES"]:
+    case _actions_post__WEBPACK_IMPORTED_MODULE_1__["RECEIVE_MEMES"]:
       return action.memes;
 
     default:
@@ -65282,17 +65286,17 @@ function memes() {
   }
 }
 
-var rootReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
+var postReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
   memes: memes
 });
-/* harmony default export */ __webpack_exports__["default"] = (rootReducer);
+/* harmony default export */ __webpack_exports__["default"] = (postReducer);
 
 /***/ }),
 
-/***/ "./resources/assets/js/store.js":
-/*!**************************************!*\
-  !*** ./resources/assets/js/store.js ***!
-  \**************************************/
+/***/ "./resources/assets/js/redux/store.js":
+/*!********************************************!*\
+  !*** ./resources/assets/js/redux/store.js ***!
+  \********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -65300,17 +65304,17 @@ var rootReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])(
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 /* harmony import */ var redux_thunk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux-thunk */ "./node_modules/redux-thunk/es/index.js");
-/* harmony import */ var _reducers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./reducers */ "./resources/assets/js/reducers/index.js");
-/* harmony import */ var _actions_index___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./actions/index. */ "./resources/assets/js/actions/index..js");
+/* harmony import */ var _reducers_post__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./reducers/post */ "./resources/assets/js/redux/reducers/post.js");
+/* harmony import */ var _actions_post__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./actions/post */ "./resources/assets/js/redux/actions/post.js");
 
 
 
 
-var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers__WEBPACK_IMPORTED_MODULE_2__["default"], Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_1__["default"]));
+var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers_post__WEBPACK_IMPORTED_MODULE_2__["default"], Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_1__["default"]));
 store.subscribe(function () {
   return console.log('store', store.getState());
 });
-store.dispatch(Object(_actions_index___WEBPACK_IMPORTED_MODULE_3__["fetchMemes"])());
+store.dispatch(Object(_actions_post__WEBPACK_IMPORTED_MODULE_3__["fetchMemes"])());
 /* harmony default export */ __webpack_exports__["default"] = (store);
 
 /***/ }),
@@ -65322,7 +65326,7 @@ store.dispatch(Object(_actions_index___WEBPACK_IMPORTED_MODULE_3__["fetchMemes"]
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\forum\resources\assets\js\app.js */"./resources/assets/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\message_board\resources\assets\js\app.js */"./resources/assets/js/app.js");
 
 
 /***/ })

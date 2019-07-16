@@ -1,10 +1,10 @@
 import {createStore, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 
-import rootReducer from './reducers';
-import {fetchMemes} from './actions/index.';
+import postReducer from './reducers/post';
+import {fetchMemes} from './actions/post';
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const store = createStore(postReducer, applyMiddleware(thunk));
 
 store.subscribe(() => console.log('store', store.getState()));
 store.dispatch(fetchMemes());

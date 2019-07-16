@@ -1,5 +1,5 @@
 // 匯入API
-import {fetchMemesJson} from '../api/index';
+import {fetchMemesJson} from '../../api/post';
 
 // 定義行為
 function receiveMemes(json) {

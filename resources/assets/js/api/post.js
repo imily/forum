@@ -1,4 +1,4 @@
-const url = '/forum/public/api/posts';
+const url = '/message_board/public//api/posts';
 
 const params = {
     offset: 0,

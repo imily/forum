@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master_inner_page')
 @section('title', '')
 @section('content')
 <section>
