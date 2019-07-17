@@ -64951,13 +64951,13 @@ module.exports = function(module) {
 /*!*****************************************!*\
   !*** ./resources/assets/js/api/post.js ***!
   \*****************************************/
-/*! exports provided: fetchMemesJson */
+/*! exports provided: fetchPostsJson */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchMemesJson", function() { return fetchMemesJson; });
-var url = '/message_board/public//api/posts';
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchPostsJson", function() { return fetchPostsJson; });
+var url = '/message_board/public/api/posts';
 var params = {
   offset: 0,
   limit: 2,
@@ -64978,7 +64978,7 @@ function toQueryString(obj) {
 } // get from API
 
 
-function fetchMemesJson() {
+function fetchPostsJson() {
   return fetch(url + '?' + toQueryString(params)).then(function (response) {
     return response.json();
   });
@@ -65079,9 +65079,6 @@ if (token) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _PostItem__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PostItem */ "./resources/assets/js/components/post/PostItem.js");
-/* harmony import */ var _redux_actions_post__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../redux/actions/post */ "./resources/assets/js/redux/actions/post.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -65099,9 +65096,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
 
 
 
@@ -65119,11 +65113,10 @@ function (_Component) {
   _createClass(Post, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, " Welcome to the Meme Generator!"), this.props.memes.map(function (meme, index) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PostItem__WEBPACK_IMPORTED_MODULE_2__["default"], {
-          key: index,
-          meme: meme
-        });
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, this.props.list.map(function (item, index) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+          key: index
+        }, item.user_name);
       }));
     }
   }]);
@@ -65131,20 +65124,14 @@ function (_Component) {
   return Post;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-function mapStateToProps(state) {
-  return state;
-}
-
-var mapDisPatchToProps = function mapDisPatchToProps(dispatch) {};
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDisPatchToProps())(Post));
+/* harmony default export */ __webpack_exports__["default"] = (Post);
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/post/PostItem.js":
-/*!*********************************************************!*\
-  !*** ./resources/assets/js/components/post/PostItem.js ***!
-  \*********************************************************/
+/***/ "./resources/assets/js/containers/Post/index.js":
+/*!******************************************************!*\
+  !*** ./resources/assets/js/containers/Post/index.js ***!
+  \******************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -65152,6 +65139,9 @@ var mapDisPatchToProps = function mapDisPatchToProps(dispatch) {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _redux_actions_post__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../redux/actions/post */ "./resources/assets/js/redux/actions/post.js");
+/* harmony import */ var _components_post_Post__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/post/Post */ "./resources/assets/js/components/post/Post.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -65172,28 +65162,50 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var PostItem =
+
+
+
+var PostMain =
 /*#__PURE__*/
 function (_Component) {
-  _inherits(PostItem, _Component);
+  _inherits(PostMain, _Component);
 
-  function PostItem() {
-    _classCallCheck(this, PostItem);
+  function PostMain(props) {
+    _classCallCheck(this, PostMain);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(PostItem).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(PostMain).call(this, props));
   }
 
-  _createClass(PostItem, [{
+  _createClass(PostMain, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.fetchPosts();
+    }
+  }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.meme.user_name);
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, " Welcome to the Meme Generator!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_post_Post__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        list: this.props.posts.list
+      }));
     }
   }]);
 
-  return PostItem;
+  return PostMain;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-/* harmony default export */ __webpack_exports__["default"] = (PostItem);
+function mapStateToProps(state) {
+  return state;
+}
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    fetchPosts: function fetchPosts() {
+      return dispatch(Object(_redux_actions_post__WEBPACK_IMPORTED_MODULE_2__["fetchPosts"])());
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(PostMain));
 
 /***/ }),
 
@@ -65210,7 +65222,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_post_Post__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/post/Post */ "./resources/assets/js/components/post/Post.js");
+/* harmony import */ var _containers_Post__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./containers/Post */ "./resources/assets/js/containers/Post/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _redux_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./redux/store */ "./resources/assets/js/redux/store.js");
 
@@ -65220,7 +65232,7 @@ __webpack_require__.r(__webpack_exports__);
 
 react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_redux__WEBPACK_IMPORTED_MODULE_3__["Provider"], {
   store: _redux_store__WEBPACK_IMPORTED_MODULE_4__["default"]
-}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_post_Post__WEBPACK_IMPORTED_MODULE_2__["default"], null)), document.getElementById('example'));
+}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_containers_Post__WEBPACK_IMPORTED_MODULE_2__["default"], null)), document.getElementById('example'));
 
 /***/ }),
 
@@ -65228,34 +65240,34 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_
 /*!***************************************************!*\
   !*** ./resources/assets/js/redux/actions/post.js ***!
   \***************************************************/
-/*! exports provided: fetchMemes, RECEIVE_MEMES */
+/*! exports provided: fetchPosts, RECEIVE_POSTS */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchMemes", function() { return fetchMemes; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_MEMES", function() { return RECEIVE_MEMES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchPosts", function() { return fetchPosts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_POSTS", function() { return RECEIVE_POSTS; });
 /* harmony import */ var _api_post__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/post */ "./resources/assets/js/api/post.js");
 // 匯入API
  // 定義行為
 
-function receiveMemes(json) {
-  var memes = json.data;
+function receivePosts(json) {
   return {
-    type: RECEIVE_MEMES,
-    memes: memes
+    type: RECEIVE_POSTS,
+    actionList: json.data,
+    actionTotal: json.total_amount
   };
 } // 匯出行為(取得API)的dispatch
 
 
-function fetchMemes() {
+function fetchPosts() {
   return function (dispatch) {
-    return Object(_api_post__WEBPACK_IMPORTED_MODULE_0__["fetchMemesJson"])().then(function (json) {
-      return dispatch(receiveMemes(json));
+    return Object(_api_post__WEBPACK_IMPORTED_MODULE_0__["fetchPostsJson"])().then(function (json) {
+      dispatch(receivePosts(json));
     });
   };
 }
-var RECEIVE_MEMES = 'RECEIVE_MEMES';
+var RECEIVE_POSTS = 'RECEIVE_POSTS';
 
 /***/ }),
 
@@ -65270,16 +65282,29 @@ var RECEIVE_MEMES = 'RECEIVE_MEMES';
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 /* harmony import */ var _actions_post__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../actions/post */ "./resources/assets/js/redux/actions/post.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { keys.push.apply(keys, Object.getOwnPropertySymbols(object)); } if (enumerableOnly) keys = keys.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
-function memes() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+var devicesInitialState = {
+  list: [],
+  totalAmount: 0
+};
+
+function posts() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : devicesInitialState;
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
   switch (action.type) {
-    case _actions_post__WEBPACK_IMPORTED_MODULE_1__["RECEIVE_MEMES"]:
-      return action.memes;
+    case _actions_post__WEBPACK_IMPORTED_MODULE_1__["RECEIVE_POSTS"]:
+      return _objectSpread({}, state, {
+        list: action.actionList,
+        totalAmount: action.actionTotal
+      });
 
     default:
       return state;
@@ -65287,7 +65312,7 @@ function memes() {
 }
 
 var postReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
-  memes: memes
+  posts: posts
 });
 /* harmony default export */ __webpack_exports__["default"] = (postReducer);
 
@@ -65305,16 +65330,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 /* harmony import */ var redux_thunk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux-thunk */ "./node_modules/redux-thunk/es/index.js");
 /* harmony import */ var _reducers_post__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./reducers/post */ "./resources/assets/js/redux/reducers/post.js");
-/* harmony import */ var _actions_post__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./actions/post */ "./resources/assets/js/redux/actions/post.js");
-
 
 
 
 var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers_post__WEBPACK_IMPORTED_MODULE_2__["default"], Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_1__["default"]));
-store.subscribe(function () {
-  return console.log('store', store.getState());
-});
-store.dispatch(Object(_actions_post__WEBPACK_IMPORTED_MODULE_3__["fetchMemes"])());
 /* harmony default export */ __webpack_exports__["default"] = (store);
 
 /***/ }),

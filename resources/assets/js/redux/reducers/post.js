@@ -1,15 +1,24 @@
 import {combineReducers} from 'redux';
-import {RECEIVE_MEMES} from '../actions/post';
+import {RECEIVE_POSTS} from '../actions/post';
 
-function memes(state = [], action) {
+const devicesInitialState = {
+    list : [],
+    totalAmount : 0,
+};
+
+function posts(state = devicesInitialState, action) {
     switch (action.type) {
-        case RECEIVE_MEMES:
-            return action.memes;
+        case RECEIVE_POSTS:
+            return {
+                ...state,
+                list: action.actionList,
+                totalAmount: action.actionTotal
+            };
         default:
             return state;
     }
 }
 
-const postReducer = combineReducers({memes});
+const postReducer = combineReducers({posts});
 
 export default postReducer;

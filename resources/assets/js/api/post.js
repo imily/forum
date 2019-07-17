@@ -1,4 +1,4 @@
-const url = '/message_board/public//api/posts';
+const url = '/message_board/public/api/posts';
 
 const params = {
     offset: 0,
@@ -18,7 +18,7 @@ function toQueryString(obj) {
 }
 
 // get from API
-export function fetchMemesJson() {
+export function fetchPostsJson() {
     return fetch(url + '?' + toQueryString(params))
         .then(response => response.json())
 }

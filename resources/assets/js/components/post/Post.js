@@ -1,7 +1,4 @@
-import React, { Component } from 'react';
-import {connect} from "react-redux";
-import PostItem from "./PostItem";
-import {fetchMemes} from "../../redux/actions/post";
+import React, {Component} from 'react';
 
 class Post extends Component {
     constructor(props) {
@@ -10,26 +7,15 @@ class Post extends Component {
 
     render() {
         return (
-            <div>
-                <h2> Welcome to the Meme Generator!</h2>
-
-                {
-                    this.props.memes.map((meme, index) => {
-                        return (
-                            <PostItem key={index}
-                                      meme={meme} />
-                        )
-                    })
-                }
-            </div>
+            <ul>
+                {this.props.list.map((item, index) =>
+                    <li key={index}>
+                        {item.user_name}
+                    </li>
+                )}
+            </ul>
         );
     }
 }
 
-function mapStateToProps(state) {
-    return state;
-}
-
-const mapDisPatchToProps = (dispatch) => { };
-
-export default connect(mapStateToProps, mapDisPatchToProps())(Post);
+export default Post;
