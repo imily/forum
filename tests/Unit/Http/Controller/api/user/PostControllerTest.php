@@ -241,7 +241,7 @@ class PostControllerTest extends ApiTestCase
         // 回應的Json格式字串，轉成array後檢查內容是否符合預期
         $contents = json_decode($response->getContent(), true);
         $testContents = array();
-        $testContents['total_amount'] = 2;
+        $testContents['total_amount'] = 7;
 
         $testContents['data'][0] =
             array('id' => 6

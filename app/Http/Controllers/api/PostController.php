@@ -81,9 +81,8 @@ class PostController extends Controller
             return response()->json($error->convertToDisplayArray(), $statusCode);
         }
 
-        $totalAmount = count($posts);
         $response = array();
-        $response['total_amount'] = $totalAmount;
+        $response['total_amount'] = count(PostModel::getAllList());
         $response['data'] = static::convertToPostsDisplayArray($posts);
 
         $statusCode = HttpStatusCode::STATUS_200_OK;
