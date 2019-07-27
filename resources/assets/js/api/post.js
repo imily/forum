@@ -1,24 +1,18 @@
-const url = '/message_board/public/api/posts';
+import axios from 'axios';
 
-const params = {
-    offset: 0,
-    limit: 2,
-    message_offset: 0,
-    message_limit: 10
+export const apiGetPosts =
+    (offset=0, limit=2, message_offset=0, message_limit=10) => {
+        const url = '/forum/public/api/posts';
+        return axios.get(url , {params: {
+                limit: limit,
+                offset: offset,
+                message_offset: message_offset,
+                message_limit: message_limit
+            }})
+            .then(response => {
+                return response.data;
+            })
+            .catch(error => {
+                return error;
+            });
 };
-
-function toQueryString(obj) {
-    let parts = [];
-    for (let i in obj) {
-        if (obj.hasOwnProperty(i)) {
-            parts.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]));
-        }
-    }
-    return parts.join("&");
-}
-
-// get from API
-export function fetchPostsJson() {
-    return fetch(url + '?' + toQueryString(params))
-        .then(response => response.json())
-}

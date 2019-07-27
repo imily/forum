@@ -867,6 +867,10 @@ i.required,
     margin: 150px 0 0 0;
 }
 
+.forum-cotainer .row + .row {
+    margin-top: 50px;
+}
+
 .forum-cotainer .col {
     float: right;
     width: calc(100% - 150px);
@@ -883,10 +887,32 @@ i.required,
     border: 0;
 }
 
-.sticker .pic {
+
+.forum-cotainer .pic {
     width: 123px;
     height: 123px;
     border-radius: 50%;
+    -webkit-background-size: 100%;
+    background-size: 100%;
+}
+
+.sticker-1 {
+    background: url(../images/characters/finch.jpg);
+}
+.sticker-2 {
+    background: url(../images/characters/reese.jpg);
+}
+.sticker-3 {
+    background: url(../images/characters/carter.jpg);
+}
+.sticker-4 {
+    background: url(../images/characters/fusco.jpg);
+}
+.sticker-5 {
+    background: url(../images/characters/shaw.jpg);
+}
+.sticker-6 {
+    background: url(../images/characters/root.jpg);
 }
 
 .main-post {}

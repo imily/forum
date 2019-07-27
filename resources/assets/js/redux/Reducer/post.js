@@ -1,24 +1,23 @@
 import {combineReducers} from 'redux';
-import {RECEIVE_POSTS} from '../actions/post';
+import {RECEIVE_POSTS} from '../Action/Type';
 
-const devicesInitialState = {
+const postInitialState = {
     list : [],
     totalAmount : 0,
 };
 
-function posts(state = devicesInitialState, action) {
+function ReducerPosts(state = postInitialState, action) {
     switch (action.type) {
         case RECEIVE_POSTS:
             return {
                 ...state,
-                list: action.actionList,
-                totalAmount: action.actionTotal
+                list: action.list,
+                totalAmount: action.totalAmount
             };
         default:
             return state;
     }
 }
 
-const postReducer = combineReducers({posts});
-
+const postReducer = combineReducers({ReducerPosts});
 export default postReducer;

@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PostMain from './containers/Post';
+import PostMain from './Container/Post/PostMain';
 
 import {Provider} from 'react-redux';
-import store from './redux/store';
+import store from './Redux/Store';
 
 ReactDOM.render(
     <Provider store={store}>
         <PostMain/>
     </Provider>
-    , document.getElementById('example'));
+    , document.getElementById('post-main'));

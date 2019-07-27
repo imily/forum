@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
-import {fetchPosts} from "../../redux/actions/post";
-import Post from '../../components/post/Post';
+import {actionGetPosts} from "../../Redux/Action/Post";
+import Post from '../../Component/Post/Post';
 
 class PostMain extends Component {
     constructor(props) {
@@ -9,14 +9,15 @@ class PostMain extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchPosts();
+        this.props.actionGetPosts();
     }
 
     render() {
         return (
-            <div>
-                <h2> Welcome to the Meme Generator!</h2>
-                <Post list = {this.props.posts.list}  />
+            <div className="forum-cotainer">
+                {this.props.ReducerPosts.list.map((item, index) =>
+                    <Post item = {item}  key = {index}  />
+                )}
             </div>
         );
     }
@@ -27,7 +28,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchPosts: () => dispatch(fetchPosts())
+    actionGetPosts: () => dispatch(actionGetPosts())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostMain);

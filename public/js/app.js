@@ -64947,42 +64947,330 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ "./resources/assets/js/api/post.js":
+/***/ "./resources/assets/js/Api/Post.js":
 /*!*****************************************!*\
-  !*** ./resources/assets/js/api/post.js ***!
+  !*** ./resources/assets/js/Api/Post.js ***!
   \*****************************************/
-/*! exports provided: fetchPostsJson */
+/*! exports provided: apiGetPosts */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchPostsJson", function() { return fetchPostsJson; });
-var url = '/message_board/public/api/posts';
-var params = {
-  offset: 0,
-  limit: 2,
-  message_offset: 0,
-  message_limit: 10
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "apiGetPosts", function() { return apiGetPosts; });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
+var apiGetPosts = function apiGetPosts() {
+  var offset = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+  var limit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+  var message_offset = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+  var message_limit = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 10;
+  var url = '/forum/public/api/posts';
+  return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url, {
+    params: {
+      limit: limit,
+      offset: offset,
+      message_offset: message_offset,
+      message_limit: message_limit
+    }
+  }).then(function (response) {
+    return response.data;
+  })["catch"](function (error) {
+    return error;
+  });
 };
 
-function toQueryString(obj) {
-  var parts = [];
+/***/ }),
 
-  for (var i in obj) {
-    if (obj.hasOwnProperty(i)) {
-      parts.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]));
-    }
+/***/ "./resources/assets/js/Component/Post/Post.jsx":
+/*!*****************************************************!*\
+  !*** ./resources/assets/js/Component/Post/Post.jsx ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var Post =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(Post, _Component);
+
+  function Post(props) {
+    _classCallCheck(this, Post);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(Post).call(this, props));
   }
 
-  return parts.join("&");
-} // get from API
+  _createClass(Post, [{
+    key: "render",
+    value: function render() {
+      var item = this.props.item;
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row clearfix"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col sticker"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "pic sticker-".concat(item.user_sicker_type)
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "main-post"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "topic"
+      }, item.topic), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "posted-by"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "user"
+      }, item.user_name), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "time"
+      }, item.update_time)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "main-content"
+      }, item.description), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "likes",
+        href: "#"
+      }, "LIKE", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "num"
+      }, item.likes.length)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "comment"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "submit",
+        className: "btn-style-normal"
+      }, "ADD COMMENT")))));
+    }
+  }]);
+
+  return Post;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Post);
+
+/***/ }),
+
+/***/ "./resources/assets/js/Container/Post/PostMain.jsx":
+/*!*********************************************************!*\
+  !*** ./resources/assets/js/Container/Post/PostMain.jsx ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _Redux_Action_Post__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Redux/Action/Post */ "./resources/assets/js/Redux/Action/Post.js");
+/* harmony import */ var _Component_Post_Post__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Component/Post/Post */ "./resources/assets/js/Component/Post/Post.jsx");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 
-function fetchPostsJson() {
-  return fetch(url + '?' + toQueryString(params)).then(function (response) {
-    return response.json();
-  });
+
+
+
+
+var PostMain =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(PostMain, _Component);
+
+  function PostMain(props) {
+    _classCallCheck(this, PostMain);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(PostMain).call(this, props));
+  }
+
+  _createClass(PostMain, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.actionGetPosts();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "forum-cotainer"
+      }, this.props.ReducerPosts.list.map(function (item, index) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Component_Post_Post__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          item: item,
+          key: index
+        });
+      }));
+    }
+  }]);
+
+  return PostMain;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+function mapStateToProps(state) {
+  return state;
 }
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    actionGetPosts: function actionGetPosts() {
+      return dispatch(Object(_Redux_Action_Post__WEBPACK_IMPORTED_MODULE_2__["actionGetPosts"])());
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(PostMain));
+
+/***/ }),
+
+/***/ "./resources/assets/js/Redux/Action/Post.js":
+/*!**************************************************!*\
+  !*** ./resources/assets/js/Redux/Action/Post.js ***!
+  \**************************************************/
+/*! exports provided: receivePosts, actionGetPosts */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "receivePosts", function() { return receivePosts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "actionGetPosts", function() { return actionGetPosts; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Api_Post__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Api/Post */ "./resources/assets/js/Api/Post.js");
+/* harmony import */ var _Type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Type */ "./resources/assets/js/Redux/Action/Type.js");
+ // 匯入API
+
+
+ // 定義行為
+
+var receivePosts = function receivePosts(json) {
+  return {
+    type: _Type__WEBPACK_IMPORTED_MODULE_2__["RECEIVE_POSTS"],
+    list: json.data,
+    totalAmount: json.total_amount
+  };
+}; // 匯出行為(取得API)的dispatch
+
+var actionGetPosts = function actionGetPosts() {
+  return function (dispatch) {
+    return Object(_Api_Post__WEBPACK_IMPORTED_MODULE_1__["apiGetPosts"])().then(function (json) {
+      dispatch(receivePosts(json));
+    });
+  };
+};
+
+/***/ }),
+
+/***/ "./resources/assets/js/Redux/Action/Type.js":
+/*!**************************************************!*\
+  !*** ./resources/assets/js/Redux/Action/Type.js ***!
+  \**************************************************/
+/*! exports provided: RECEIVE_POSTS */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_POSTS", function() { return RECEIVE_POSTS; });
+var RECEIVE_POSTS = 'RECEIVE_POSTS';
+
+/***/ }),
+
+/***/ "./resources/assets/js/Redux/Reducer/Post.js":
+/*!***************************************************!*\
+  !*** ./resources/assets/js/Redux/Reducer/Post.js ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+/* harmony import */ var _Action_Type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Action/Type */ "./resources/assets/js/Redux/Action/Type.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { keys.push.apply(keys, Object.getOwnPropertySymbols(object)); } if (enumerableOnly) keys = keys.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+var postInitialState = {
+  list: [],
+  totalAmount: 0
+};
+
+function ReducerPosts() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : postInitialState;
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case _Action_Type__WEBPACK_IMPORTED_MODULE_1__["RECEIVE_POSTS"]:
+      return _objectSpread({}, state, {
+        list: action.list,
+        totalAmount: action.totalAmount
+      });
+
+    default:
+      return state;
+  }
+}
+
+var postReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
+  ReducerPosts: ReducerPosts
+});
+/* harmony default export */ __webpack_exports__["default"] = (postReducer);
+
+/***/ }),
+
+/***/ "./resources/assets/js/Redux/Store.js":
+/*!********************************************!*\
+  !*** ./resources/assets/js/Redux/Store.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+/* harmony import */ var redux_thunk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux-thunk */ "./node_modules/redux-thunk/es/index.js");
+/* harmony import */ var _Reducer_Post__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Reducer/Post */ "./resources/assets/js/Redux/Reducer/Post.js");
+
+
+
+var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_Reducer_Post__WEBPACK_IMPORTED_MODULE_2__["default"], Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_1__["default"]));
+/* harmony default export */ __webpack_exports__["default"] = (store);
 
 /***/ }),
 
@@ -65068,147 +65356,6 @@ if (token) {
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/post/Post.js":
-/*!*****************************************************!*\
-  !*** ./resources/assets/js/components/post/Post.js ***!
-  \*****************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-var Post =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Post, _Component);
-
-  function Post(props) {
-    _classCallCheck(this, Post);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(Post).call(this, props));
-  }
-
-  _createClass(Post, [{
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, this.props.list.map(function (item, index) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-          key: index
-        }, item.user_name);
-      }));
-    }
-  }]);
-
-  return Post;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-/* harmony default export */ __webpack_exports__["default"] = (Post);
-
-/***/ }),
-
-/***/ "./resources/assets/js/containers/Post/index.js":
-/*!******************************************************!*\
-  !*** ./resources/assets/js/containers/Post/index.js ***!
-  \******************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _redux_actions_post__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../redux/actions/post */ "./resources/assets/js/redux/actions/post.js");
-/* harmony import */ var _components_post_Post__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/post/Post */ "./resources/assets/js/components/post/Post.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-
-
-var PostMain =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(PostMain, _Component);
-
-  function PostMain(props) {
-    _classCallCheck(this, PostMain);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(PostMain).call(this, props));
-  }
-
-  _createClass(PostMain, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.props.fetchPosts();
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, " Welcome to the Meme Generator!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_post_Post__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        list: this.props.posts.list
-      }));
-    }
-  }]);
-
-  return PostMain;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-function mapStateToProps(state) {
-  return state;
-}
-
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return {
-    fetchPosts: function fetchPosts() {
-      return dispatch(Object(_redux_actions_post__WEBPACK_IMPORTED_MODULE_2__["fetchPosts"])());
-    }
-  };
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(PostMain));
-
-/***/ }),
-
 /***/ "./resources/assets/js/index..js":
 /*!***************************************!*\
   !*** ./resources/assets/js/index..js ***!
@@ -65222,119 +65369,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _containers_Post__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./containers/Post */ "./resources/assets/js/containers/Post/index.js");
+/* harmony import */ var _Container_Post_PostMain__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Container/Post/PostMain */ "./resources/assets/js/Container/Post/PostMain.jsx");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _redux_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./redux/store */ "./resources/assets/js/redux/store.js");
+/* harmony import */ var _Redux_Store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Redux/Store */ "./resources/assets/js/Redux/Store.js");
 
 
 
 
 
 react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_redux__WEBPACK_IMPORTED_MODULE_3__["Provider"], {
-  store: _redux_store__WEBPACK_IMPORTED_MODULE_4__["default"]
-}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_containers_Post__WEBPACK_IMPORTED_MODULE_2__["default"], null)), document.getElementById('example'));
-
-/***/ }),
-
-/***/ "./resources/assets/js/redux/actions/post.js":
-/*!***************************************************!*\
-  !*** ./resources/assets/js/redux/actions/post.js ***!
-  \***************************************************/
-/*! exports provided: fetchPosts, RECEIVE_POSTS */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchPosts", function() { return fetchPosts; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_POSTS", function() { return RECEIVE_POSTS; });
-/* harmony import */ var _api_post__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/post */ "./resources/assets/js/api/post.js");
-// 匯入API
- // 定義行為
-
-function receivePosts(json) {
-  return {
-    type: RECEIVE_POSTS,
-    actionList: json.data,
-    actionTotal: json.total_amount
-  };
-} // 匯出行為(取得API)的dispatch
-
-
-function fetchPosts() {
-  return function (dispatch) {
-    return Object(_api_post__WEBPACK_IMPORTED_MODULE_0__["fetchPostsJson"])().then(function (json) {
-      dispatch(receivePosts(json));
-    });
-  };
-}
-var RECEIVE_POSTS = 'RECEIVE_POSTS';
-
-/***/ }),
-
-/***/ "./resources/assets/js/redux/reducers/post.js":
-/*!****************************************************!*\
-  !*** ./resources/assets/js/redux/reducers/post.js ***!
-  \****************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
-/* harmony import */ var _actions_post__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../actions/post */ "./resources/assets/js/redux/actions/post.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { keys.push.apply(keys, Object.getOwnPropertySymbols(object)); } if (enumerableOnly) keys = keys.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-
-
-var devicesInitialState = {
-  list: [],
-  totalAmount: 0
-};
-
-function posts() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : devicesInitialState;
-  var action = arguments.length > 1 ? arguments[1] : undefined;
-
-  switch (action.type) {
-    case _actions_post__WEBPACK_IMPORTED_MODULE_1__["RECEIVE_POSTS"]:
-      return _objectSpread({}, state, {
-        list: action.actionList,
-        totalAmount: action.actionTotal
-      });
-
-    default:
-      return state;
-  }
-}
-
-var postReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
-  posts: posts
-});
-/* harmony default export */ __webpack_exports__["default"] = (postReducer);
-
-/***/ }),
-
-/***/ "./resources/assets/js/redux/store.js":
-/*!********************************************!*\
-  !*** ./resources/assets/js/redux/store.js ***!
-  \********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
-/* harmony import */ var redux_thunk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux-thunk */ "./node_modules/redux-thunk/es/index.js");
-/* harmony import */ var _reducers_post__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./reducers/post */ "./resources/assets/js/redux/reducers/post.js");
-
-
-
-var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers_post__WEBPACK_IMPORTED_MODULE_2__["default"], Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_1__["default"]));
-/* harmony default export */ __webpack_exports__["default"] = (store);
+  store: _Redux_Store__WEBPACK_IMPORTED_MODULE_4__["default"]
+}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Container_Post_PostMain__WEBPACK_IMPORTED_MODULE_2__["default"], null)), document.getElementById('post-main'));
 
 /***/ }),
 
@@ -65345,7 +65390,7 @@ var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers_
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\message_board\resources\assets\js\app.js */"./resources/assets/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\forum\resources\assets\js\app.js */"./resources/assets/js/app.js");
 
 
 /***/ })

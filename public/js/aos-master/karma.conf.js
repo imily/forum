@@ -12,7 +12,7 @@ module.exports = function(config) {
 
     files: [
       'node_modules/babel-polyfill/dist/polyfill.js',
-      'test/post.js',
+      'test/Post.js',
       {
         pattern: 'test/fixtures/**/*.html',
         watched: true,
