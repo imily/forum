@@ -2,8 +2,9 @@ import {combineReducers} from 'redux';
 import {RECEIVE_POSTS} from '../Action/Type';
 
 const postInitialState = {
-    list : [],
-    totalAmount : 0,
+    list: [],
+    allPages: 0,
+    limit: 0
 };
 
 function ReducerPosts(state = postInitialState, action) {
@@ -12,7 +13,8 @@ function ReducerPosts(state = postInitialState, action) {
             return {
                 ...state,
                 list: action.list,
-                totalAmount: action.totalAmount
+                allPages: action.allPages,
+                limit: action.limit
             };
         default:
             return state;

@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {connect} from "react-redux";
+
 import {actionGetPosts} from "../../Redux/Action/Post";
+
+import PageMain from '../../Container/Post/PageMain';
 import Post from '../../Component/Post/Post';
 
 class PostMain extends Component {
@@ -15,17 +18,18 @@ class PostMain extends Component {
     render() {
         return (
             <div className="forum-cotainer">
-                {this.props.ReducerPosts.list.map((item, index) =>
-                    <Post item = {item}  key = {index}  />
+                {this.props.list.map((item, index) =>
+                    <Post item={item} key={index}/>
                 )}
+                <PageMain/>
             </div>
         );
     }
 }
 
-function mapStateToProps(state) {
-    return state;
-}
+const mapStateToProps = (state) => ({
+    list: state.ReducerPosts.list
+});
 
 const mapDispatchToProps = (dispatch) => ({
     actionGetPosts: () => dispatch(actionGetPosts())

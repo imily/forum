@@ -1,24 +1,23 @@
 import React from "react";
 
-// 匯入API
 import {apiGetPosts} from '../../Api/Post';
 import {RECEIVE_POSTS} from './Type';
 
-// 定義行為
-export const receivePosts = (json) => {
+export const receivePosts = (limit, json) => {
     return {
         type: RECEIVE_POSTS,
         list: json.data,
-        totalAmount: json.total_amount
+        allPages: Math.ceil(json.total_amount / limit),
+        limit: limit
     }
 }
 
-// 匯出行為(取得API)的dispatch
-export const actionGetPosts = () => {
-    return dispatch => {
-        return apiGetPosts()
-            .then(json => {
-                dispatch(receivePosts(json))
-            })
+export const actionGetPosts =
+    (limit = 1, offset = 0, message_limit = 10, message_offset = 0) => {
+        return dispatch => {
+            return apiGetPosts(limit, offset, message_limit = 10, message_offset)
+                .then(json => {
+                    dispatch(receivePosts(limit, json))
+                })
+        }
     }
-}
