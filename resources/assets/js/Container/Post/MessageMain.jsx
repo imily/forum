@@ -2,11 +2,9 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 
 import {actionGetPosts} from "../../Redux/Action/Post";
+import Message from '../../Component/Post/Message';
 
-import PageMain from '../../Container/Post/PageMain';
-import Post from '../../Component/Post/Post';
-
-class PostMain extends Component {
+class MessageMain extends Component {
     constructor(props) {
         super(props);
     }
@@ -16,13 +14,9 @@ class PostMain extends Component {
     }
 
     render() {
+        const message = this.props.list[0].messages.data;
         return (
-            <div className="forum-container">
-                {this.props.list.map((item, index) =>
-                    <Post item={item} key={index}/>
-                )}
-                <PageMain/>
-            </div>
+            <Message list = {message}/>
         );
     }
 }
@@ -35,4 +29,4 @@ const mapDispatchToProps = (dispatch) => ({
     actionGetPosts: () => dispatch(actionGetPosts())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostMain);
+export default connect(mapStateToProps, mapDispatchToProps)(MessageMain);

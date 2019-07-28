@@ -642,10 +642,12 @@ section .title:after {
     margin: 0 5px;
 }
 
-.pages a{
+.pages button{
     font-size: 16px;
+    cursor: pointer;
     line-height: 29px;
     width: 30px;
+    border: 0;
     height: 30px;
     display: block;
     background: #0D0D0D;
@@ -653,7 +655,7 @@ section .title:after {
     transition: all .2s;
 }
 
-.pages a:hover{
+.pages button:hover{
     background:#222;
 }
 
@@ -859,19 +861,19 @@ i.required,
 
 /*--------forum --------*/
 
-.forum-cotainer{
+.forum-container{
     text-align: left;
 }
 
-.forum-cotainer + .forum-cotainer{
+.forum-container + .forum-container{
     margin: 150px 0 0 0;
 }
 
-.forum-cotainer .row + .row {
+.forum-container .row + .row {
     margin-top: 50px;
 }
 
-.forum-cotainer .col {
+.forum-container .col {
     float: right;
     width: calc(100% - 150px);
     letter-spacing: 1px;
@@ -880,15 +882,14 @@ i.required,
     box-sizing: border-box;
 }
 
-.forum-cotainer .sticker {
+.forum-container .sticker {
     padding: 0;
     float: left;
     width: 123px;
     border: 0;
 }
 
-
-.forum-cotainer .pic {
+.forum-container .pic {
     width: 123px;
     height: 123px;
     border-radius: 50%;
@@ -946,7 +947,7 @@ i.required,
 
 .posted-by .user {
     margin: 0 10px 0 0;
-    }
+}
 
 .posted-by .time {
     display: inline-block;

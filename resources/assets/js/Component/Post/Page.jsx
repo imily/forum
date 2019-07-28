@@ -12,12 +12,10 @@ class Page extends Component {
             <ul className="pages">
                 {list.map((item, index) =>
                     <li key={index}>
-                        <a>
-                            <button value={item}
-                                    onMouseOver={this.props.onMainMouseOver}
-                                    onClick={this.props.onMainClick}>{item}
-                            </button>
-                        </a>
+                        <button value={item}
+                                onMouseOver={this.props.onMainMouseOver}
+                                onClick={this.props.onMainClick}>{item}
+                        </button>
                     </li>
                 )}
             </ul>

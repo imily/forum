@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import MessageMain from '../../Container/Post/MessageMain'
 
 class Post extends Component {
     constructor(props) {
@@ -25,6 +26,7 @@ class Post extends Component {
                         <a className="likes" href="#">LIKE
                             <span className="num">{item.likes.length}</span>
                         </a>
+                        <MessageMain />
                         <div className="comment">
                             <button type="submit" className="btn-style-normal">ADD COMMENT</button>
                         </div>
