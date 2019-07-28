@@ -36,6 +36,7 @@ class PostController extends Controller
                 $messageUser = $message->getUser();
                 $messageContent['user_name'] = $messageUser->getUsername();
                 $messageContent['description'] = $message->getDescription();
+                $messageContent['update_time'] = $message->getDtUpdate();
                 $messageContents[] = $messageContent;
             }
 
