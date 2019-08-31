@@ -1,0 +1,146 @@
+/*-------- rwd --------*/
+
+@media screen and (max-width: 1200px) {
+    .characters-ul{
+        margin: 0 -15px;
+    }
+    .characters-ul li{
+        padding: 0 20px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .logo{
+        width: 137px;
+        height: 39px;
+        margin: 15px 0;
+    }
+    .site-nav {
+        margin: 15px -35px 15px;
+    }
+    .parallax-window{
+        min-height: 200px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    section{
+        padding: 35px 0 45px;
+    }
+    section .title{
+        margin: 0 0 30px;
+    }
+    .menu,
+    .header-fixed .menu{
+        /*position: static;*/
+        top: 0;
+    }
+    .banner{
+        margin: 59px 0 0 0;
+    }
+    .logo,
+    .header-fixed .logo{
+        margin: 10px auto;
+    }
+    .site-nav,
+    .header-fixed .site-nav {
+        margin: 17px -15px 10px;
+    }
+    .site-nav li {
+        padding: 0 5px;
+    }
+    .characters{
+        padding: 35px 0 30px;
+    }
+    .characters-ul li,
+    .photos-ul li{
+        width: 50%;
+    }
+    .characters-ul li:nth-child(3n+1),
+    .photos-ul li:nth-child(3n+1){
+        clear: none;
+    }
+    .characters-ul li:nth-child(2n+1),
+    .photos-ul li:nth-child(2n+1){
+        clear: left;
+    }
+    .characters-ul li .box{
+        margin: 0 auto 45px;
+    }
+    .footer{
+        padding: 10px 0 30px;
+        letter-spacing: 0.05em;
+        opacity: .5;
+    }
+    .gototop{
+        width: 24px;
+        height: 24px;
+        right: 50%;
+        margin: 0 -12px 0 0;
+        bottom: 5px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .logo,
+    .site-nav,
+    .header-fixed .logo,
+    .header-fixed .site-nav{
+        float: none;
+        margin: 10px auto;
+        text-align: center;
+    }
+    .site-nav li{
+        display: inline-block;
+        float: none;
+        margin: 0 -4px 0 0;
+    }
+    .site-nav a{
+        padding: 0 5px;
+    }
+    .banner{
+        margin: 92px 0 0 0;
+    }
+    section{
+        padding: 10px 0;
+    }
+    section .title{
+        margin: 0;
+        font-size: 18px;
+        letter-spacing: .2em;
+    }
+    .parallax-window{
+        min-height: 100px;
+    }
+    .characters {
+        padding: 15px 0 0;
+    }
+    .characters .title{
+        margin: 0 0 20px;
+    }
+    .characters-ul{
+        margin: 0;
+    }
+    .characters-ul li,
+    .photos-ul li{
+        padding: 0;
+        width: 100%;
+    }
+    .characters-ul li .box {
+        margin: 0 auto 30px;
+    }
+    .characters-ul li .name{
+        font-size: 14px;
+        text-align: center;
+        margin: 5px 0;
+        letter-spacing: 1px;
+    }
+    .characters-ul li .text{
+        line-height: 1.6;
+    }
+    .footer{
+    }
+    .author{
+        margin: 0;
+    }
+}
