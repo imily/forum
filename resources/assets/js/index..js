@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import PostMain from './Container/Post/PostMain';
 
 import {Provider} from 'react-redux';
-import store from './Redux/Store';
+import Store from './Redux/Stroe';
 
 ReactDOM.render(
-    <Provider store={store}>
+    <Provider store={Store}>
         <PostMain/>
     </Provider>
     , document.getElementById('post-main'));

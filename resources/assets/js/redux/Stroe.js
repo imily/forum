@@ -3,6 +3,6 @@ import thunk from 'redux-thunk';
 
 import postReducer from './Reducer/Post';
 
-const store = createStore(postReducer, applyMiddleware(thunk));
+const Store = createStore(postReducer, applyMiddleware(thunk));
 
-export default store;
+export default Store;
