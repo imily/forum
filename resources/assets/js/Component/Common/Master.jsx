@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Menu from './Menu';
 import Banner from './Banner';
 import Footer from './Footer';
+import PostMain from '../../Container/Post/PostMain';
 
 class Master extends Component{
     render() {
@@ -11,6 +12,7 @@ class Master extends Component{
                     <Menu />
                     <Banner />
                 </div>
+                <PostMain />
                 <Footer />
             </div>
         );
