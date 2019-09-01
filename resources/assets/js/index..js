@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { HashRouter } from 'react-router-dom';
 
 import {Provider} from 'react-redux';
 import Store from './Redux/Stroe';
@@ -14,6 +15,8 @@ import Master from './Master';
 
 ReactDOM.render(
     <Provider store={Store}>
-        <Master/>
+        <HashRouter>
+            <Master/>
+        </HashRouter>
     </Provider>
     , document.getElementById('root'));

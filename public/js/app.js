@@ -63694,7 +63694,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -74704,7 +74704,7 @@ function (_Component) {
   _createClass(PageRouter, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["HashRouter"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Switch"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
         path: "/",
         component: _Container_Post_PostMain__WEBPACK_IMPORTED_MODULE_2__["default"]
       }));
@@ -74813,19 +74813,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _Redux_Stroe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Redux/Stroe */ "./resources/assets/js/Redux/Stroe.js");
-/* harmony import */ var _styles_css_normalize_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./styles/css/normalize.css */ "./resources/assets/js/styles/css/normalize.css");
-/* harmony import */ var _styles_css_normalize_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_styles_css_normalize_css__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _styles_css_basic_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./styles/css/basic.css */ "./resources/assets/js/styles/css/basic.css");
-/* harmony import */ var _styles_css_basic_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_styles_css_basic_css__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _styles_css_jquery_fancybox_min_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./styles/css/jquery.fancybox.min.css */ "./resources/assets/js/styles/css/jquery.fancybox.min.css");
-/* harmony import */ var _styles_css_jquery_fancybox_min_css__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_styles_css_jquery_fancybox_min_css__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _styles_css_style_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./styles/css/style.css */ "./resources/assets/js/styles/css/style.css");
-/* harmony import */ var _styles_css_style_css__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_styles_css_style_css__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _styles_css_rwd_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./styles/css/rwd.css */ "./resources/assets/js/styles/css/rwd.css");
-/* harmony import */ var _styles_css_rwd_css__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_styles_css_rwd_css__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _Master__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Master */ "./resources/assets/js/Master.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _Redux_Stroe__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Redux/Stroe */ "./resources/assets/js/Redux/Stroe.js");
+/* harmony import */ var _styles_css_normalize_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./styles/css/normalize.css */ "./resources/assets/js/styles/css/normalize.css");
+/* harmony import */ var _styles_css_normalize_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_styles_css_normalize_css__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _styles_css_basic_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./styles/css/basic.css */ "./resources/assets/js/styles/css/basic.css");
+/* harmony import */ var _styles_css_basic_css__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_styles_css_basic_css__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _styles_css_jquery_fancybox_min_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./styles/css/jquery.fancybox.min.css */ "./resources/assets/js/styles/css/jquery.fancybox.min.css");
+/* harmony import */ var _styles_css_jquery_fancybox_min_css__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_styles_css_jquery_fancybox_min_css__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _styles_css_style_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./styles/css/style.css */ "./resources/assets/js/styles/css/style.css");
+/* harmony import */ var _styles_css_style_css__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_styles_css_style_css__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _styles_css_rwd_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./styles/css/rwd.css */ "./resources/assets/js/styles/css/rwd.css");
+/* harmony import */ var _styles_css_rwd_css__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_styles_css_rwd_css__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _Master__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Master */ "./resources/assets/js/Master.js");
 
 
 
@@ -74836,9 +74837,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_redux__WEBPACK_IMPORTED_MODULE_2__["Provider"], {
-  store: _Redux_Stroe__WEBPACK_IMPORTED_MODULE_3__["default"]
-}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Master__WEBPACK_IMPORTED_MODULE_9__["default"], null)), document.getElementById('root'));
+
+react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_redux__WEBPACK_IMPORTED_MODULE_3__["Provider"], {
+  store: _Redux_Stroe__WEBPACK_IMPORTED_MODULE_4__["default"]
+}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["HashRouter"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Master__WEBPACK_IMPORTED_MODULE_10__["default"], null))), document.getElementById('root'));
 
 /***/ }),
 
