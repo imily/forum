@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import Menu from './Menu';
-import Banner from './Banner';
-import Footer from './Footer';
+import Menu from './Common/Menu';
+import Banner from './Common/Banner';
+import Footer from './Common/Footer';
 
 class MasterNoLogin extends Component{
     render() {
