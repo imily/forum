@@ -1,18 +1,15 @@
 import React, {Component} from 'react';
-import Menu from '../Common/Menu';
-import Banner from '../Common/Banner';
 import Footer from '../Common/Footer';
+import Header from "../../Container/Post/PostMain";
 
 class Login extends Component{
     render() {
         return (
-            <div className="wrap">
-                <div className="header">
-                    <Menu />
-                    <Banner />
-                </div>
+            <React.Fragment>
+                <Header />
+                    Login
                 <Footer />
-            </div>
+            </React.Fragment>
         );
     }
 }
