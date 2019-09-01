@@ -3,6 +3,8 @@ import {connect} from "react-redux";
 
 import {actionGetPosts} from "../../Redux/Action/Post";
 
+import Header from '../../Component/Common/Header';
+import Footer from '../../Component/Common/Footer';
 import PageMain from '../../Container/Post/PageMain';
 import Post from '../../Component/Post/Post';
 
@@ -17,12 +19,16 @@ class PostMain extends Component {
 
     render() {
         return (
-            <div className="forum-container">
-                {this.props.list.map((item, index) =>
-                    <Post item={item} key={index}/>
-                )}
-                <PageMain/>
-            </div>
+            <React.Fragment>
+                <Header />
+                    <div className="forum-container">
+                        {this.props.list.map((item, index) =>
+                            <Post item={item} key={index}/>
+                        )}
+                        <PageMain/>
+                    </div>
+                <Footer />
+            </React.Fragment>
         );
     }
 }
