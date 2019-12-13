@@ -100,9 +100,9 @@ class PostController extends Controller
     public function getPost()
     {
         $offset = (int)Input::get('offset', 0);
-        $limit = (int)Input::get('limit', 0);
+        $limit = (int)Input::get('limit', PHP_INT_MAX);
         $messageOffset = (int)Input::get('message_offset', 0);
-        $messageLimit = (int)Input::get('message_limit', 0);
+        $messageLimit = (int)Input::get('message_limit', PHP_INT_MAX);
 
         // 設定過濾器
         $filter = new Filter();
